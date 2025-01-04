@@ -1,0 +1,620 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "supportedLanguages": ["en", "hi"],
+    "defaultLanguage": "en",
+    "lastUpdated": "2024-01-02"
+  },
+  "quotes": [
+    {
+      "id": "q001",
+      "text": {
+        "en": "Peace comes from within. Do not seek it without.",
+        "hi": "शांति भीतर से आती है। बाहर इसकी तलाश न करें।"
+      },
+      "author": {
+        "en": "Buddha",
+        "hi": "बुद्ध"
+      },
+      "source": {
+        "en": "Dhammapada",
+        "hi": "धम्मपद"
+      },
+      "categories": ["peace", "wisdom", "meditation"],
+      "tags": ["morning", "inspiration"],
+      "isVerified": true,
+      "style": {
+        "fontSize": 24,
+        "fontFamily": "Playfair Display",
+        "colorHex": "#FFFFFF",
+        "effects": ["shadow"]
+      },
+      "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": "q002",
+      "text": {
+        "en": "Let your light shine so brightly that others can see their way out of the dark.",
+        "hi": "अपनी रोशनी को इतना चमकने दें कि दूसरे अंधेरे से बाहर का रास्ता देख सकें।"
+      },
+      "author": {
+        "en": "Anonymous",
+        "hi": "अज्ञात"
+      },
+      "categories": ["inspiration", "leadership"],
+      "tags": ["morning", "motivation"],
+      "isVerified": true,
+      "style": {
+        "fontSize": 24,
+        "fontFamily": "Playfair Display",
+        "colorHex": "#FFFFFF",
+        "effects": ["shadow"]
+      },
+      "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": "q003",
+      "text": {
+        "en": "The journey of a thousand miles begins with a single step.",
+        "hi": "हजार मील की यात्रा एक कदम से शुरू होती है।"
+      },
+      "author": {
+        "en": "Lao Tzu",
+        "hi": "लाओ त्जू"
+      },
+      "categories": ["wisdom", "journey"],
+      "tags": ["motivation", "beginning"],
+      "isVerified": true,
+      "style": {
+        "fontSize": 24,
+        "fontFamily": "Playfair Display",
+        "colorHex": "#FFFFFF",
+        "effects": ["shadow"]
+      },
+      "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": "q004",
+      "text": {
+        "en": "Happiness is not something ready-made. It comes from your own actions.",
+        "hi": "खुशी कोई बनी बनाई चीज नहीं है। यह आपके अपने कर्मों से आती है।"
+      },
+      "author": {
+        "en": "Dalai Lama",
+        "hi": "दलाई लामा"
+      },
+      "categories": ["happiness", "wisdom"],
+      "tags": ["motivation", "action"],
+      "isVerified": true,
+      "style": {
+        "fontSize": 24,
+        "fontFamily": "Playfair Display",
+        "colorHex": "#FFFFFF",
+        "effects": ["shadow"]
+      },
+      "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": "q005",
+      "text": {
+        "en": "In the middle of difficulty lies opportunity.",
+        "hi": "कठिनाई के बीच में अवसर छिपा होता है।"
+      },
+      "author": {
+        "en": "Albert Einstein",
+        "hi": "अल्बर्ट आइंस्टीन"
+      },
+      "categories": ["opportunity", "wisdom"],
+      "tags": ["motivation", "challenge"],
+      "isVerified": true,
+      "style": {
+        "fontSize": 24,
+        "fontFamily": "Playfair Display",
+        "colorHex": "#FFFFFF",
+        "effects": ["shadow"]
+      },
+      "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": "q006",
+      "text": {
+        "en": "Every sunrise is a new chapter in your life waiting to be written.",
+        "hi": "हर सूर्योदय आपके जीवन का एक नया अध्याय है जो लिखा जाने का इंतजार कर रहा है।"
+      },
+      "author": {
+        "en": "Anonymous",
+        "hi": "अज्ञात"
+      },
+      "categories": ["morning", "inspiration"],
+      "tags": ["motivation", "new-beginnings"],
+      "isVerified": true,
+      "style": {
+        "fontSize": 24,
+        "fontFamily": "Playfair Display",
+        "colorHex": "#FFFFFF",
+        "effects": ["shadow"]
+      },
+      "createdAt": "2024-01-02T00:00:00Z"
+    }
+  ],
+  "backgrounds": [
+    {
+      "id": "bg001",
+      "type": "image",
+      "imageUrl": "assets/images/backgrounds/temple_sunrise1.jpeg",
+      "title": {
+        "en": "Temple at Sunrise 1",
+        "hi": "सूर्योदय में मंदिर 1"
+      },
+      "description": {
+        "en": "Ancient Buddhist temple during golden sunrise",
+        "hi": "सुनहरी सूर्योदय के दौरान प्राचीन बौद्ध मंदिर"
+      },
+      "categories": ["temples", "nature", "sunrise"],
+      "tags": ["morning", "peaceful"],
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "textAreas": [
+        {
+          "id": "greeting",
+          "portrait": {
+            "x": 0.5,
+            "y": 0.3,
+            "width": 0.8,
+            "height": 0.2,
+            "rotation": 0
+          },
+          "landscape": {
+            "x": 0.5,
+            "y": 0.25,
+            "width": 0.7,
+            "height": 0.15,
+            "rotation": 0
+          }
+        },
+        {
+          "id": "quote",
+          "portrait": {
+            "x": 0.5,
+            "y": 0.7,
+            "width": 0.8,
+            "height": 0.25,
+            "rotation": 0
+          },
+          "landscape": {
+            "x": 0.5,
+            "y": 0.75,
+            "width": 0.7,
+            "height": 0.2,
+            "rotation": 0
+          }
+        }
+      ],
+      "attribution": "Photo by @photographer1",
+      "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": "bg002",
+      "type": "image",
+      "imageUrl": "assets/images/backgrounds/temple_sunrise2.jpeg",
+      "title": {
+        "en": "Temple at Sunrise 2",
+        "hi": "सूर्योदय में मंदिर 2"
+      },
+      "description": {
+        "en": "Zen garden with morning mist",
+        "hi": "सुबह की धुंध के साथ जेन गार्डन"
+      },
+      "categories": ["gardens", "nature", "sunrise"],
+      "tags": ["morning", "peaceful"],
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "textAreas": [
+        {
+          "id": "greeting",
+          "portrait": {
+            "x": 0.5,
+            "y": 0.3,
+            "width": 0.8,
+            "height": 0.2,
+            "rotation": 0
+          },
+          "landscape": {
+            "x": 0.5,
+            "y": 0.25,
+            "width": 0.7,
+            "height": 0.15,
+            "rotation": 0
+          }
+        },
+        {
+          "id": "quote",
+          "portrait": {
+            "x": 0.5,
+            "y": 0.7,
+            "width": 0.8,
+            "height": 0.25,
+            "rotation": 0
+          },
+          "landscape": {
+            "x": 0.5,
+            "y": 0.75,
+            "width": 0.7,
+            "height": 0.2,
+            "rotation": 0
+          }
+        }
+      ],
+      "attribution": "Photo by @photographer2",
+      "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": "bg003",
+      "type": "image",
+      "imageUrl": "assets/images/backgrounds/temple_sunrise3.jpeg",
+      "title": {
+        "en": "Temple at Sunrise 3",
+        "hi": "सूर्योदय में मंदिर 3"
+      },
+      "description": {
+        "en": "Mountain temple in morning light",
+        "hi": "सुबह की रोशनी में पहाड़ी मंदिर"
+      },
+      "categories": ["temples", "mountains", "sunrise"],
+      "tags": ["morning", "peaceful"],
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "textAreas": [
+        {
+          "id": "greeting",
+          "portrait": {
+            "x": 0.5,
+            "y": 0.3,
+            "width": 0.8,
+            "height": 0.2,
+            "rotation": 0
+          },
+          "landscape": {
+            "x": 0.5,
+            "y": 0.25,
+            "width": 0.7,
+            "height": 0.15,
+            "rotation": 0
+          }
+        },
+        {
+          "id": "quote",
+          "portrait": {
+            "x": 0.5,
+            "y": 0.7,
+            "width": 0.8,
+            "height": 0.25,
+            "rotation": 0
+          },
+          "landscape": {
+            "x": 0.5,
+            "y": 0.75,
+            "width": 0.7,
+            "height": 0.2,
+            "rotation": 0
+          }
+        }
+      ],
+      "attribution": "Photo by @photographer3",
+      "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": "bg004",
+      "type": "image",
+      "imageUrl": "assets/images/backgrounds/temple_sunrise4.jpeg",
+      "title": {
+        "en": "Temple at Sunrise 4",
+        "hi": "सूर्योदय में मंदिर 4"
+      },
+      "description": {
+        "en": "Lakeside temple at dawn",
+        "hi": "भोर में झील किनारे मंदिर"
+      },
+      "categories": ["temples", "water", "sunrise"],
+      "tags": ["morning", "peaceful"],
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "textAreas": [
+        {
+          "id": "greeting",
+          "portrait": {
+            "x": 0.5,
+            "y": 0.3,
+            "width": 0.8,
+            "height": 0.2,
+            "rotation": 0
+          },
+          "landscape": {
+            "x": 0.5,
+            "y": 0.25,
+            "width": 0.7,
+            "height": 0.15,
+            "rotation": 0
+          }
+        },
+        {
+          "id": "quote",
+          "portrait": {
+            "x": 0.5,
+            "y": 0.7,
+            "width": 0.8,
+            "height": 0.25,
+            "rotation": 0
+          },
+          "landscape": {
+            "x": 0.5,
+            "y": 0.75,
+            "width": 0.7,
+            "height": 0.2,
+            "rotation": 0
+          }
+        }
+      ],
+      "attribution": "Photo by @photographer4",
+      "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": "bg005",
+      "type": "image",
+      "imageUrl": "assets/images/backgrounds/temple_sunrise5.jpeg",
+      "title": {
+        "en": "Temple at Sunrise 5",
+        "hi": "सूर्योदय में मंदिर 5"
+      },
+      "description": {
+        "en": "Forest temple in morning fog",
+        "hi": "सुबह की धुंध में जंगल का मंदिर"
+      },
+      "categories": ["temples", "forest", "sunrise"],
+      "tags": ["morning", "mystical"],
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "textAreas": [
+        {
+          "id": "greeting",
+          "portrait": {
+            "x": 0.5,
+            "y": 0.3,
+            "width": 0.8,
+            "height": 0.2,
+            "rotation": 0
+          },
+          "landscape": {
+            "x": 0.5,
+            "y": 0.25,
+            "width": 0.7,
+            "height": 0.15,
+            "rotation": 0
+          }
+        },
+        {
+          "id": "quote",
+          "portrait": {
+            "x": 0.5,
+            "y": 0.7,
+            "width": 0.8,
+            "height": 0.25,
+            "rotation": 0
+          },
+          "landscape": {
+            "x": 0.5,
+            "y": 0.75,
+            "width": 0.7,
+            "height": 0.2,
+            "rotation": 0
+          }
+        }
+      ],
+      "attribution": "Photo by @photographer5",
+      "createdAt": "2024-01-02T00:00:00Z"
+    }
+  ],
+  "templates": [
+    {
+      "id": "t001",
+      "title": {
+        "en": "Morning Blessing",
+        "hi": "प्रभाती आशीर्वाद"
+      },
+      "description": {
+        "en": "Perfect template for sharing morning blessings",
+        "hi": "सुबह का आशीर्वाद साझा करने के लिए उत्तम टेम्पलेट"
+      },
+      "backgroundId": "bg001",
+      "quoteId": "q001",
+      "greeting": {
+        "en": "Good Morning! May your day be filled with peace and joy.",
+        "hi": "सुप्रभात! आपका दिन शांति और आनंद से भरा हो।"
+      },
+      "style": {
+        "greeting": {
+          "fontSize": 28,
+          "fontFamily": "Poppins",
+          "colorHex": "#FFFFFF",
+          "effects": ["shadow"]
+        },
+        "quote": {
+          "fontSize": 24,
+          "fontFamily": "Playfair Display",
+          "colorHex": "#FFFFFF",
+          "effects": ["shadow"]
+        }
+      },
+      "categories": ["morning", "blessings"],
+      "occasions": ["daily", "special"],
+      "isPremium": false,
+      "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": "t002",
+      "title": {
+        "en": "Zen Wisdom",
+        "hi": "जेन ज्ञान"
+      },
+      "description": {
+        "en": "Share timeless wisdom with serene backgrounds",
+        "hi": "शांत पृष्ठभूमि के साथ शाश्वत ज्ञान साझा करें"
+      },
+      "backgroundId": "bg002",
+      "quoteId": "q002",
+      "greeting": {
+        "en": "Take a moment to reflect and find peace within.",
+        "hi": "भीतर की शांति को खोजने के लिए एक क्षण लें।"
+      },
+      "style": {
+        "greeting": {
+          "fontSize": 28,
+          "fontFamily": "Poppins",
+          "colorHex": "#FFFFFF",
+          "effects": ["shadow"]
+        },
+        "quote": {
+          "fontSize": 24,
+          "fontFamily": "Playfair Display",
+          "colorHex": "#FFFFFF",
+          "effects": ["shadow"]
+        }
+      },
+      "categories": ["wisdom", "meditation"],
+      "occasions": ["daily", "mindfulness"],
+      "isPremium": false,
+      "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": "t003",
+      "title": {
+        "en": "Mountain Inspiration",
+        "hi": "पर्वतीय प्रेरणा"
+      },
+      "description": {
+        "en": "Inspire with majestic mountain backgrounds",
+        "hi": "भव्य पर्वतीय पृष्ठभूमि के साथ प्रेरित करें"
+      },
+      "backgroundId": "bg003",
+      "quoteId": "q003",
+      "greeting": {
+        "en": "Rise and shine! Let your spirit soar high like mountains.",
+        "hi": "जागो और चमको! अपनी आत्मा को पहाड़ों की तरह ऊंचा उड़ने दो।"
+      },
+      "style": {
+        "greeting": {
+          "fontSize": 28,
+          "fontFamily": "Poppins",
+          "colorHex": "#FFFFFF",
+          "effects": ["shadow"]
+        },
+        "quote": {
+          "fontSize": 24,
+          "fontFamily": "Playfair Display",
+          "colorHex": "#FFFFFF",
+          "effects": ["shadow"]
+        }
+      },
+      "categories": ["inspiration", "nature"],
+      "occasions": ["daily", "adventure"],
+      "isPremium": false,
+      "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": "t004",
+      "title": {
+        "en": "Peaceful Dawn",
+        "hi": "शांतिपूर्ण प्रभात"
+      },
+      "description": {
+        "en": "Share tranquil morning messages",
+        "hi": "शांतिपूर्ण सुबह के संदेश साझा करें"
+      },
+      "backgroundId": "bg004",
+      "quoteId": "q004",
+      "greeting": {
+        "en": "Embrace the peace of dawn",
+        "hi": "प्रभात की शांति को आत्मसात करें"
+      },
+      "style": {
+        "greeting": {
+          "fontSize": 28,
+          "fontFamily": "Poppins",
+          "colorHex": "#FFFFFF",
+          "effects": ["shadow"]
+        },
+        "quote": {
+          "fontSize": 24,
+          "fontFamily": "Playfair Display",
+          "colorHex": "#FFFFFF",
+          "effects": ["shadow"]
+        }
+      },
+      "categories": ["morning", "peace"],
+      "occasions": ["daily", "meditation"],
+      "isPremium": false,
+      "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": "t005",
+      "title": {
+        "en": "Forest Wisdom",
+        "hi": "वन ज्ञान"
+      },
+      "description": {
+        "en": "Share wisdom with mystical forest backgrounds",
+        "hi": "रहस्यमय जंगल की पृष्ठभूमि के साथ ज्ञान साझा करें"
+      },
+      "backgroundId": "bg005",
+      "quoteId": "q005",
+      "greeting": {
+        "en": "Find wisdom in nature's silence",
+        "hi": "प्रकृति की चुप्पी में ज्ञान खोजें"
+      },
+      "style": {
+        "greeting": {
+          "fontSize": 28,
+          "fontFamily": "Poppins",
+          "colorHex": "#FFFFFF",
+          "effects": ["shadow"]
+        },
+        "quote": {
+          "fontSize": 24,
+          "fontFamily": "Playfair Display",
+          "colorHex": "#FFFFFF",
+          "effects": ["shadow"]
+        }
+      },
+      "categories": ["wisdom", "nature"],
+      "occasions": ["daily", "reflection"],
+      "isPremium": true,
+      "createdAt": "2024-01-02T00:00:00Z"
+    }
+  ],
+  "fonts": {
+    "categories": [
+      {
+        "id": "heading",
+        "fonts": ["Poppins", "Roboto", "Open Sans"],
+        "sizes": [20, 24, 28, 32]
+      },
+      {
+        "id": "quote",
+        "fonts": ["Playfair Display", "Lora", "Merriweather"],
+        "sizes": [18, 20, 24, 28]
+      }
+    ],
+    "effects": ["none", "shadow", "glow", "outline"],
+    "colors": ["#FFFFFF", "#F5F5F5", "#FFD700", "#FFA500"]
+  }
+}
