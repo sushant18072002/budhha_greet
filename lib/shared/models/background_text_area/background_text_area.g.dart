@@ -18,8 +18,8 @@ class BackgroundTextAreaAdapter extends TypeAdapter<BackgroundTextArea> {
     };
     return BackgroundTextArea(
       id: fields[0] as String,
-      portrait: (fields[1] as Map).cast<String, BackgroundTextPosition>(),
-      landscape: (fields[2] as Map).cast<String, BackgroundTextPosition>(),
+      portrait: fields[1] as BackgroundTextPosition,
+      landscape: fields[2] as BackgroundTextPosition,
     );
   }
 

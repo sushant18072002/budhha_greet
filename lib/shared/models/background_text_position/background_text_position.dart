@@ -31,7 +31,7 @@ class BackgroundTextPosition extends HiveObject {
         y: json['y']?.toDouble() ?? 0.5,
         width: json['width']?.toDouble() ?? 0.8,
         height: json['height']?.toDouble() ?? 0.2,
-        rotation: json['rotation']?.toDouble() ?? 0,
+        rotation: json['rotation']?.toDouble() ?? 0.0,
       );
 
   Map<String, dynamic> toJson() => {

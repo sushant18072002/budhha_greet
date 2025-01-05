@@ -7,6 +7,8 @@ import '../../../../shared/theme/app_colors.dart';
 import '../../../../shared/theme/app_text_styles.dart';
 import 'package:card_swiper/card_swiper.dart';
 
+import '../widgets/morning_template.dart';
+
 class HomeScreen extends GetView<HomeController> {
   HomeScreen({Key? key}) : super(key: key);
 
@@ -26,9 +28,10 @@ class HomeScreen extends GetView<HomeController> {
                   _buildHeader(),
                   const SizedBox(height: 16),
                   _buildCarousel(context),
-                  const SizedBox(height: 24),
-                  _buildCategories(),
                   const SizedBox(height: 16),
+                  _buildCategories(),
+                 // const SizedBox(height: 16),
+                  MorningTemplatesWidget()
                 ],
               ),
             ),
@@ -46,7 +49,7 @@ class HomeScreen extends GetView<HomeController> {
       }
 
       return Container(
-        height: MediaQuery.of(context).size.height * 0.50,
+        height: MediaQuery.of(context).size.height * 0.35,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
@@ -79,7 +82,8 @@ class HomeScreen extends GetView<HomeController> {
     final template = item['template'];
     final background = item['background'];
     final quote = item['quote'];
-
+    //debugPrint("template.greeting ${template.greeting} \n greeting ${template.greeting[controller.currentLanguage.value]}");
+    debugPrint("quote.text ${quote.text} \n text ${quote.text[controller.currentLanguage.value]}");
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -109,9 +113,9 @@ class HomeScreen extends GetView<HomeController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (item['greeting'].isNotEmpty)
+            if (template.title.isNotEmpty)
               Text(
-                item['greeting'],
+                template.title[controller.currentLanguage.value],
                 style: template.style.greeting != null
                     ? AppTextStyles.quoteText.copyWith(
                         fontSize: template.style.greeting.fontSize,
@@ -128,7 +132,7 @@ class HomeScreen extends GetView<HomeController> {
                 quote.text[controller.currentLanguage.value] ?? '',
                 style: template.style.quote != null
                     ? AppTextStyles.quoteText.copyWith(
-                        fontSize: template.style.quote.fontSize,
+                        fontSize: template.style.quote.fontSize*0.9,
                         color: Color(
                           int.parse(template.style.quote.colorHex.replaceAll('#', '0xFF')),
                         ),
@@ -154,33 +158,54 @@ class HomeScreen extends GetView<HomeController> {
       if (controller.isLoading.value) {
         return const Center(child: CircularProgressIndicator());
       }
-
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Categories', style: AppTextStyles.sectionTitle),
           const SizedBox(height: 16),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 2,
+          SizedBox(
+            height:60,
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: controller.categories.length,
+              itemBuilder: (context, index) {
+                return _buildCategoryCard(controller.categories[index]);
+              },
             ),
-            itemCount: controller.categories.length,
-            itemBuilder: (context, index) {
-              return _buildCategoryCard(controller.categories[index]);
-            },
           ),
         ],
       );
+
+      // return Column(
+      //   crossAxisAlignment: CrossAxisAlignment.start,
+      //   children: [
+      //     Text('Categories', style: AppTextStyles.sectionTitle),
+      //     const SizedBox(height: 16),
+      //     GridView.builder(
+      //       shrinkWrap: true,
+      //       physics: const NeverScrollableScrollPhysics(),
+      //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      //         crossAxisCount: 2,
+      //         crossAxisSpacing: 16,
+      //         mainAxisSpacing: 16,
+      //         childAspectRatio: 2,
+      //       ),
+      //       itemCount: controller.categories.length,
+      //       itemBuilder: (context, index) {
+      //         return _buildCategoryCard(controller.categories[index]);
+      //       },
+      //     ),
+      //   ],
+      // );
     });
   }
 
   Widget _buildCategoryCard(String category) {
     return Container(
+      margin: EdgeInsets.only(right: 10),
+      padding: EdgeInsets.symmetric(vertical: 10,horizontal: 16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [AppColors.amber100, AppColors.amber300],

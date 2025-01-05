@@ -41,6 +41,10 @@
         "en": "Anonymous",
         "hi": "अज्ञात"
       },
+      "source": {
+        "en": "",
+        "hi": ""
+      },
       "categories": ["inspiration", "leadership"],
       "tags": ["morning", "motivation"],
       "isVerified": true,
@@ -61,6 +65,10 @@
       "author": {
         "en": "Lao Tzu",
         "hi": "लाओ त्जू"
+      },
+      "source": {
+        "en": "",
+        "hi": ""
       },
       "categories": ["wisdom", "journey"],
       "tags": ["motivation", "beginning"],
@@ -83,6 +91,10 @@
         "en": "Dalai Lama",
         "hi": "दलाई लामा"
       },
+      "source": {
+        "en": "",
+        "hi": ""
+      },
       "categories": ["happiness", "wisdom"],
       "tags": ["motivation", "action"],
       "isVerified": true,
@@ -104,6 +116,10 @@
         "en": "Albert Einstein",
         "hi": "अल्बर्ट आइंस्टीन"
       },
+      "source": {
+        "en": "",
+        "hi": ""
+      },
       "categories": ["opportunity", "wisdom"],
       "tags": ["motivation", "challenge"],
       "isVerified": true,
@@ -124,6 +140,10 @@
       "author": {
         "en": "Anonymous",
         "hi": "अज्ञात"
+      },
+      "source": {
+        "en": "",
+        "hi": ""
       },
       "categories": ["morning", "inspiration"],
       "tags": ["motivation", "new-beginnings"],

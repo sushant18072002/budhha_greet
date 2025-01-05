@@ -17,7 +17,7 @@ import '../../shared/models/background_text_style/background_text_style.dart';
 class DatabaseService extends GetxService {
   // Singleton instance
   static DatabaseService? _instance;
-  
+
   // Box names
   static const String quotesBox = 'quotes';
   static const String backgroundsBox = 'backgrounds';
@@ -31,8 +31,8 @@ class DatabaseService extends GetxService {
   final RxString currentLanguage = 'en'.obs;
   final RxList<String> supportedLanguages = <String>['en', 'hi'].obs;
   final RxMap<String, dynamic> cache = <String, dynamic>{}.obs;
-  
-  bool _isInitialized = false;
+
+  bool isInitialized = false;
 
   // Singleton accessor
   static DatabaseService get instance {
@@ -52,17 +52,15 @@ class DatabaseService extends GetxService {
 
   // Initialization
   Future<DatabaseService> init() async {
-    if (_isInitialized) return this;
+    if (isInitialized) return this;
 
     try {
       await Hive.initFlutter();
-      
       _registerAdapters();
       await _initializeBoxes();
       await _loadInitialData();
       await _initializeCache();
-      
-      _isInitialized = true;
+      isInitialized = true;
       return this;
     } catch (e) {
       print('Error in database initialization: $e');
@@ -90,7 +88,7 @@ class DatabaseService extends GetxService {
   // Initialize all Hive boxes
   Future<void> _initializeBoxes() async {
     await _closeAllBoxes();
-    
+
     await Future.wait([
       Hive.openBox<Quote>(quotesBox),
       Hive.openBox<Background>(backgroundsBox),
@@ -105,55 +103,124 @@ class DatabaseService extends GetxService {
   // Close all open boxes
   Future<void> _closeAllBoxes() async {
     final boxNames = [
-      quotesBox, 
-      backgroundsBox, 
+      quotesBox,
+      backgroundsBox,
       templatesBox,
       fontConfigBox,
       customizationsBox,
       metadataBox,
       preferencesBox
     ];
-    
-    await Future.wait(
-      boxNames.where((name) => Hive.isBoxOpen(name))
-        .map((name) => Hive.box(name).close())
-    );
+
+    await Future.wait(boxNames
+        .where((name) => Hive.isBoxOpen(name))
+        .map((name) => Hive.box(name).close()));
   }
 
   // Load initial data from JSON
   Future<void> _loadInitialData() async {
     final Box metadataBoxRef = await _getBox(metadataBox);
-    
+    print(
+        'Checking initialization status: ${metadataBoxRef.get('isInitialized')}');
+
     if (metadataBoxRef.get('isInitialized') != true) {
       try {
-        final String jsonContent = await rootBundle.loadString('assets/data/app_data.json');
+        print('Loading initial data from JSON...');
+        final String jsonContent =
+            await rootBundle.loadString('assets/data/app_data.json');
         final Map<String, dynamic> data = json.decode(jsonContent);
+        print('JSON data loaded successfully');
 
         if (!_validateDataStructure(data)) {
           throw Exception('Invalid data structure in app_data.json');
         }
+        print('Data structure validated');
 
         // Store metadata
         await metadataBoxRef.putAll({
           'version': data['metadata']['version'] ?? '1.0',
-          'supportedLanguages': data['metadata']['supportedLanguages'] ?? ['en'],
+          'supportedLanguages':
+              data['metadata']['supportedLanguages'] ?? ['en'],
           'defaultLanguage': data['metadata']['defaultLanguage'] ?? 'en',
           'lastUpdated': data['metadata']['lastUpdated'],
           'isInitialized': true,
         });
+        print('Metadata stored successfully');
 
-        // Store all data types
+        // Store all data types with logging
+        print('Starting to store quotes...');
         await _storeQuotes(data['quotes'] ?? []);
-        await _storeBackgrounds(data['backgrounds'] ?? []);
-        await _storeTemplates(data['templates'] ?? []);
-        await _storeFontConfig(data['fonts'] ?? {});
+        print('Quotes stored successfully');
 
-      } catch (e) {
+        // Verify Quote were stored
+        final Box<Quote> quotesBoxRef =
+            await _getBox<Quote>(quotesBox);
+        print(
+            'Quotes stored. Box contains ${quotesBoxRef.length} items');
+        print('Quotes IDs stored: ${quotesBoxRef.keys.toList()}');
+
+        print('Starting to store backgrounds...');
+        print(
+            'Number of backgrounds to store: ${data['backgrounds']?.length ?? 0}');
+        await _storeBackgrounds(data['backgrounds'] ?? []);
+
+        // Verify backgrounds were stored
+        final Box<Background> backgroundsBoxRef =
+            await _getBox<Background>(backgroundsBox);
+        print(
+            'Backgrounds stored. Box contains ${backgroundsBoxRef.length} items');
+        print('Background IDs stored: ${backgroundsBoxRef.keys.toList()}');
+
+        print('Starting to store templates...');
+        await _storeTemplates(data['templates'] ?? []);
+        print('Templates stored successfully');
+
+        print('Starting to store font config...');
+        await _storeFontConfig(data['fonts'] ?? {});
+        print('Font config stored successfully');
+      } catch (e, stackTrace) {
         print('Error loading initial data: $e');
+        print('Stack trace: $stackTrace');
         await metadataBoxRef.put('isInitialized', false);
         rethrow;
       }
+    } else {
+      print('Data already initialized. Checking stored data...');
+      final Box<Background> backgroundsBoxRef =
+          await _getBox<Background>(backgroundsBox);
+      print('Backgrounds box contains ${backgroundsBoxRef.length} items');
+      print('Background IDs: ${backgroundsBoxRef.keys.toList()}');
+
+      // Verify Quote were stored
+        final Box<Quote> quotesBoxRef =
+            await _getBox<Quote>(quotesBox);
+        print(
+            'Quotes stored. Box contains ${quotesBoxRef.length} items');
+        print('Quotes IDs stored: ${quotesBoxRef.keys.toList()}');
     }
+  }
+
+
+  Future<void> forceReinitialization() async {
+    print('Force reinitializing database...');
+    final Box metadataBoxRef = await _getBox(metadataBox);
+    await metadataBoxRef.put('isInitialized', false);
+
+    // Clear all boxes
+    await Future.wait([
+      (await _getBox<Quote>(quotesBox)).clear(),
+      (await _getBox<Background>(backgroundsBox)).clear(),
+      (await _getBox<Template>(templatesBox)).clear(),
+      (await _getBox<BackgroundFontConfig>(fontConfigBox)).clear(),
+      (await _getBox<UserCustomization>(customizationsBox)).clear(),
+      metadataBoxRef.clear(),
+      (await _getBox(preferencesBox)).clear(),
+    ]);
+
+    print('All boxes cleared');
+    isInitialized = false;
+    await init();
+    print('Reinitialization complete');
   }
 
   // Store quotes in Hive
@@ -173,7 +240,8 @@ class DatabaseService extends GetxService {
 
   // Store backgrounds in Hive
   Future<void> _storeBackgrounds(List<dynamic> backgrounds) async {
-    final Box<Background> backgroundsBoxRef = await _getBox<Background>(backgroundsBox);
+    final Box<Background> backgroundsBoxRef =
+        await _getBox<Background>(backgroundsBox);
     for (final bgData in backgrounds) {
       if (bgData != null && bgData is Map<String, dynamic>) {
         try {
@@ -203,7 +271,8 @@ class DatabaseService extends GetxService {
 
   // Store font configuration in Hive
   Future<void> _storeFontConfig(Map<String, dynamic> fontConfig) async {
-    final Box<BackgroundFontConfig> fontConfigBoxRef = await _getBox<BackgroundFontConfig>(fontConfigBox);
+    final Box<BackgroundFontConfig> fontConfigBoxRef =
+        await _getBox<BackgroundFontConfig>(fontConfigBox);
     try {
       final config = BackgroundFontConfig.fromJson(fontConfig);
       await fontConfigBoxRef.put('default', config);
@@ -230,15 +299,15 @@ class DatabaseService extends GetxService {
   // Validate JSON data structure
   bool _validateDataStructure(Map<String, dynamic> data) {
     return data.containsKey('metadata') &&
-           data['metadata'] is Map &&
-           data.containsKey('quotes') &&
-           data['quotes'] is List &&
-           data.containsKey('backgrounds') &&
-           data['backgrounds'] is List &&
-           data.containsKey('templates') &&
-           data['templates'] is List &&
-           data.containsKey('fonts') &&
-           data['fonts'] is Map;
+        data['metadata'] is Map &&
+        data.containsKey('quotes') &&
+        data['quotes'] is List &&
+        data.containsKey('backgrounds') &&
+        data['backgrounds'] is List &&
+        data.containsKey('templates') &&
+        data['templates'] is List &&
+        data.containsKey('fonts') &&
+        data['fonts'] is Map;
   }
 
   // Quote-related methods
@@ -249,7 +318,7 @@ class DatabaseService extends GetxService {
     int? offset,
   }) async {
     final Box<Quote> quotesBoxRef = await _getBox<Quote>(quotesBox);
-    
+
     List<Quote> quotes = quotesBoxRef.values.where((quote) {
       bool matches = true;
 
@@ -259,10 +328,15 @@ class DatabaseService extends GetxService {
 
       if (searchTerm != null) {
         final searchLower = searchTerm.toLowerCase();
-        matches = matches && (
-          quote.text[currentLanguage.value]?.toLowerCase().contains(searchLower) == true ||
-          quote.author[currentLanguage.value]?.toLowerCase().contains(searchLower) == true
-        );
+        matches = matches &&
+            (quote.text[currentLanguage.value]
+                        ?.toLowerCase()
+                        .contains(searchLower) ==
+                    true ||
+                quote.author[currentLanguage.value]
+                        ?.toLowerCase()
+                        .contains(searchLower) ==
+                    true);
       }
 
       return matches;
@@ -291,7 +365,8 @@ class DatabaseService extends GetxService {
     int? limit,
     int? offset,
   }) async {
-    final Box<Background> backgroundsBoxRef = await _getBox<Background>(backgroundsBox);
+    final Box<Background> backgroundsBoxRef =
+        await _getBox<Background>(backgroundsBox);
 
     List<Background> backgrounds = backgroundsBoxRef.values.where((background) {
       bool matches = true;
@@ -312,15 +387,27 @@ class DatabaseService extends GetxService {
     if (offset != null || limit != null) {
       final start = offset ?? 0;
       final end = limit != null ? (start + limit) : backgrounds.length;
-      backgrounds = backgrounds.sublist(start, end.clamp(0, backgrounds.length));
+      backgrounds =
+          backgrounds.sublist(start, end.clamp(0, backgrounds.length));
     }
 
     return backgrounds;
   }
 
   Future<Background?> getBackgroundById(String id) async {
-    final Box<Background> backgroundsBoxRef = await _getBox<Background>(backgroundsBox);
-    return backgroundsBoxRef.get(id);
+    try {
+      final Box<Background> backgroundsBoxRef =
+          await _getBox<Background>(backgroundsBox);
+      print(
+          "Checking background box - isOpen: ${Hive.isBoxOpen(backgroundsBox)}, isEmpty: ${backgroundsBoxRef.isEmpty}");
+      final background = backgroundsBoxRef.get(id);
+      print(
+          "Getting background $id: ${background != null ? 'found' : 'not found'} from box with ${backgroundsBoxRef.length} items");
+      return background;
+    } catch (e) {
+      print('Error getting background $id: $e');
+      return null;
+    }
   }
 
   // Template-related methods
@@ -373,14 +460,17 @@ class DatabaseService extends GetxService {
 
   // User customization methods
   Future<void> saveCustomization(UserCustomization customization) async {
-    final Box<UserCustomization> customizationsBoxRef = await _getBox<UserCustomization>(customizationsBox);
+    final Box<UserCustomization> customizationsBoxRef =
+        await _getBox<UserCustomization>(customizationsBox);
     await customizationsBoxRef.put(customization.id, customization);
   }
 
   Future<List<UserCustomization>> getUserCustomizations({int? limit}) async {
-    final Box<UserCustomization> customizationsBoxRef = await _getBox<UserCustomization>(customizationsBox);
+    final Box<UserCustomization> customizationsBoxRef =
+        await _getBox<UserCustomization>(customizationsBox);
 
-    List<UserCustomization> customizations = customizationsBoxRef.values.toList()
+    List<UserCustomization> customizations = customizationsBoxRef.values
+        .toList()
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
     if (limit != null) {
@@ -391,12 +481,14 @@ class DatabaseService extends GetxService {
   }
 
   Future<void> deleteCustomization(String id) async {
-    final Box<UserCustomization> customizationsBoxRef = await _getBox<UserCustomization>(customizationsBox);
+    final Box<UserCustomization> customizationsBoxRef =
+        await _getBox<UserCustomization>(customizationsBox);
     await customizationsBoxRef.delete(id);
   }
 
   Future<void> cleanupOldCustomizations({int daysToKeep = 30}) async {
-    final Box<UserCustomization> customizationsBoxRef = await _getBox<UserCustomization>(customizationsBox);
+    final Box<UserCustomization> customizationsBoxRef =
+        await _getBox<UserCustomization>(customizationsBox);
     final cutoffDate = DateTime.now().subtract(Duration(days: daysToKeep));
 
     final keysToDelete = customizationsBoxRef.values
@@ -412,23 +504,25 @@ class DatabaseService extends GetxService {
   // Category and metadata methods
   Future<List<String>> getCategories() async {
     final Set<String> categories = {};
-    
+
     try {
       // First get the box references without using the variables in their own declarations
       final Box<Quote> quotesBoxRef = await _getBox<Quote>(quotesBox);
-      final Box<Background> backgroundsBoxRef = await _getBox<Background>(backgroundsBox);
-      final Box<Template> templatesBoxRef = await _getBox<Template>(templatesBox);
-      
+      final Box<Background> backgroundsBoxRef =
+          await _getBox<Background>(backgroundsBox);
+      final Box<Template> templatesBoxRef =
+          await _getBox<Template>(templatesBox);
+
       // Collect categories from quotes
       for (final quote in quotesBoxRef.values) {
         categories.addAll(quote.categories);
       }
-      
+
       // Collect categories from backgrounds
       for (final background in backgroundsBoxRef.values) {
         categories.addAll(background.categories);
       }
-      
+
       // Collect categories from templates
       for (final template in templatesBoxRef.values) {
         categories.addAll(template.categories);
@@ -436,7 +530,7 @@ class DatabaseService extends GetxService {
     } catch (e) {
       print('Error getting categories: $e');
     }
-    
+
     return categories.toList()..sort();
   }
 
@@ -456,7 +550,8 @@ class DatabaseService extends GetxService {
   // Language and localization methods
   Future<List<String>> getSupportedLanguages() async {
     final Box metadataBoxRef = await _getBox(metadataBox);
-    final languages = metadataBoxRef.get('supportedLanguages') as List<dynamic>?;
+    final languages =
+        metadataBoxRef.get('supportedLanguages') as List<dynamic>?;
     return languages?.cast<String>() ?? ['en', 'hi'];
   }
 
@@ -470,12 +565,14 @@ class DatabaseService extends GetxService {
 
   // Font configuration methods
   Future<BackgroundFontConfig?> getFontConfig() async {
-    final Box<BackgroundFontConfig> fontConfigBoxRef = await _getBox<BackgroundFontConfig>(fontConfigBox);
+    final Box<BackgroundFontConfig> fontConfigBoxRef =
+        await _getBox<BackgroundFontConfig>(fontConfigBox);
     return fontConfigBoxRef.get('default');
   }
 
   Future<void> updateFontConfig(BackgroundFontConfig config) async {
-    final Box<BackgroundFontConfig> fontConfigBoxRef = await _getBox<BackgroundFontConfig>(fontConfigBox);
+    final Box<BackgroundFontConfig> fontConfigBoxRef =
+        await _getBox<BackgroundFontConfig>(fontConfigBox);
     await fontConfigBoxRef.put('default', config);
     await _initializeCache();
   }
@@ -489,9 +586,8 @@ class DatabaseService extends GetxService {
   Future<Map<String, dynamic>> getUserPreferences() async {
     final Box preferencesBoxRef = await _getBox(preferencesBox);
     return Map.fromEntries(
-      preferencesBoxRef.keys.map((key) => 
-        MapEntry(key.toString(), preferencesBoxRef.get(key))
-      ),
+      preferencesBoxRef.keys
+          .map((key) => MapEntry(key.toString(), preferencesBoxRef.get(key))),
     );
   }
 
@@ -520,7 +616,8 @@ class DatabaseService extends GetxService {
   }
 
   Future<void> addBackground(Background background) async {
-    final Box<Background> backgroundsBoxRef = await _getBox<Background>(backgroundsBox);
+    final Box<Background> backgroundsBoxRef =
+        await _getBox<Background>(backgroundsBox);
     await backgroundsBoxRef.put(background.id, background);
   }
 
@@ -529,7 +626,8 @@ class DatabaseService extends GetxService {
   }
 
   Future<void> deleteBackground(String id) async {
-    final Box<Background> backgroundsBoxRef = await _getBox<Background>(backgroundsBox);
+    final Box<Background> backgroundsBoxRef =
+        await _getBox<Background>(backgroundsBox);
     await backgroundsBoxRef.delete(id);
   }
 
@@ -556,8 +654,14 @@ class DatabaseService extends GetxService {
     final templates = await getTemplates();
     return templates.where((template) {
       final searchLower = query.toLowerCase();
-      return template.title[currentLanguage.value]?.toLowerCase().contains(searchLower) == true ||
-             template.description[currentLanguage.value]?.toLowerCase().contains(searchLower) == true;
+      return template.title[currentLanguage.value]
+                  ?.toLowerCase()
+                  .contains(searchLower) ==
+              true ||
+          template.description[currentLanguage.value]
+                  ?.toLowerCase()
+                  .contains(searchLower) ==
+              true;
     }).toList();
   }
 
@@ -582,7 +686,7 @@ class DatabaseService extends GetxService {
   Future<void> importData(Map<String, dynamic> data) async {
     await _closeAllBoxes();
     await _initializeBoxes();
-    
+
     try {
       if (data['quotes'] != null) {
         await _storeQuotes(data['quotes']);
@@ -599,7 +703,7 @@ class DatabaseService extends GetxService {
       if (data['userPreferences'] != null) {
         await saveUserPreferences(data['userPreferences']);
       }
-      
+
       await _initializeCache();
     } catch (e) {
       print('Error importing data: $e');
