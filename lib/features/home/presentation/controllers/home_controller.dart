@@ -152,7 +152,7 @@ class HomeController extends GetxController {
       isMorningTemplatesLoading.value = true;
       // Load morning templates
       final allTemplates = await _dbService.getTemplates(
-        category: 'morning',
+       // category: 'morning',
       );
       morningTemplates.value = allTemplates;
       print("loadMorningTemplatesInitialData ${allTemplates.length}");

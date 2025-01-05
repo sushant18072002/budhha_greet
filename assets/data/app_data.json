@@ -1,7 +1,10 @@
 {
   "metadata": {
     "version": "1.0",
-    "supportedLanguages": ["en", "hi"],
+    "supportedLanguages": [
+      "en",
+      "hi"
+    ],
     "defaultLanguage": "en",
     "lastUpdated": "2024-01-02"
   },
@@ -20,14 +23,23 @@
         "en": "Dhammapada",
         "hi": "धम्मपद"
       },
-      "categories": ["peace", "wisdom", "meditation"],
-      "tags": ["morning", "inspiration"],
+      "categories": [
+        "peace",
+        "wisdom",
+        "meditation"
+      ],
+      "tags": [
+        "morning",
+        "inspiration"
+      ],
       "isVerified": true,
       "style": {
         "fontSize": 24,
         "fontFamily": "Playfair Display",
         "colorHex": "#FFFFFF",
-        "effects": ["shadow"]
+        "effects": [
+          "shadow"
+        ]
       },
       "createdAt": "2024-01-02T00:00:00Z"
     },
@@ -45,14 +57,22 @@
         "en": "",
         "hi": ""
       },
-      "categories": ["inspiration", "leadership"],
-      "tags": ["morning", "motivation"],
+      "categories": [
+        "inspiration",
+        "leadership"
+      ],
+      "tags": [
+        "morning",
+        "motivation"
+      ],
       "isVerified": true,
       "style": {
         "fontSize": 24,
         "fontFamily": "Playfair Display",
         "colorHex": "#FFFFFF",
-        "effects": ["shadow"]
+        "effects": [
+          "shadow"
+        ]
       },
       "createdAt": "2024-01-02T00:00:00Z"
     },
@@ -70,14 +90,22 @@
         "en": "",
         "hi": ""
       },
-      "categories": ["wisdom", "journey"],
-      "tags": ["motivation", "beginning"],
+      "categories": [
+        "wisdom",
+        "journey"
+      ],
+      "tags": [
+        "motivation",
+        "beginning"
+      ],
       "isVerified": true,
       "style": {
         "fontSize": 24,
         "fontFamily": "Playfair Display",
         "colorHex": "#FFFFFF",
-        "effects": ["shadow"]
+        "effects": [
+          "shadow"
+        ]
       },
       "createdAt": "2024-01-02T00:00:00Z"
     },
@@ -95,14 +123,22 @@
         "en": "",
         "hi": ""
       },
-      "categories": ["happiness", "wisdom"],
-      "tags": ["motivation", "action"],
+      "categories": [
+        "happiness",
+        "wisdom"
+      ],
+      "tags": [
+        "motivation",
+        "action"
+      ],
       "isVerified": true,
       "style": {
         "fontSize": 24,
         "fontFamily": "Playfair Display",
         "colorHex": "#FFFFFF",
-        "effects": ["shadow"]
+        "effects": [
+          "shadow"
+        ]
       },
       "createdAt": "2024-01-02T00:00:00Z"
     },
@@ -120,14 +156,22 @@
         "en": "",
         "hi": ""
       },
-      "categories": ["opportunity", "wisdom"],
-      "tags": ["motivation", "challenge"],
+      "categories": [
+        "opportunity",
+        "wisdom"
+      ],
+      "tags": [
+        "motivation",
+        "challenge"
+      ],
       "isVerified": true,
       "style": {
         "fontSize": 24,
         "fontFamily": "Playfair Display",
         "colorHex": "#FFFFFF",
-        "effects": ["shadow"]
+        "effects": [
+          "shadow"
+        ]
       },
       "createdAt": "2024-01-02T00:00:00Z"
     },
@@ -145,14 +189,22 @@
         "en": "",
         "hi": ""
       },
-      "categories": ["morning", "inspiration"],
-      "tags": ["motivation", "new-beginnings"],
+      "categories": [
+        "morning",
+        "inspiration"
+      ],
+      "tags": [
+        "motivation",
+        "new-beginnings"
+      ],
       "isVerified": true,
       "style": {
         "fontSize": 24,
         "fontFamily": "Playfair Display",
         "colorHex": "#FFFFFF",
-        "effects": ["shadow"]
+        "effects": [
+          "shadow"
+        ]
       },
       "createdAt": "2024-01-02T00:00:00Z"
     }
@@ -170,48 +222,19 @@
         "en": "Ancient Buddhist temple during golden sunrise",
         "hi": "सुनहरी सूर्योदय के दौरान प्राचीन बौद्ध मंदिर"
       },
-      "categories": ["temples", "nature", "sunrise"],
-      "tags": ["morning", "peaceful"],
+      "categories": [
+        "temples",
+        "nature",
+        "sunrise"
+      ],
+      "tags": [
+        "morning",
+        "peaceful"
+      ],
       "dimensions": {
         "width": 1080,
         "height": 1920
       },
-      "textAreas": [
-        {
-          "id": "greeting",
-          "portrait": {
-            "x": 0.5,
-            "y": 0.3,
-            "width": 0.8,
-            "height": 0.2,
-            "rotation": 0
-          },
-          "landscape": {
-            "x": 0.5,
-            "y": 0.25,
-            "width": 0.7,
-            "height": 0.15,
-            "rotation": 0
-          }
-        },
-        {
-          "id": "quote",
-          "portrait": {
-            "x": 0.5,
-            "y": 0.7,
-            "width": 0.8,
-            "height": 0.25,
-            "rotation": 0
-          },
-          "landscape": {
-            "x": 0.5,
-            "y": 0.75,
-            "width": 0.7,
-            "height": 0.2,
-            "rotation": 0
-          }
-        }
-      ],
       "attribution": "Photo by @photographer1",
       "createdAt": "2024-01-02T00:00:00Z"
     },
@@ -227,48 +250,19 @@
         "en": "Zen garden with morning mist",
         "hi": "सुबह की धुंध के साथ जेन गार्डन"
       },
-      "categories": ["gardens", "nature", "sunrise"],
-      "tags": ["morning", "peaceful"],
+      "categories": [
+        "gardens",
+        "nature",
+        "sunrise"
+      ],
+      "tags": [
+        "morning",
+        "peaceful"
+      ],
       "dimensions": {
         "width": 1080,
         "height": 1920
       },
-      "textAreas": [
-        {
-          "id": "greeting",
-          "portrait": {
-            "x": 0.5,
-            "y": 0.3,
-            "width": 0.8,
-            "height": 0.2,
-            "rotation": 0
-          },
-          "landscape": {
-            "x": 0.5,
-            "y": 0.25,
-            "width": 0.7,
-            "height": 0.15,
-            "rotation": 0
-          }
-        },
-        {
-          "id": "quote",
-          "portrait": {
-            "x": 0.5,
-            "y": 0.7,
-            "width": 0.8,
-            "height": 0.25,
-            "rotation": 0
-          },
-          "landscape": {
-            "x": 0.5,
-            "y": 0.75,
-            "width": 0.7,
-            "height": 0.2,
-            "rotation": 0
-          }
-        }
-      ],
       "attribution": "Photo by @photographer2",
       "createdAt": "2024-01-02T00:00:00Z"
     },
@@ -284,48 +278,19 @@
         "en": "Mountain temple in morning light",
         "hi": "सुबह की रोशनी में पहाड़ी मंदिर"
       },
-      "categories": ["temples", "mountains", "sunrise"],
-      "tags": ["morning", "peaceful"],
+      "categories": [
+        "temples",
+        "mountains",
+        "sunrise"
+      ],
+      "tags": [
+        "morning",
+        "peaceful"
+      ],
       "dimensions": {
         "width": 1080,
         "height": 1920
       },
-      "textAreas": [
-        {
-          "id": "greeting",
-          "portrait": {
-            "x": 0.5,
-            "y": 0.3,
-            "width": 0.8,
-            "height": 0.2,
-            "rotation": 0
-          },
-          "landscape": {
-            "x": 0.5,
-            "y": 0.25,
-            "width": 0.7,
-            "height": 0.15,
-            "rotation": 0
-          }
-        },
-        {
-          "id": "quote",
-          "portrait": {
-            "x": 0.5,
-            "y": 0.7,
-            "width": 0.8,
-            "height": 0.25,
-            "rotation": 0
-          },
-          "landscape": {
-            "x": 0.5,
-            "y": 0.75,
-            "width": 0.7,
-            "height": 0.2,
-            "rotation": 0
-          }
-        }
-      ],
       "attribution": "Photo by @photographer3",
       "createdAt": "2024-01-02T00:00:00Z"
     },
@@ -341,48 +306,19 @@
         "en": "Lakeside temple at dawn",
         "hi": "भोर में झील किनारे मंदिर"
       },
-      "categories": ["temples", "water", "sunrise"],
-      "tags": ["morning", "peaceful"],
+      "categories": [
+        "temples",
+        "water",
+        "sunrise"
+      ],
+      "tags": [
+        "morning",
+        "peaceful"
+      ],
       "dimensions": {
         "width": 1080,
         "height": 1920
       },
-      "textAreas": [
-        {
-          "id": "greeting",
-          "portrait": {
-            "x": 0.5,
-            "y": 0.3,
-            "width": 0.8,
-            "height": 0.2,
-            "rotation": 0
-          },
-          "landscape": {
-            "x": 0.5,
-            "y": 0.25,
-            "width": 0.7,
-            "height": 0.15,
-            "rotation": 0
-          }
-        },
-        {
-          "id": "quote",
-          "portrait": {
-            "x": 0.5,
-            "y": 0.7,
-            "width": 0.8,
-            "height": 0.25,
-            "rotation": 0
-          },
-          "landscape": {
-            "x": 0.5,
-            "y": 0.75,
-            "width": 0.7,
-            "height": 0.2,
-            "rotation": 0
-          }
-        }
-      ],
       "attribution": "Photo by @photographer4",
       "createdAt": "2024-01-02T00:00:00Z"
     },
@@ -398,50 +334,37 @@
         "en": "Forest temple in morning fog",
         "hi": "सुबह की धुंध में जंगल का मंदिर"
       },
-      "categories": ["temples", "forest", "sunrise"],
-      "tags": ["morning", "mystical"],
+      "categories": [
+        "temples",
+        "forest",
+        "sunrise"
+      ],
+      "tags": [
+        "morning",
+        "mystical"
+      ],
       "dimensions": {
         "width": 1080,
         "height": 1920
       },
-      "textAreas": [
-        {
-          "id": "greeting",
-          "portrait": {
-            "x": 0.5,
-            "y": 0.3,
-            "width": 0.8,
-            "height": 0.2,
-            "rotation": 0
-          },
-          "landscape": {
-            "x": 0.5,
-            "y": 0.25,
-            "width": 0.7,
-            "height": 0.15,
-            "rotation": 0
-          }
-        },
-        {
-          "id": "quote",
-          "portrait": {
-            "x": 0.5,
-            "y": 0.7,
-            "width": 0.8,
-            "height": 0.25,
-            "rotation": 0
-          },
-          "landscape": {
-            "x": 0.5,
-            "y": 0.75,
-            "width": 0.7,
-            "height": 0.2,
-            "rotation": 0
-          }
-        }
-      ],
       "attribution": "Photo by @photographer5",
       "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": "bg006",
+      "type": "gradient",
+      "gradient": {
+        "colors": ["#FF8C00", "#FFD700"],
+        "type": "linear",
+        "angle": 45
+      },
+      "title": {
+        "en": "Golden Sunrise",
+        "hi": "सुनहरी सूर्योदय"
+      },
+      "categories": ["gradients", "warm"],
+      "tags": ["morning", "peaceful"],
+      "createdAt": "2024-01-04T00:00:00Z"
     }
   ],
   "templates": [
@@ -463,20 +386,82 @@
       },
       "style": {
         "greeting": {
-          "fontSize": 28,
+          "baseFontSize": 28,
+          "minFontSize": 16,
+          "maxLength": 120,
+          "overflow": "ellipsis",
+          "textAlign": "center",
+          "fallbackFonts": "sans-serif",
+          "lineHeight": 1.5,
+          "letterSpacing": 0.5,
+          "textTransform": "uppercase",
+          "maxFontSize": 32,
+          "fontSizeScale": 0.05,
           "fontFamily": "Poppins",
           "colorHex": "#FFFFFF",
-          "effects": ["shadow"]
+          "effects": [
+            "shadow"
+          ],
+          "position": {
+            "portrait": {
+              "x": 0.5,
+              "y": 0.2,
+              "width": 0.85,
+              "height": 0.15,
+              "padding": 16
+            },
+            "landscape": {
+              "x": 0.5,
+              "y": 0.15,
+              "width": 0.7,
+              "height": 0.2,
+              "padding": 16
+            }
+          }
         },
         "quote": {
-          "fontSize": 24,
+          "baseFontSize": 24,
+          "minFontSize": 14,
+          "maxLength": 120,
+          "overflow": "ellipsis",
+          "textAlign": "center",
+          "fallbackFonts": "sans-serif",
+          "lineHeight": 1.5,
+          "letterSpacing": 0.5,
+          "textTransform": "uppercase",
+          "maxFontSize": 28,
+          "fontSizeScale": 0.04,
           "fontFamily": "Playfair Display",
           "colorHex": "#FFFFFF",
-          "effects": ["shadow"]
+          "effects": [
+            "shadow"
+          ],
+          "position": {
+            "portrait": {
+              "x": 0.5,
+              "y": 0.6,
+              "width": 0.8,
+              "height": 0.3,
+              "padding": 16
+            },
+            "landscape": {
+              "x": 0.5,
+              "y": 0.5,
+              "width": 0.65,
+              "height": 0.35,
+              "padding": 16
+            }
+          }
         }
       },
-      "categories": ["morning", "blessings"],
-      "occasions": ["daily", "special"],
+      "categories": [
+        "morning",
+        "blessings"
+      ],
+      "occasions": [
+        "daily",
+        "special"
+      ],
       "isPremium": false,
       "createdAt": "2024-01-02T00:00:00Z"
     },
@@ -498,20 +483,82 @@
       },
       "style": {
         "greeting": {
-          "fontSize": 28,
+          "baseFontSize": 28,
+          "minFontSize": 16,
+          "maxLength": 120,
+          "overflow": "ellipsis",
+          "textAlign": "center",
+          "fallbackFonts": "sans-serif",
+          "lineHeight": 1.5,
+          "letterSpacing": 0.5,
+          "textTransform": "uppercase",
+          "maxFontSize": 32,
+          "fontSizeScale": 0.05,
           "fontFamily": "Poppins",
           "colorHex": "#FFFFFF",
-          "effects": ["shadow"]
+          "effects": [
+            "shadow"
+          ],
+          "position": {
+            "portrait": {
+              "x": 0.5,
+              "y": 0.25,
+              "width": 0.85,
+              "height": 0.15,
+              "padding": 16
+            },
+            "landscape": {
+              "x": 0.5,
+              "y": 0.2,
+              "width": 0.7,
+              "height": 0.2,
+              "padding": 16
+            }
+          }
         },
         "quote": {
-          "fontSize": 24,
+          "baseFontSize": 24,
+          "minFontSize": 14,
+          "maxLength": 120,
+          "overflow": "ellipsis",
+          "textAlign": "center",
+          "fallbackFonts": "sans-serif",
+          "lineHeight": 1.5,
+          "letterSpacing": 0.5,
+          "textTransform": "uppercase",
+          "maxFontSize": 28,
+          "fontSizeScale": 0.04,
           "fontFamily": "Playfair Display",
           "colorHex": "#FFFFFF",
-          "effects": ["shadow"]
+          "effects": [
+            "shadow"
+          ],
+          "position": {
+            "portrait": {
+              "x": 0.5,
+              "y": 0.65,
+              "width": 0.8,
+              "height": 0.3,
+              "padding": 16
+            },
+            "landscape": {
+              "x": 0.5,
+              "y": 0.55,
+              "width": 0.65,
+              "height": 0.35,
+              "padding": 16
+            }
+          }
         }
       },
-      "categories": ["wisdom", "meditation"],
-      "occasions": ["daily", "mindfulness"],
+      "categories": [
+        "wisdom",
+        "meditation"
+      ],
+      "occasions": [
+        "daily",
+        "mindfulness"
+      ],
       "isPremium": false,
       "createdAt": "2024-01-02T00:00:00Z"
     },
@@ -533,20 +580,82 @@
       },
       "style": {
         "greeting": {
-          "fontSize": 28,
+          "baseFontSize": 28,
+          "minFontSize": 16,
+          "maxLength": 120,
+          "overflow": "ellipsis",
+          "textAlign": "center",
+          "fallbackFonts": "sans-serif",
+          "lineHeight": 1.5,
+          "letterSpacing": 0.5,
+          "textTransform": "uppercase",
+          "maxFontSize": 32,
+          "fontSizeScale": 0.05,
           "fontFamily": "Poppins",
           "colorHex": "#FFFFFF",
-          "effects": ["shadow"]
+          "effects": [
+            "shadow"
+          ],
+          "position": {
+            "portrait": {
+              "x": 0.5,
+              "y": 0.15,
+              "width": 0.85,
+              "height": 0.15,
+              "padding": 16
+            },
+            "landscape": {
+              "x": 0.5,
+              "y": 0.1,
+              "width": 0.7,
+              "height": 0.2,
+              "padding": 16
+            }
+          }
         },
         "quote": {
-          "fontSize": 24,
+          "baseFontSize": 24,
+          "minFontSize": 14,
+          "maxLength": 120,
+          "overflow": "ellipsis",
+          "textAlign": "center",
+          "fallbackFonts": "sans-serif",
+          "lineHeight": 1.5,
+          "letterSpacing": 0.5,
+          "textTransform": "uppercase",
+          "maxFontSize": 28,
+          "fontSizeScale": 0.04,
           "fontFamily": "Playfair Display",
           "colorHex": "#FFFFFF",
-          "effects": ["shadow"]
+          "effects": [
+            "shadow"
+          ],
+          "position": {
+            "portrait": {
+              "x": 0.5,
+              "y": 0.55,
+              "width": 0.8,
+              "height": 0.3,
+              "padding": 16
+            },
+            "landscape": {
+              "x": 0.5,
+              "y": 0.45,
+              "width": 0.65,
+              "height": 0.35,
+              "padding": 16
+            }
+          }
         }
       },
-      "categories": ["inspiration", "nature"],
-      "occasions": ["daily", "adventure"],
+      "categories": [
+        "inspiration",
+        "nature"
+      ],
+      "occasions": [
+        "daily",
+        "adventure"
+      ],
       "isPremium": false,
       "createdAt": "2024-01-02T00:00:00Z"
     },
@@ -568,20 +677,82 @@
       },
       "style": {
         "greeting": {
-          "fontSize": 28,
+          "baseFontSize": 28,
+          "minFontSize": 16,
+          "maxLength": 120,
+          "overflow": "ellipsis",
+          "textAlign": "center",
+          "fallbackFonts": "sans-serif",
+          "lineHeight": 1.5,
+          "letterSpacing": 0.5,
+          "textTransform": "uppercase",
+          "maxFontSize": 32,
+          "fontSizeScale": 0.05,
           "fontFamily": "Poppins",
           "colorHex": "#FFFFFF",
-          "effects": ["shadow"]
+          "effects": [
+            "shadow"
+          ],
+          "position": {
+            "portrait": {
+              "x": 0.5,
+              "y": 0.2,
+              "width": 0.85,
+              "height": 0.15,
+              "padding": 16
+            },
+            "landscape": {
+              "x": 0.5,
+              "y": 0.15,
+              "width": 0.7,
+              "height": 0.2,
+              "padding": 16
+            }
+          }
         },
         "quote": {
-          "fontSize": 24,
+          "baseFontSize": 24,
+          "minFontSize": 14,
+          "maxLength": 120,
+          "overflow": "ellipsis",
+          "textAlign": "center",
+          "fallbackFonts": "sans-serif",
+          "lineHeight": 1.5,
+          "letterSpacing": 0.5,
+          "textTransform": "uppercase",
+          "maxFontSize": 28,
+          "fontSizeScale": 0.04,
           "fontFamily": "Playfair Display",
           "colorHex": "#FFFFFF",
-          "effects": ["shadow"]
+          "effects": [
+            "shadow"
+          ],
+          "position": {
+            "portrait": {
+              "x": 0.5,
+              "y": 0.6,
+              "width": 0.8,
+              "height": 0.3,
+              "padding": 16
+            },
+            "landscape": {
+              "x": 0.5,
+              "y": 0.5,
+              "width": 0.65,
+              "height": 0.35,
+              "padding": 16
+            }
+          }
         }
       },
-      "categories": ["morning", "peace"],
-      "occasions": ["daily", "meditation"],
+      "categories": [
+        "morning",
+        "peace"
+      ],
+      "occasions": [
+        "daily",
+        "meditation"
+      ],
       "isPremium": false,
       "createdAt": "2024-01-02T00:00:00Z"
     },
@@ -603,20 +774,82 @@
       },
       "style": {
         "greeting": {
-          "fontSize": 28,
+          "baseFontSize": 28,
+          "minFontSize": 16,
+          "maxLength": 120,
+          "overflow": "ellipsis",
+          "textAlign": "center",
+          "fallbackFonts": "sans-serif",
+          "lineHeight": 1.5,
+          "letterSpacing": 0.5,
+          "textTransform": "uppercase",
+          "maxFontSize": 32,
+          "fontSizeScale": 0.05,
           "fontFamily": "Poppins",
           "colorHex": "#FFFFFF",
-          "effects": ["shadow"]
+          "effects": [
+            "shadow"
+          ],
+          "position": {
+            "portrait": {
+              "x": 0.5,
+              "y": 0.2,
+              "width": 0.85,
+              "height": 0.15,
+              "padding": 16
+            },
+            "landscape": {
+              "x": 0.5,
+              "y": 0.15,
+              "width": 0.7,
+              "height": 0.2,
+              "padding": 16
+            }
+          }
         },
         "quote": {
-          "fontSize": 24,
+          "baseFontSize": 24,
+          "minFontSize": 14,
+          "maxLength": 120,
+          "overflow": "ellipsis",
+          "textAlign": "center",
+          "fallbackFonts": "sans-serif",
+          "lineHeight": 1.5,
+          "letterSpacing": 0.5,
+          "textTransform": "uppercase",
+          "maxFontSize": 28,
+          "fontSizeScale": 0.04,
           "fontFamily": "Playfair Display",
           "colorHex": "#FFFFFF",
-          "effects": ["shadow"]
+          "effects": [
+            "shadow"
+          ],
+          "position": {
+            "portrait": {
+              "x": 0.5,
+              "y": 0.6,
+              "width": 0.8,
+              "height": 0.3,
+              "padding": 16
+            },
+            "landscape": {
+              "x": 0.5,
+              "y": 0.5,
+              "width": 0.65,
+              "height": 0.35,
+              "padding": 16
+            }
+          }
         }
       },
-      "categories": ["wisdom", "nature"],
-      "occasions": ["daily", "reflection"],
+      "categories": [
+        "wisdom",
+        "nature"
+      ],
+      "occasions": [
+        "daily",
+        "reflection"
+      ],
       "isPremium": true,
       "createdAt": "2024-01-02T00:00:00Z"
     }
@@ -625,16 +858,56 @@
     "categories": [
       {
         "id": "heading",
-        "fonts": ["Poppins", "Roboto", "Open Sans"],
-        "sizes": [20, 24, 28, 32]
+        "fonts": [
+          "Poppins",
+          "Roboto",
+          "Open Sans"
+        ],
+        "sizes": [
+          20,
+          24,
+          28,
+          32
+        ]
       },
       {
         "id": "quote",
-        "fonts": ["Playfair Display", "Lora", "Merriweather"],
-        "sizes": [18, 20, 24, 28]
+        "fonts": [
+          "Playfair Display",
+          "Lora",
+          "Merriweather"
+        ],
+        "sizes": [
+          18,
+          20,
+          24,
+          28
+        ]
       }
     ],
-    "effects": ["none", "shadow", "glow", "outline"],
-    "colors": ["#FFFFFF", "#F5F5F5", "#FFD700", "#FFA500"]
+    "effects": [
+      "none",
+      "shadow",
+      "glow",
+      "outline"
+    ],
+    "colors": [
+      "#FFFFFF",
+      "#F5F5F5",
+      "#FFD700",
+      "#FFA500"
+    ]
+  },
+  "validation": {
+  "quotes": {
+    "maxLength": 280,
+    "minLength": 10,
+    "allowedCharacters": "^[a-zA-Z0-9.,!? ]*$"
+  },
+  "templates": {
+    "maxGreetingLength": 120,
+    "minFontSize": 12,
+    "maxFontSize": 72
   }
+}
 }
