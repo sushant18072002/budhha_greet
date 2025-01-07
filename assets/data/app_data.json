@@ -1,518 +1,582 @@
 {
   "metadata": {
-    "version": {
-      "schema": "4.0",
-      "lastUpdated": "2024-01-05T00:00:00Z",
-      "minAppVersion": "1.0.0",
-      "changelog": [
-        {
-          "version": "4.0",
-          "changes": [
-            "Optimized for Flutter state management",
-            "Enhanced caching and performance",
-            "Improved type safety and validation",
-            "Added error handling",
-            "Improved internationalization support",
-            "Added responsive design controls",
-            "Enhanced analytics tracking"
-          ],
-          "date": "2024-01-05T00:00:00Z",
-          "author": "system"
-        }
-      ]
-    },
-    "config": {
-      "supportedLanguages": [
+    "schema_version": "4.0",
+    "last_updated": "2024-01-05T00:00:00Z",
+    "min_app_version": "1.0.0"
+  },
+  "system_config": {
+    "languages": {
+      "supported": [
         "en",
         "hi"
       ],
-      "defaultLanguage": "en",
-      "fallbackLanguage": "en",
-      "app": {
-        "theme": {
-          "supportsDarkMode": true,
-          "dynamicColors": true
-        },
-        "connectivity": {
-          "offlineSupport": true,
-          "syncInterval": 3600
+      "default": "en",
+      "fallback": "en"
+    },
+    "app_settings": {
+      "theme": {
+        "dark_mode_support": true,
+        "dynamic_colors": true
+      },
+      "connectivity": {
+        "offline_support": true,
+        "sync_interval_seconds": 3600
+      }
+    },
+    "cache_config": {
+      "image": {
+        "ttl_seconds": 86400,
+        "strategy": "stale-while-revalidate",
+        "max_size_mb": 200,
+        "compression": {
+          "enabled": true,
+          "quality": 85
         }
       },
-      "caching": {
-        "images": {
-          "ttl": 86400,
-          "strategy": "stale-while-revalidate",
-          "maxSize": "200MB",
-          "compression": {
-            "enabled": true,
-            "quality": 85
-          },
-          "preload": {
-            "enabled": true,
-            "priority": [
-              "templates",
-              "backgrounds"
-            ]
-          }
-        },
-        "data": {
-          "ttl": 3600,
-          "strategy": "cache-first",
-          "persistence": true,
-          "encryption": true
-        }
+      "data": {
+        "ttl_seconds": 3600,
+        "strategy": "cache-first",
+        "persistence": true,
+        "encryption": true
+      }
+    },
+    "api_config": {
+      "base_url": "https://api.example.com/v4",
+      "timeout_ms": 30000,
+      "retry": {
+        "max_attempts": 3,
+        "backoff_ms": 1000
       },
-      "api": {
-        "baseUrl": "https://api.example.com/v4",
-        "timeout": 30000,
-        "retry": {
-          "attempts": 3,
-          "backoffMs": 1000
-        },
-        "rateLimit": {
-          "requestsPerMinute": 60,
-          "burstSize": 10
-        }
+      "rate_limit": {
+        "requests_per_minute": 60,
+        "burst_size": 10
       }
     }
   },
-  "quotes": {
+  "entities": {
+    "languages": {
+      "en": {
+        "id": "en",
+        "name": "English",
+        "rtl": false
+      },
+      "hi": {
+        "id": "hi",
+        "name": "Hindi",
+        "rtl": false
+      }
+    },
+    "categories": {
     "schema": {
       "type": "collection",
-      "indexes": [
-        "id",
-        "uuid",
-        "categories",
-        "tags",
-        "createdAt",
-        "language"
-      ],
-      "required": [
-        "uuid",
-        "text",
-        "author"
-      ],
-      "unique": [
-        "uuid",
-        "id"
-      ]
+      "id_prefix": "cat_",
+      "indexes": ["id", "type", "parent_id"],
+      "required": ["id", "type", "translations"]
     },
     "data": [
       {
+        "id": "cat_nature_001",
+        "type": "nature",
+        "parent_id": null,
+        "translations": {
+          "en": {
+            "name": "Nature",
+            "description": "Nature related backgrounds"
+          },
+          "hi": {
+            "name": "प्रकृति",
+            "description": "प्रकृति संबंधित पृष्ठभूमि"
+          }
+        },
+        "metadata": {
+          "icon": "leaf",
+          "color": "0xFF4CAF50"
+        },
+        "audit": {
+          "created_at": "2024-01-02T00:00:00Z",
+          "created_by": "system",
+          "modified_at": "2024-01-02T00:00:00Z",
+          "modified_by": "system",
+          "version": 1
+        }
+      },
+      {
+        "id": "cat_temple_001",
+        "type": "architecture",
+        "parent_id": null,
+        "translations": {
+          "en": {
+            "name": "Temples",
+            "description": "Temple and spiritual places"
+          },
+          "hi": {
+            "name": "मंदिर",
+            "description": "मंदिर और आध्यात्मिक स्थल"
+          }
+        },
+        "metadata": {
+          "icon": "temple",
+          "color": "0xFF9C27B0"
+        },
+        "audit": {
+          "created_at": "2024-01-02T00:00:00Z",
+          "created_by": "system",
+          "modified_at": "2024-01-02T00:00:00Z",
+          "modified_by": "system",
+          "version": 1
+        }
+      },
+      {
+        "id": "cat_abstract_001",
+        "type": "style",
+        "parent_id": null,
+        "translations": {
+          "en": {
+            "name": "Abstract",
+            "description": "Abstract patterns and designs"
+          },
+          "hi": {
+            "name": "सार",
+            "description": "सार पैटर्न और डिजाइन"
+          }
+        },
+        "metadata": {
+          "icon": "triangle",
+          "color": "0xFF2196F3"
+        },
+        "audit": {
+          "created_at": "2024-01-02T00:00:00Z",
+          "created_by": "system",
+          "modified_at": "2024-01-02T00:00:00Z",
+          "modified_by": "system",
+          "version": 1
+        }
+      }
+    ]
+  },
+  "tags": {
+    "schema": {
+      "type": "collection",
+      "id_prefix": "tag_",
+      "indexes": ["id", "category"],
+      "required": ["id", "translations"]
+    },
+    "data": [
+      {
+        "id": "tag_time_001",
+        "category": "time",
+        "translations": {
+          "en": {
+            "name": "Morning",
+            "description": "Morning time content"
+          },
+          "hi": {
+            "name": "सुबह",
+            "description": "सुबह का समय सामग्री"
+          }
+        },
+        "metadata": {
+          "icon": "sun-rise",
+          "color": "0xFFFFA000"
+        },
+        "audit": {
+          "created_at": "2024-01-02T00:00:00Z",
+          "created_by": "system",
+          "modified_at": "2024-01-02T00:00:00Z",
+          "modified_by": "system",
+          "version": 1
+        }
+      },
+      {
+        "id": "tag_mood_002",
+        "category": "mood",
+        "translations": {
+          "en": {
+            "name": "Peaceful",
+            "description": "Calm and peaceful content"
+          },
+          "hi": {
+            "name": "शांतिपूर्ण",
+            "description": "शांत और शांतिपूर्ण सामग्री"
+          }
+        },
+        "metadata": {
+          "icon": "peace",
+          "color": "0xFF66BB6A"
+        },
+        "audit": {
+          "created_at": "2024-01-02T00:00:00Z",
+          "created_by": "system",
+          "modified_at": "2024-01-02T00:00:00Z",
+          "modified_by": "system",
+          "version": 1
+        }
+      }
+    ]
+  },
+    "authors": {
+      "auth001": {
+        "uuid": "auth001",
+        "translations": {
+          "en": {
+            "name": "Buddha",
+            "info": "Spiritual Teacher"
+          },
+          "hi": {
+            "name": "बुद्ध",
+            "info": "आध्यात्मिक गुरु"
+          }
+        }
+      }
+    },
+    "sources": {
+      "src001": {
+        "uuid": "src001",
+        "translations": {
+          "en": {
+            "title": "Dhammapada"
+          },
+          "hi": {
+            "title": "धम्मपद"
+          }
+        },
+        "reference": "Chapter 1, Verse 3",
+        "type": "religious_text"
+      }
+    },
+    "quotes": {
+      "q001": {
         "uuid": "550e8400-e29b-41d4-a716-446655440000",
-        "id": "q001",
-        "text": {
-          "en": "Peace comes from within. Do not seek it without.",
-          "hi": "शांति भीतर से आती है। बाहर इसकी तलाश न करें।"
-        },
-        "author": {
-          "uuid": "auth001",
-          "name": {
-            "en": "Buddha",
-            "hi": "बुद्ध"
+        "translations": {
+          "en": {
+            "text": "Peace comes from within. Do not seek it without.",
+            "semantic_label": "Quote by Buddha about inner peace"
           },
-          "info": {
-            "en": "Spiritual Teacher",
-            "hi": "आध्यात्मिक गुरु"
+          "hi": {
+            "text": "शांति भीतर से आती है। बाहर इसकी तलाश न करें।",
+            "semantic_label": "बुद्ध द्वारा आंतरिक शांति पर उद्धरण"
           }
         },
-        "source": {
-          "uuid": "src001",
-          "title": {
-            "en": "Dhammapada",
-            "hi": "धम्मपद"
-          },
-          "reference": "Chapter 1, Verse 3",
-          "type": "religious_text"
-        },
-        "categories": [
-          {
-            "en": "peace",
-            "hi": "शांति"
-          },
-          {
-            "en": "wisdom",
-            "hi": "ज्ञान"
-          },
-          {
-            "en": "meditation",
-            "hi": "ध्यान"
-          }
+        "author_id": "auth001",
+        "source_id": "src001",
+        "category_ids": [
+          "peace",
+          "wisdom",
+          "meditation"
         ],
-        "tags": [
-          {
-            "en": "morning",
-            "hi": "सुबह"
-          },
-          {
-            "en": "inspiration",
-            "hi": "प्रेरणा"
-          }
+        "tag_ids": [
+          "tag_time_001",
+          "inspiration"
         ],
         "style": {
           "typography": {
-            "fontFamily": "Playfair Display",
-            "fontSize": {
+            "font_family": "Playfair Display",
+            "font_size": {
               "base": 24,
               "min": 16,
               "max": 32,
               "scale": 0.05
             },
-            "fontWeight": "500",
-            "letterSpacing": 0.5,
-            "lineHeight": 1.5,
-            "textAlign": "center"
+            "font_weight": "500",
+            "letter_spacing": 0.5,
+            "line_height": 1.5,
+            "text_align": "center"
           },
           "colors": {
             "text": "0xFFFFFFFF",
             "shadow": "0x80000000"
-          },
-          "effects": {
-            "shadow": {
-              "color": "0x80000000",
-              "offset": {
-                "dx": 2,
-                "dy": 2
-              },
-              "blurRadius": 4
-            }
           }
         },
-        "localization": {
-          "originalLanguage": "pali",
-          "availableLanguages": [
-            "en",
-            "hi"
-          ],
-          "rtlSupport": false
-        },
-        "accessibility": {
-          "semanticLabel": {
-            "en": "Quote by Buddha about inner peace",
-            "hi": "बुद्ध द्वारा आंतरिक शांति पर उद्धरण"
-          }
-        },
-        "moderation": {
-          "status": "approved",
-          "reviewedAt": "2024-01-05T00:00:00Z",
-          "reviewedBy": "system"
+        "metadata": {
+          "original_language": "pali",
+          "moderation_status": "approved",
+          "moderation_date": "2024-01-05T00:00:00Z",
+          "moderation_by": "system"
         },
         "metrics": {
           "views": 0,
           "shares": 0,
           "favorites": 0,
-          "lastInteraction": null
+          "last_interaction": null
         },
         "audit": {
-          "createdAt": "2024-01-02T00:00:00Z",
-          "createdBy": "system",
-          "lastModifiedAt": "2024-01-02T00:00:00Z",
-          "lastModifiedBy": "system",
-          "version": 1,
-          "changes": []
-        }
-      }
-    ]
-  },
-  "backgrounds": {
-    "schema": {
-      "type": "collection",
-      "indexes": [
-        "id",
-        "uuid",
-        "type",
-        "categories"
-      ],
-      "required": [
-        "uuid",
-        "type",
-        "title"
-      ],
-      "unique": [
-        "uuid",
-        "id"
-      ]
-    },
-    "data": [
-      {
-        "id": "bg001",
-        "type": "image",
-        "title": {
-          "en": "Temple at Sunrise 1",
-          "hi": "सूर्योदय में मंदिर 1"
-        },
-        "description": {
-          "en": "Ancient Buddhist temple during golden sunrise",
-          "hi": "सुनहरी सूर्योदय के दौरान प्राचीन बौद्ध मंदिर"
-        },
-        "visual": {
-          "image": {
-            "original": "assets/images/backgrounds/temple_sunrise1.jpeg",
-            "thumbnail": "assets/images/thumbnails/temple_sunrise1_thumb.jpeg",
-            "placeholder": "assets/images/placeholders/temple_sunrise1_tiny.jpeg",
-            "variants": [
-              {
-                "width": 640,
-                "height": 1136,
-                "path": "assets/images/backgrounds/temple_sunrise1_sm.jpeg"
-              },
-              {
-                "width": 750,
-                "height": 1334,
-                "path": "assets/images/backgrounds/temple_sunrise1_md.jpeg"
-              },
-              {
-                "width": 1080,
-                "height": 1920,
-                "path": "assets/images/backgrounds/temple_sunrise1_lg.jpeg"
-              }
-            ]
-          },
-          "gradient": null,
-          "color": null
-        },
-        "categories": [
-          {
-            "en": "temples",
-            "hi": "मंदिर"
-          },
-          {
-            "en": "nature",
-            "hi": "प्रकृति"
-          }
-        ],
-        "tags": [
-          {
-            "en": "morning",
-            "hi": "सुबह"
-          },
-          {
-            "en": "peaceful",
-            "hi": "शांतिपूर्ण"
-          }
-        ],
-        "accessibility": {
-          "decorative": false,
-          "semanticLabel": {
-            "en": "Buddhist temple at sunrise with golden sky",
-            "hi": "सुनहरे आसमान के साथ सूर्योदय में बौद्ध मंदिर"
-          }
-        },
-        "attribution": {
-          "photographer": "@photographer1",
-          "license": "CC BY 4.0",
-          "url": "https://example.com/license"
-        },
-        "optimization": {
-          "formats": [
-            "jpeg",
-            "webp",
-            "avif"
-          ],
-          "quality": 85,
-          "placeholder": "blur"
-        },
-        "caching": {
-          "ttl": 86400,
-          "priority": "high",
-          "preload": true
-        },
-        "audit": {
-          "createdAt": "2024-01-02T00:00:00Z",
-          "createdBy": "system",
-          "lastModifiedAt": "2024-01-02T00:00:00Z",
-          "lastModifiedBy": "system",
+          "created_at": "2024-01-02T00:00:00Z",
+          "created_by": "system",
+          "modified_at": "2024-01-02T00:00:00Z",
+          "modified_by": "system",
           "version": 1
         }
+      }
+    },
+    "backgrounds": {
+      "schema": {
+        "type": "collection",
+        "indexes": [
+          "id",
+          "uuid",
+          "type",
+          "categories"
+        ],
+        "required": [
+          "uuid",
+          "type",
+          "title"
+        ],
+        "unique": [
+          "uuid",
+          "id"
+        ]
       },
-      {
-        "id": "bg006",
-        "type": "gradient",
-        "title": {
-          "en": "Golden Sunrise",
-          "hi": "सुनहरी सूर्योदय"
-        },
-        "description": {
-          "en": "A warm gradient representing the hues of a golden sunrise",
-          "hi": "सुनहरे सूर्योदय के रंगों को दर्शाता एक गर्म ग्रेडिएंट"
-        },
-        "visual": {
-          "image": null,
-          "gradient": {
-            "colors": [
-              "0xFFFF8C00",
-              "0xFFFFD700"
+      "data": [
+        {
+          "uuid": "bg001",
+          "id": "bg001",
+          "type": "image",
+          "translations": {
+            "en": {
+              "title": "Temple at Sunrise 1",
+              "description": "Ancient Buddhist temple during golden sunrise",
+              "semantic_label": "Buddhist temple at sunrise with golden sky"
+            },
+            "hi": {
+              "title": "सूर्योदय में मंदिर 1",
+              "description": "सुनहरी सूर्योदय के दौरान प्राचीन बौद्ध मंदिर",
+              "semantic_label": "सुनहरे आसमान के साथ सूर्योदय में बौद्ध मंदिर"
+            }
+          },
+          "visual_data": {
+            "image": {
+              "original": "assets/images/backgrounds/temple_sunrise1.jpeg",
+              "thumbnail": "assets/images/thumbnails/temple_sunrise1_thumb.jpeg",
+              "placeholder": "assets/images/placeholders/temple_sunrise1_tiny.jpeg",
+              "variants": [
+                {
+                  "width": 640,
+                  "height": 1136,
+                  "path": "assets/images/backgrounds/temple_sunrise1_sm.jpeg"
+                },
+                {
+                  "width": 750,
+                  "height": 1334,
+                  "path": "assets/images/backgrounds/temple_sunrise1_md.jpeg"
+                },
+                {
+                  "width": 1080,
+                  "height": 1920,
+                  "path": "assets/images/backgrounds/temple_sunrise1_lg.jpeg"
+                }
+              ]
+            },
+            "gradient": null,
+            "color": null
+          },
+          "visual_effects": {
+            "opacity": 1.0,
+            "blur": 0,
+            "blend_mode": "normal"
+          },
+          "category_ids": [
+            "temples",
+            "nature"
+          ],
+          "tag_ids": [
+            "tag_time_001",
+            "tag_time_002"
+          ],
+          "attribution": {
+            "photographer": "@photographer1",
+            "license": "CC BY 4.0",
+            "url": "https://example.com/license"
+          },
+          "optimization": {
+            "formats": [
+              "jpeg",
+              "webp",
+              "avif"
             ],
-            "type": "linear",
-            "angle": 45
+            "quality": 85,
+            "placeholder": "blur"
           },
-          "color": null
-        },
-        "categories": [
-          {
-            "en": "temples",
-            "hi": "मंदिर"
+          "cache_config": {
+            "ttl_seconds": 86400,
+            "priority": "high",
+            "preload": true
           },
-          {
-            "en": "nature",
-            "hi": "प्रकृति"
-          }
-        ],
-        "tags": [
-          {
-            "en": "morning",
-            "hi": "सुबह"
-          },
-          {
-            "en": "peaceful",
-            "hi": "शांतिपूर्ण"
-          }
-        ],
-        "accessibility": {
-          "decorative": true,
-          "semanticLabel": {
-            "en": "Warm golden gradient",
-            "hi": "गर्म सुनहरी ग्रेडिएंट"
+          "audit": {
+            "created_at": "2024-01-02T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-02T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
           }
         },
-        "attribution": {
-          "license": "CC0",
-          "url": "https://example.com/gradient-license"
-        },
-        "optimization": {
-          "formats": [
-            "webp",
-            "jpeg"
+        {
+          "uuid": "bg006",
+          "id": "bg006",
+          "type": "gradient",
+          "translations": {
+            "en": {
+              "title": "Golden Sunrise",
+              "description": "A warm gradient representing the hues of a golden sunrise",
+              "semantic_label": "Warm golden gradient"
+            },
+            "hi": {
+              "title": "सुनहरी सूर्योदय",
+              "description": "सुनहरे सूर्योदय के रंगों को दर्शाता एक गर्म ग्रेडिएंट",
+              "semantic_label": "गर्म सुनहरी ग्रेडिएंट"
+            }
+          },
+          "visual_data": {
+            "image": null,
+            "gradient": {
+              "colors": [
+                "0xFFFF8C00",
+                "0xFFFFD700"
+              ],
+              "type": "linear",
+              "angle": 45,
+              "stops": [
+                {
+                  "position": 0.0,
+                  "color": "0xFFFF8C00"
+                },
+                {
+                  "position": 1.0,
+                  "color": "0xFFFFD700"
+                }
+              ]
+            },
+            "color": null
+          },
+          "visual_effects": {
+            "opacity": 0.38,  
+            "blur": 1.5,      
+            "blend_mode": "normal"
+          },
+          "category_ids": [
+            "abstract",
+            "warm"
           ],
-          "quality": 90,
-          "placeholder": "solid"
-        },
-        "caching": {
-          "ttl": 86400,
-          "priority": "medium",
-          "preload": false
-        },
-        "audit": {
-          "createdAt": "2024-01-04T00:00:00Z",
-          "createdBy": "user",
-          "lastModifiedAt": "2024-01-04T00:00:00Z",
-          "lastModifiedBy": "user",
-          "version": 1
-        }
-      },
-      {
-        "id": "bg007",
-        "type": "color",
-        "title": {
-          "en": "Bright Orange",
-          "hi": "चमकीला नारंगी"
-        },
-        "description": {
-          "en": "A solid bright orange color representing energy and warmth",
-          "hi": "ऊर्जा और गर्मी का प्रतिनिधित्व करने वाला ठोस चमकीला नारंगी रंग"
-        },
-        "visual": {
-          "image": null,
-          "gradient": null,
-          "color": "0xFFFFA500"
-        },
-        "categories": [
-          {
-            "en": "temples",
-            "hi": "मंदिर"
-          },
-          {
-            "en": "nature",
-            "hi": "प्रकृति"
-          }
-        ],
-        "tags": [
-          {
-            "en": "morning",
-            "hi": "सुबह"
-          },
-          {
-            "en": "peaceful",
-            "hi": "शांतिपूर्ण"
-          }
-        ],
-        "accessibility": {
-          "decorative": true,
-          "semanticLabel": {
-            "en": "Bright orange color",
-            "hi": "चमकीला नारंगी रंग"
-          }
-        },
-        "attribution": {
-          "license": "CC0",
-          "url": "https://example.com/color-license"
-        },
-        "optimization": {
-          "formats": [
-            "webp",
-            "jpeg"
+          "tag_ids": [
+            "tag_time_001",
+            "tag_time_002"
           ],
-          "quality": 100,
-          "placeholder": "solid"
+          "attribution": {
+            "license": "CC0",
+            "url": "https://example.com/gradient-license"
+          },
+          "optimization": {
+            "formats": [
+              "svg"
+            ],
+            "quality": 100,
+            "placeholder": "color"
+          },
+          "cache_config": {
+            "ttl_seconds": 86400,
+            "priority": "medium",
+            "preload": false
+          },
+          "audit": {
+            "created_at": "2024-01-04T00:00:00Z",
+            "created_by": "user",
+            "modified_at": "2024-01-04T00:00:00Z",
+            "modified_by": "user",
+            "version": 1
+          }
         },
-        "caching": {
-          "ttl": 86400,
-          "priority": "low",
-          "preload": false
-        },
-        "audit": {
-          "createdAt": "2024-01-05T00:00:00Z",
-          "createdBy": "user",
-          "lastModifiedAt": "2024-01-05T00:00:00Z",
-          "lastModifiedBy": "user",
-          "version": 1
+        {
+          "uuid": "bg007",
+          "id": "bg007",
+          "type": "color",
+          "translations": {
+            "en": {
+              "title": "Bright Orange",
+              "description": "A solid bright orange color representing energy and warmth",
+              "semantic_label": "Bright orange color"
+            },
+            "hi": {
+              "title": "चमकीला नारंगी",
+              "description": "ऊर्जा और गर्मी का प्रतिनिधित्व करने वाला ठोस चमकीला नारंगी रंग",
+              "semantic_label": "चमकीला नारंगी रंग"
+            }
+          },
+          "visual_data": {
+            "image": null,
+            "gradient": null,
+            "color": {
+              "color": "0xFFFFA500",
+              "palette": {
+                "light": "0xFFFFA500",
+                "dark": "0xFFFF8C00"
+              }
+            }
+          },
+          "visual_effects": {
+            "opacity": 1.0,
+            "blur": 0,
+            "blend_mode": "normal"
+          },
+          "category_ids": [
+            "solid",
+            "warm"
+          ],
+          "tag_ids": [
+            "energetic",
+            "bright"
+          ],
+          "attribution": {
+            "license": "CC0",
+            "url": "https://example.com/color-license"
+          },
+          "optimization": {
+            "formats": [
+              "hex"
+            ],
+            "quality": 100,
+            "placeholder": "color"
+          },
+          "cache_config": {
+            "ttl_seconds": 86400,
+            "priority": "low",
+            "preload": false
+          },
+          "audit": {
+            "created_at": "2024-01-05T00:00:00Z",
+            "created_by": "user",
+            "modified_at": "2024-01-05T00:00:00Z",
+            "modified_by": "user",
+            "version": 1
+          }
         }
-      }
-    ]
-  },
-  "templates": {
-    "schema": {
-      "type": "collection",
-      "indexes": [
-        "id",
-        "uuid",
-        "categories",
-        "occasions"
-      ],
-      "required": [
-        "uuid",
-        "title",
-        "backgroundId",
-        "quoteId"
-      ],
-      "unique": [
-        "uuid",
-        "id"
       ]
-    },
-    "data": [
-      {
+    }
+    ,
+
+    "templates": {
+      "t001": {
         "uuid": "550e8400-e29b-41d4-a716-446655440002",
-        "id": "t001",
-        "title": {
-          "en": "Morning Blessing",
-          "hi": "प्रभाती आशीर्वाद"
-        },
-        "description": {
-          "en": "Perfect template for sharing morning blessings",
-          "hi": "सुबह का आशीर्वाद साझा करने के लिए उत्तम टेम्पलेट"
+        "translations": {
+          "en": {
+            "title": "Morning Blessing",
+            "description": "Perfect template for sharing morning blessings",
+            "greeting": "Good Morning! May your day be filled with peace and joy.",
+            "semantic_label": "Buddhist temple at sunrise with golden sky"
+          },
+          "hi": {
+            "title": "प्रभाती आशीर्वाद",
+            "description": "सुबह का आशीर्वाद साझा करने के लिए उत्तम टेम्पलेट",
+            "greeting": "सुप्रभात! आपका दिन शांति और आनंद से भरा हो।",
+            "semantic_label": "सुनहरे आसमान के साथ सूर्योदय में बौद्ध मंदिर"
+          }
         },
         "composition": {
-          "backgroundId": "bg001",
-          "quoteId": "q001",
+          "background_id": "bg001",
+          "quote_id": "q001",
           "layout": "vertical",
-          "aspectRatio": "9:16"
+          "aspect_ratio": "9:16"
         },
-        "greeting": {
-          "en": "Good Morning! May your day be filled with peace and joy.",
-          "hi": "सुप्रभात! आपका दिन शांति और आनंद से भरा हो।"
-        },
-        "layout": {
+        "layout_config": {
           "responsive": true,
           "portrait": {
             "greeting": {
@@ -525,7 +589,7 @@
                 "height": 0.15
               },
               "padding": 16,
-              "safeArea": {
+              "safe_area": {
                 "top": 44,
                 "bottom": 34
               }
@@ -553,7 +617,7 @@
                 "height": 0.2
               },
               "padding": 16,
-              "safeArea": {
+              "safe_area": {
                 "top": 0,
                 "bottom": 21
               }
@@ -571,240 +635,81 @@
             }
           }
         },
-        "style": {
+        "style_config": {
           "greeting": {
             "typography": {
-              "fontFamily": "Poppins",
-              "fontSize": {
+              "font_family": "Poppins",
+              "font_size": {
                 "base": 28,
                 "min": 16,
                 "max": 32,
                 "scale": 0.05
               },
-              "fontWeight": "600",
-              "letterSpacing": 0.5,
-              "lineHeight": 1.5,
-              "textAlign": "center",
-              "textTransform": "uppercase"
+              "font_weight": "600",
+              "letter_spacing": 0.5,
+              "line_height": 1.5,
+              "text_align": "center",
+              "text_transform": "uppercase"
             },
             "colors": {
               "text": "0xFFFFFFFF",
               "shadow": "0x80000000"
-            },
-            "effects": {
-              "shadow": {
-                "color": "0x80000000",
-                "offset": {
-                  "dx": 2,
-                  "dy": 2
-                },
-                "blurRadius": 4
-              }
-            }
-          },
-          "quote": {
-            "typography": {
-              "fontFamily": "Playfair Display",
-              "fontSize": {
-                "base": 24,
-                "min": 14,
-                "max": 28,
-                "scale": 0.04
-              },
-              "fontWeight": "500",
-              "letterSpacing": 0.5,
-              "lineHeight": 1.5,
-              "textAlign": "center"
-            },
-            "colors": {
-              "text": "0xFFFFFFFF",
-              "shadow": "0x80000000"
-            },
-            "effects": {
-              "shadow": {
-                "color": "0x80000000",
-                "offset": {
-                  "dx": 2,
-                  "dy": 2
-                },
-                "blurRadius": 4
-              }
             }
           }
         },
-        "accessibility": {
-          "decorative": false,
-          "semanticLabel": {
-            "en": "Buddhist temple at sunrise with golden sky",
-            "hi": "सुनहरे आसमान के साथ सूर्योदय में बौद्ध मंदिर"
-          }
-        },
-        "categories": [
-          {
-            "en": "temples",
-            "hi": "मंदिर"
-          },
-          {
-            "en": "nature",
-            "hi": "प्रकृति"
-          }
+        "category_ids": [
+          "temples",
+          "nature"
         ],
-        "tags": [
-          {
-            "en": "morning",
-            "hi": "सुबह"
-          },
-          {
-            "en": "peaceful",
-            "hi": "शांतिपूर्ण"
-          }
+        "tag_ids": [
+          "tag_time_001",
+          "tag_time_002"
         ],
-        "localization": {
-          "supportedLanguages": [
-            "en",
-            "hi"
-          ],
-          "defaultLanguage": "en",
-          "rtlSupport": false
+        "metadata": {
+          "is_premium": false,
+          "status": "active",
+          "version": 1
         },
         "metrics": {
           "views": 0,
           "shares": 0,
           "favorites": 0,
-          "lastUsed": null
-        },
-        "metadata": {
-          "isPremium": false,
-          "version": 1,
-          "status": "active"
+          "last_used": null
         },
         "audit": {
-          "createdAt": "2024-01-02T00:00:00Z",
-          "createdBy": "system",
-          "lastModifiedAt": "2024-01-02T00:00:00Z",
-          "lastModifiedBy": "system",
+          "created_at": "2024-01-02T00:00:00Z",
+          "created_by": "system",
+          "modified_at": "2024-01-02T00:00:00Z",
+          "modified_by": "system",
           "version": 1
         }
       }
-    ]
+    }
   },
-  "fonts": {
-    "categories": [
-      {
-        "id": "heading",
-        "title":
-          {
-            "en": "heading",
-            "hi": "शीर्षक"
-          }
-        ,
-        "fonts": [
-          {
-            "name": "Poppins",
-            "weights": [
-              400,
-              500,
-              600,
-              700
-            ],
-            "styles": [
-              "normal",
-              "italic"
-            ],
-            "subset": "latin",
-            "fallback": "sans-serif",
-            "license": "OFL",
-            "url": "assets/fonts/poppins"
-          }
-        ],
-        "sizes": {
-          "min": 20,
-          "max": 32,
-          "step": 4
-        }
-      },
-      {
-        "id": "quote",
-        "title":{
-          "en": "heading",
-          "hi": "शीर्षक"
-        },
-        "fonts": [
-          {
-            "name": "Playfair Display",
-            "weights": [
-              400,
-              500,
-              600,
-              700
-            ],
-            "styles": [
-              "normal",
-              "italic",
-              "bold"
-            ],
-            "subset": "latin",
-            "fallback": "sans-serif",
-            "license": "OFL",
-            "url": "assets/fonts/poppins"
-          }
-        ],
-        "sizes": {
-          "min": 20,
-          "max": 32,
-          "step": 4
-        }
-      }
-    ],
-    "effects": [
-      {
-        "en": "none",
-        "hi": "कोई नहीं"
-      },
-      {
-        "en": "shadow",
-        "hi": "छाया"
-      },
-      {
-        "en": "glow",
-        "hi": "चमक"
-      },
-      {
-        "en": "outline",
-        "hi": "रूपरेखा"
-      }
-    ],
-    "colors": [
-      "0xFFFFFFFF",
-      "0xFFF5F5F5",
-      "0xFFFFD700",
-      "0xFFFFA500"
-    ]
-  },
-  "validation": {
+  "validation_rules": {
     "quotes": {
       "text": {
-        "maxLength": 280,
-        "minLength": 10,
-        "allowedCharacters": "^[a-zA-Z0-9.,!? ]*$"
+        "max_length": 280,
+        "min_length": 10,
+        "allowed_characters": "^[a-zA-Z0-9.,!? ]*$"
       },
       "author": {
-        "maxLength": 50,
-        "minLength": 2
+        "max_length": 50,
+        "min_length": 2
       }
     },
     "templates": {
       "greeting": {
-        "maxLength": 120,
-        "minLength": 10
+        "max_length": 120,
+        "min_length": 10
       },
       "typography": {
-        "minFontSize": 12,
-        "maxFontSize": 72
+        "min_font_size": 12,
+        "max_font_size": 72
       }
     }
   },
-  "analytics": {
+  "analytics_config": {
     "tracking": {
       "enabled": true,
       "metrics": [
@@ -814,25 +719,25 @@
         "favorites"
       ],
       "events": [
-        "templateCreated",
-        "quoteShared",
-        "backgroundSelected"
+        "template_created",
+        "quote_shared",
+        "background_selected"
       ]
     },
     "reporting": {
-      "dailyStats": true,
-      "weeklyStats": true,
-      "monthlyStats": true,
-      "popularItems": {
-        "templates": [
+      "daily_stats": true,
+      "weekly_stats": true,
+      "monthly_stats": true,
+      "popular_items": {
+        "template_ids": [
           "t001",
           "t002"
         ],
-        "quotes": [
+        "quote_ids": [
           "q001",
           "q003"
         ],
-        "backgrounds": [
+        "background_ids": [
           "bg001",
           "bg003"
         ]
