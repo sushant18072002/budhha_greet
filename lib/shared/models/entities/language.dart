@@ -7,12 +7,15 @@ part 'language.g.dart';
 @JsonSerializable()
 class Language {
   @HiveField(0)
+  @JsonKey(name: 'id')
   final String id;
   
   @HiveField(1)
+  @JsonKey(name: 'name')
   final String name;
   
   @HiveField(2)
+  @JsonKey(name: 'rtl')
   final bool rtl;
 
   Language({
@@ -31,6 +34,7 @@ class Language {
 @JsonSerializable()
 class LanguageCollection {
   @HiveField(0)
+  @JsonKey(name: 'data')
   final List<Language> data;
 
   LanguageCollection({

@@ -9,12 +9,15 @@ part 'visual_data.g.dart';
 @JsonSerializable()
 class VisualData {
   @HiveField(0)
+   @JsonKey(name: 'image')
   final ImageData? image;
   
   @HiveField(1)
+   @JsonKey(name: 'gradient')
   final GradientData? gradient;
   
   @HiveField(2)
+   @JsonKey(name: 'color')
   final ColorData? color;
 
   VisualData({

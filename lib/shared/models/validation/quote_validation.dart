@@ -10,9 +10,11 @@ part 'quote_validation.g.dart';
 @JsonSerializable()
 class QuoteValidation {
   @HiveField(0)
+   @JsonKey(name: 'text')
   final TextValidation text;
   
   @HiveField(1)
+   @JsonKey(name: '')
   final AuthorValidation author;
 
   QuoteValidation({

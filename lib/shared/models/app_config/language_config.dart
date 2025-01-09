@@ -7,12 +7,15 @@ part 'language_config.g.dart';
 @JsonSerializable()
 class LanguageConfig {
   @HiveField(0)
+  @JsonKey(name: 'supported')
   final List<String> supported;
   
   @HiveField(1)
+   @JsonKey(name: 'default')
   final String defaultLang;
   
   @HiveField(2)
+   @JsonKey(name: 'fallback')
   final String fallback;
 
   LanguageConfig({

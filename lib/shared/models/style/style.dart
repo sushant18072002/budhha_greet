@@ -10,9 +10,11 @@ part 'style.g.dart';
 @JsonSerializable()
 class Style {
   @HiveField(0)
+  @JsonKey(name: 'typography')
   final Typography typography;
   
   @HiveField(1)
+  @JsonKey(name: 'colors')
   final StyleColors colors;
 
   Style({

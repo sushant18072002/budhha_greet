@@ -27,6 +27,9 @@ class AppConfig {
   @HiveField(4)
   final AnalyticsConfig analyticsConfig;
 
+  @HiveField(5)
+  bool isInitialized=false;
+
   AppConfig({
     required this.metadata,
     required this.systemConfig,

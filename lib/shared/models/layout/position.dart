@@ -8,9 +8,11 @@ part 'position.g.dart';
 @JsonSerializable()
 class Position {
   @HiveField(0)
+  @JsonKey(name: 'x')
   final double x;
   
   @HiveField(1)
+  @JsonKey(name: 'y')
   final double y;
 
   Position({

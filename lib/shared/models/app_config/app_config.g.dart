@@ -22,13 +22,13 @@ class AppConfigAdapter extends TypeAdapter<AppConfig> {
       entities: fields[2] as Entities,
       validationRules: fields[3] as ValidationRules,
       analyticsConfig: fields[4] as AnalyticsConfig,
-    );
+    )..isInitialized = fields[5] as bool;
   }
 
   @override
   void write(BinaryWriter writer, AppConfig obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.metadata)
       ..writeByte(1)
@@ -38,7 +38,9 @@ class AppConfigAdapter extends TypeAdapter<AppConfig> {
       ..writeByte(3)
       ..write(obj.validationRules)
       ..writeByte(4)
-      ..write(obj.analyticsConfig);
+      ..write(obj.analyticsConfig)
+      ..writeByte(5)
+      ..write(obj.isInitialized);
   }
 
   @override
@@ -65,7 +67,7 @@ AppConfig _$AppConfigFromJson(Map<String, dynamic> json) => AppConfig(
           json['validationRules'] as Map<String, dynamic>),
       analyticsConfig: AnalyticsConfig.fromJson(
           json['analyticsConfig'] as Map<String, dynamic>),
-    );
+    )..isInitialized = json['isInitialized'] as bool;
 
 Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
       'metadata': instance.metadata,
@@ -73,4 +75,5 @@ Map<String, dynamic> _$AppConfigToJson(AppConfig instance) => <String, dynamic>{
       'entities': instance.entities,
       'validationRules': instance.validationRules,
       'analyticsConfig': instance.analyticsConfig,
+      'isInitialized': instance.isInitialized,
     };

@@ -13,39 +13,51 @@ part 'background.g.dart';
 @JsonSerializable()
 class Background {
   @HiveField(0)
+   @JsonKey(name: 'uuid')
   final String uuid;
   
   @HiveField(1)
+   @JsonKey(name: 'id')
   final String id;
   
   @HiveField(2)
+   @JsonKey(name: 'type')
   final String type;
   
   @HiveField(3)
+   @JsonKey(name: 'translations')
   final Map<String, Translation> translations;
   
   @HiveField(4)
+   @JsonKey(name: 'visual_data')
   final VisualData visualData;
   
   @HiveField(5)
+   @JsonKey(name: 'visual_effects')
   final VisualEffects visualEffects;
   
   @HiveField(6)
+   @JsonKey(name: 'category_ids')
   final List<String> categoryIds;
   
   @HiveField(7)
+   @JsonKey(name: 'tag_ids')
   final List<String> tagIds;
   
   @HiveField(8)
+   @JsonKey(name: 'attribution')
   final Attribution attribution;
   
   @HiveField(9)
+   @JsonKey(name: 'optimization')
   final Optimization optimization;
   
   @HiveField(10)
+   @JsonKey(name: 'cache_config')
   final CacheConfig cacheConfig;
   
   @HiveField(11)
+  @JsonKey(name: 'audit')
   final Audit audit;
 
   Background({
@@ -73,15 +85,19 @@ class Background {
 @JsonSerializable()
 class ImageData {
   @HiveField(0)
+   @JsonKey(name: 'original')
   final String original;
   
   @HiveField(1)
+   @JsonKey(name: 'thumbnail')
   final String thumbnail;
   
   @HiveField(2)
+   @JsonKey(name: 'placeholder')
   final String placeholder;
   
   @HiveField(3)
+   @JsonKey(name: 'variants')
   final List<ImageVariant> variants;
 
   ImageData({
@@ -101,12 +117,15 @@ class ImageData {
 @JsonSerializable()
 class ImageVariant {
   @HiveField(0)
+   @JsonKey(name: 'width')
   final int width;
   
   @HiveField(1)
+   @JsonKey(name: 'height')
   final int height;
   
   @HiveField(2)
+   @JsonKey(name: 'path')
   final String path;
 
   ImageVariant({
@@ -125,15 +144,19 @@ class ImageVariant {
 @JsonSerializable()
 class GradientData {
   @HiveField(0)
+   @JsonKey(name: 'colors')
   final List<String> colors;
   
   @HiveField(1)
+   @JsonKey(name: 'type')
   final String type;
   
   @HiveField(2)
+   @JsonKey(name: 'angle')
   final double angle;
   
   @HiveField(3)
+  @JsonKey(name: 'stops')
   final List<GradientStop> stops;
 
   GradientData({
@@ -153,9 +176,11 @@ class GradientData {
 @JsonSerializable()
 class GradientStop {
   @HiveField(0)
+   @JsonKey(name: 'position')
   final double position;
   
   @HiveField(1)
+   @JsonKey(name: 'color')
   final String color;
 
   GradientStop({
@@ -173,9 +198,11 @@ class GradientStop {
 @JsonSerializable()
 class ColorData {
   @HiveField(0)
+   @JsonKey(name: 'color')
   final String color;
   
   @HiveField(1)
+   @JsonKey(name: 'palette')
   final ColorPalette palette;
 
   ColorData({
@@ -193,9 +220,11 @@ class ColorData {
 @JsonSerializable()
 class ColorPalette {
   @HiveField(0)
+   @JsonKey(name: 'light')
   final String light;
   
   @HiveField(1)
+   @JsonKey(name: 'dark')
   final String dark;
 
   ColorPalette({
@@ -214,12 +243,15 @@ class ColorPalette {
 @JsonSerializable()
 class Attribution {
   @HiveField(0)
+   @JsonKey(name: 'photographer')
   final String? photographer;
   
   @HiveField(1)
+   @JsonKey(name: 'license')
   final String license;
   
   @HiveField(2)
+   @JsonKey(name: 'url')
   final String url;
 
   Attribution({
@@ -238,12 +270,15 @@ class Attribution {
 @JsonSerializable()
 class Optimization {
   @HiveField(0)
+   @JsonKey(name: 'formats')
   final List<String> formats;
   
   @HiveField(1)
+   @JsonKey(name: 'quality')
   final int quality;
   
   @HiveField(2)
+   @JsonKey(name: 'placeholder')
   final String placeholder;
 
   Optimization({
@@ -262,9 +297,11 @@ class Optimization {
 @JsonSerializable()
 class BackgroundCollection {
   @HiveField(0)
+   @JsonKey(name: 'schema')
   final BackgroundSchema schema;
   
   @HiveField(1)
+   @JsonKey(name: 'data')
   final List<Background> data;
 
   BackgroundCollection({
@@ -282,15 +319,19 @@ class BackgroundCollection {
 @JsonSerializable()
 class BackgroundSchema {
   @HiveField(0)
+   @JsonKey(name: 'type')
   final String type;
   
   @HiveField(1)
+   @JsonKey(name: 'indexes')
   final List<String> indexes;
   
   @HiveField(2)
+   @JsonKey(name: 'required')
   final List<String> required;
   
   @HiveField(3)
+   @JsonKey(name: 'unique')
   final List<String> unique;
 
   BackgroundSchema({

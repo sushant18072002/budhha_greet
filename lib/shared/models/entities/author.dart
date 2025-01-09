@@ -7,7 +7,7 @@ import '../app_config/image_cache_config.dart';
 
 part 'author.g.dart';
 
-@HiveType(typeId: 28)
+@HiveType(typeId: 79)
 @JsonSerializable()
 class SystemCacheConfig{
   @HiveField(0)
@@ -32,6 +32,7 @@ class SystemCacheConfig{
 @JsonSerializable()
 class AuthorCollection {
   @HiveField(0)
+  @JsonKey(name: 'data')
   final List<Author> data;
 
   AuthorCollection({
@@ -48,12 +49,15 @@ class AuthorCollection {
 @JsonSerializable()
 class Author {
   @HiveField(0)
+  @JsonKey(name: 'uuid')
   final String uuid;
   
   @HiveField(1)
+  @JsonKey(name: 'translations')
   final Map<String, AuthorTranslation> translations;
   
   @HiveField(2)
+  @JsonKey(name: '')
   final Audit audit;
 
   Author({
@@ -71,10 +75,13 @@ class Author {
 @HiveType(typeId: 72)
 @JsonSerializable()
 class AuthorTranslation {
+  
   @HiveField(0)
+  @JsonKey(name: 'name')
   final String name;
   
   @HiveField(1)
+  @JsonKey(name: 'info')
   final String info;
 
   AuthorTranslation({

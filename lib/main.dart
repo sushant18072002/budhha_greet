@@ -12,7 +12,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
  // await Firebase.initializeApp();
   await GetStorage.init();
-  await Get.putAsync(() => DatabaseService.instance.init());
+ await Get.putAsync(() => DatabaseService().init());
   
   runApp(const BuddhaGreetApp());
 }

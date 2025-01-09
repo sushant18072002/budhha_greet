@@ -7,9 +7,11 @@ part 'style_colors.g.dart';
 @JsonSerializable()
 class StyleColors {
   @HiveField(0)
+  @JsonKey(name: 'text')
   final String text;
   
   @HiveField(1)
+  @JsonKey(name: 'shadow')
   final String shadow;
 
   StyleColors({

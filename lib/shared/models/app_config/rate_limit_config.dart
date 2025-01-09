@@ -7,9 +7,11 @@ part 'rate_limit_config.g.dart';
 @JsonSerializable()
 class RateLimitConfig {
   @HiveField(0)
+  @JsonKey(name: 'requests_per_minute')
   final int requestsPerMinute;
   
   @HiveField(1)
+  @JsonKey(name: 'burst_size')
   final int burstSize;
 
   RateLimitConfig({

@@ -10,6 +10,7 @@ part 'source.g.dart';
 @JsonSerializable()
 class SourceCollection {
   @HiveField(0)
+   @JsonKey(name: 'data')
   final List<Source> data;
 
   SourceCollection({
@@ -26,18 +27,23 @@ class SourceCollection {
 @JsonSerializable()
 class Source {
   @HiveField(0)
+   @JsonKey(name: 'uuid')
   final String uuid;
   
   @HiveField(1)
+   @JsonKey(name: 'translations')
   final Map<String, SourceTranslation> translations;
   
   @HiveField(2)
+   @JsonKey(name: 'reference')
   final String reference;
   
   @HiveField(3)
+   @JsonKey(name: 'type')
   final String type;
   
   @HiveField(4)
+   @JsonKey(name: 'audit')
   final Audit audit;
 
   Source({
@@ -58,6 +64,7 @@ class Source {
 @JsonSerializable()
 class SourceTranslation {
   @HiveField(0)
+   @JsonKey(name: 'title')
   final String title;
 
   SourceTranslation({

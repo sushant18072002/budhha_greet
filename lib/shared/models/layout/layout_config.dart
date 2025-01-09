@@ -10,12 +10,15 @@ part 'layout_config.g.dart';
 @JsonSerializable()
 class LayoutConfig {
   @HiveField(0)
+  @JsonKey(name: 'responsive')
   final bool responsive;
   
   @HiveField(1)
+  @JsonKey(name: 'portrait')
   final OrientationLayout portrait;
   
   @HiveField(2)
+  @JsonKey(name: 'landscape')
   final OrientationLayout landscape;
 
   LayoutConfig({

@@ -7,9 +7,11 @@ part 'compression_config.g.dart';
 @JsonSerializable()
 class CompressionConfig {
   @HiveField(0)
+  @JsonKey(name: 'enabled')
   final bool enabled;
   
   @HiveField(1)
+  @JsonKey(name: 'quality')
   final int quality;
 
   CompressionConfig({

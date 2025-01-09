@@ -41,13 +41,13 @@ class AppPages {
     //   binding: ImageDetailBinding(),
     //   transition: Transition.fadeIn,
     // ),
-    GetPage(
-      name:AppRoutes.library ,
-      page: () => const QuoteLibraryScreen(),
-      binding: BindingsBuilder(() {
-        Get.lazyPut(() => QuoteLibraryController());
-      }),
-    ),
+    // GetPage(
+    //   name:AppRoutes.library ,
+    //   page: () => const QuoteLibraryScreen(),
+    //   binding: BindingsBuilder(() {
+    //     Get.lazyPut(() => QuoteLibraryController());
+    //   }),
+    // ),
     GetPage(
       name: AppRoutes.creator,
       page: () => GreetingScreen(),

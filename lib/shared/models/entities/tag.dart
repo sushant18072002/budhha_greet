@@ -9,9 +9,11 @@ part 'tag.g.dart';
 @JsonSerializable()
 class TagCollection {
   @HiveField(0)
+   @JsonKey(name: 'schema')
   final TagSchema schema;
   
   @HiveField(1)
+   @JsonKey(name: 'data')
   final List<Tag> data;
 
   TagCollection({
@@ -29,15 +31,19 @@ class TagCollection {
 @JsonSerializable()
 class TagSchema {
   @HiveField(0)
+   @JsonKey(name: 'type')
   final String type;
   
   @HiveField(1)
+   @JsonKey(name: 'id_prefix')
   final String idPrefix;
   
   @HiveField(2)
+   @JsonKey(name: 'indexes')
   final List<String> indexes;
   
   @HiveField(3)
+   @JsonKey(name: 'required')
   final List<String> required;
 
   TagSchema({
@@ -57,18 +63,23 @@ class TagSchema {
 @JsonSerializable()
 class Tag {
   @HiveField(0)
+   @JsonKey(name: 'id')
   final String id;
   
   @HiveField(1)
+   @JsonKey(name: 'category')
   final String category;
   
   @HiveField(2)
+   @JsonKey(name: 'translations')
   final Map<String, TagTranslation> translations;
   
   @HiveField(3)
+   @JsonKey(name: 'metadata')
   final TagMetadata metadata;
   
   @HiveField(4)
+   @JsonKey(name: 'audit')
   final Audit audit;
 
   Tag({
@@ -89,9 +100,11 @@ class Tag {
 @JsonSerializable()
 class TagTranslation {
   @HiveField(0)
+   @JsonKey(name: 'name')
   final String name;
   
   @HiveField(1)
+   @JsonKey(name: 'description')
   final String description;
 
   TagTranslation({
@@ -109,9 +122,11 @@ class TagTranslation {
 @JsonSerializable()
 class TagMetadata {
   @HiveField(0)
+   @JsonKey(name: 'icon')
   final String icon;
   
   @HiveField(1)
+   @JsonKey(name: 'color')
   final String color;
 
   TagMetadata({

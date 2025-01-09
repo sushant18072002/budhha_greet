@@ -9,9 +9,11 @@ part 'category.g.dart';
 @JsonSerializable()
 class CategoryCollection {
   @HiveField(0)
+  @JsonKey(name: 'schema')
   final CategorySchema schema;
   
   @HiveField(1)
+  @JsonKey(name: 'data')
   final List<Category> data;
 
   CategoryCollection({
@@ -29,15 +31,19 @@ class CategoryCollection {
 @JsonSerializable()
 class CategorySchema {
   @HiveField(0)
+  @JsonKey(name: 'type')
   final String type;
   
   @HiveField(1)
+  @JsonKey(name: 'id_prefix')
   final String idPrefix;
   
   @HiveField(2)
+  @JsonKey(name: 'indexes')
   final List<String> indexes;
   
   @HiveField(3)
+  @JsonKey(name: 'required')
   final List<String> required;
 
   CategorySchema({
@@ -57,21 +63,27 @@ class CategorySchema {
 @JsonSerializable()
 class Category {
   @HiveField(0)
+  @JsonKey(name: 'id')
   final String id;
   
   @HiveField(1)
+  @JsonKey(name: 'type')
   final String type;
   
   @HiveField(2)
+  @JsonKey(name: 'parent_id')
   final String? parentId;
   
   @HiveField(3)
+  @JsonKey(name: 'translations')
   final Map<String, CategoryTranslation> translations;
   
   @HiveField(4)
+  @JsonKey(name: 'metadata')
   final CategoryMetadata metadata;
   
   @HiveField(5)
+  @JsonKey(name: 'audit')
   final Audit audit;
 
   Category({
@@ -93,9 +105,11 @@ class Category {
 @JsonSerializable()
 class CategoryTranslation {
   @HiveField(0)
+  @JsonKey(name: 'name')
   final String name;
   
   @HiveField(1)
+  @JsonKey(name: 'description')
   final String description;
 
   CategoryTranslation({
@@ -113,9 +127,11 @@ class CategoryTranslation {
 @JsonSerializable()
 class CategoryMetadata {
   @HiveField(0)
+  @JsonKey(name: 'icon')
   final String icon;
   
   @HiveField(1)
+  @JsonKey(name: 'color')
   final String color;
 
   CategoryMetadata({

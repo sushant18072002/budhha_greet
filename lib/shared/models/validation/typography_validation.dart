@@ -7,9 +7,11 @@ part 'typography_validation.g.dart';
 @JsonSerializable()
 class TypographyValidation {
   @HiveField(0)
+   @JsonKey(name: '')
   final int minFontSize;
   
   @HiveField(1)
+   @JsonKey(name: '')
   final int maxFontSize;
 
   TypographyValidation({

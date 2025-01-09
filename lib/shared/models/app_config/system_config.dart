@@ -12,15 +12,19 @@ part 'system_config.g.dart';
 @JsonSerializable()
 class SystemConfig {
   @HiveField(0)
+  @JsonKey(name: 'languages')
   final LanguageConfig languages;
   
   @HiveField(1)
+  @JsonKey(name: 'app_settings')
   final AppSettings appSettings;
   
   @HiveField(2)
+  @JsonKey(name: 'system_cache_config')
   final SystemCacheConfig systemCacheConfig;
   
   @HiveField(3)
+  @JsonKey(name: 'api_config')
   final ApiConfig apiConfig;
 
   SystemConfig({

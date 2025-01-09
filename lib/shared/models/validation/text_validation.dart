@@ -7,12 +7,15 @@ part 'text_validation.g.dart';
 @JsonSerializable()
 class TextValidation {
   @HiveField(0)
+   @JsonKey(name: 'max_length')
   final int maxLength;
   
   @HiveField(1)
+   @JsonKey(name: 'min_length')
   final int minLength;
   
   @HiveField(2)
+   @JsonKey(name: 'allowed_characters')
   final String allowedCharacters;
 
   TextValidation({

@@ -13,6 +13,7 @@ part 'template.g.dart';
 @JsonSerializable()
 class TemplateCollection {
   @HiveField(0)
+   @JsonKey(name: 'data')
   final List<Template> data;
 
   TemplateCollection({
@@ -29,33 +30,43 @@ class TemplateCollection {
 @JsonSerializable()
 class Template {
   @HiveField(0)
+   @JsonKey(name: 'uuid')
   final String uuid;
   
   @HiveField(1)
+   @JsonKey(name: 'translations')
   final Map<String, TemplateTranslation> translations;
   
   @HiveField(2)
+   @JsonKey(name: 'composition')
   final Composition composition;
   
   @HiveField(3)
+   @JsonKey(name: 'layout_config')
   final LayoutConfig layoutConfig;
   
   @HiveField(4)
+   @JsonKey(name: 'style_config')
   final StyleConfig styleConfig;
   
   @HiveField(5)
+   @JsonKey(name: 'category_ids')
   final List<String> categoryIds;
   
   @HiveField(6)
+   @JsonKey(name: 'tag_ids')
   final List<String> tagIds;
   
   @HiveField(7)
+   @JsonKey(name: 'metadata')
   final TemplateMetadata metadata;
   
   @HiveField(8)
+   @JsonKey(name: 'metrics')
   final Metrics metrics;
   
   @HiveField(9)
+  @JsonKey(name: 'audit')
   final Audit audit;
 
   Template({
@@ -81,15 +92,19 @@ class Template {
 @JsonSerializable()
 class TemplateTranslation {
   @HiveField(0)
+   @JsonKey(name: 'title')
   final String title;
   
   @HiveField(1)
+   @JsonKey(name: 'description')
   final String description;
   
   @HiveField(2)
+   @JsonKey(name: 'greeting')
   final String greeting;
   
   @HiveField(3)
+   @JsonKey(name: 'semantic_label')
   final String semanticLabel;
 
   TemplateTranslation({
@@ -109,15 +124,19 @@ class TemplateTranslation {
 @JsonSerializable()
 class Composition {
   @HiveField(0)
+   @JsonKey(name: 'background_id')
   final String backgroundId;
   
   @HiveField(1)
+   @JsonKey(name: 'quote_id')
   final String quoteId;
   
   @HiveField(2)
+   @JsonKey(name: 'layout')
   final String layout;
   
   @HiveField(3)
+   @JsonKey(name: 'aspect_ratio')
   final String aspectRatio;
 
   Composition({
@@ -137,10 +156,16 @@ class Composition {
 @JsonSerializable()
 class StyleConfig {
   @HiveField(0)
+  @JsonKey(name: 'greeting')
   final ElementStyle greeting;
+
+  @HiveField(1)
+  @JsonKey(name: 'quote')
+  final ElementStyle? quote;
 
   StyleConfig({
     required this.greeting,
+    this.quote
   });
 
   factory StyleConfig.fromJson(Map<String, dynamic> json) => 
@@ -153,9 +178,11 @@ class StyleConfig {
 @JsonSerializable()
 class ElementStyle {
   @HiveField(0)
+   @JsonKey(name: 'typography')
   final Typography typography;
   
   @HiveField(1)
+   @JsonKey(name: 'colors')
   final StyleColors colors;
 
   ElementStyle({
@@ -173,12 +200,15 @@ class ElementStyle {
 @JsonSerializable()
 class TemplateMetadata {
   @HiveField(0)
+   @JsonKey(name: 'is_premium')
   final bool isPremium;
   
   @HiveField(1)
+   @JsonKey(name: 'status')
   final String status;
   
   @HiveField(2)
+  @JsonKey(name: 'version')
   final int version;
 
   TemplateMetadata({

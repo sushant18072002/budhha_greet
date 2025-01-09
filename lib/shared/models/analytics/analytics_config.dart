@@ -10,9 +10,11 @@ part 'analytics_config.g.dart';
 @JsonSerializable()
 class AnalyticsConfig {
   @HiveField(0)
+   @JsonKey(name: '')
   final TrackingConfig tracking;
   
   @HiveField(1)
+   @JsonKey(name: '')
   final ReportingConfig reporting;
 
   AnalyticsConfig({

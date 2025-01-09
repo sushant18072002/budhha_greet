@@ -7,15 +7,19 @@ part 'metrics.g.dart';
 @JsonSerializable()
 class Metrics {
   @HiveField(0)
+  @JsonKey(name: 'views')
   final int views;
   
   @HiveField(1)
+  @JsonKey(name: 'shares')
   final int shares;
   
   @HiveField(2)
+  @JsonKey(name: 'favorites')
   final int favorites;
   
   @HiveField(3)
+  @JsonKey(name: 'last_interaction')
   final DateTime? lastInteraction;
 
   Metrics({

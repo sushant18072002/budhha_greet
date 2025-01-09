@@ -10,9 +10,11 @@ part 'app_settings.g.dart';
 @JsonSerializable()
 class AppSettings {
   @HiveField(0)
+  @JsonKey(name: 'theme')
   final ThemeConfig theme;
   
   @HiveField(1)
+  @JsonKey(name: 'connectivity')
   final ConnectivityConfig connectivity;
 
   AppSettings({

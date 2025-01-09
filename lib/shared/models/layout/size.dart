@@ -7,9 +7,11 @@ part 'size.g.dart';
 @JsonSerializable()
 class Size {
   @HiveField(0)
+  @JsonKey(name: 'width')
   final double width;
   
   @HiveField(1)
+  @JsonKey(name: 'height')
   final double height;
 
   Size({

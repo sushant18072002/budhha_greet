@@ -51,7 +51,7 @@ class MetadataAdapter extends TypeAdapter<Metadata> {
 // **************************************************************************
 
 Metadata _$MetadataFromJson(Map<String, dynamic> json) => Metadata(
-      schemaVersion: json['schemaVersion'] as String,
+      schemaVersion: json['schema_version'] as String,
       lastUpdated: DateTime.parse(json['lastUpdated'] as String),
       minAppVersion: json['minAppVersion'] as String,
     );

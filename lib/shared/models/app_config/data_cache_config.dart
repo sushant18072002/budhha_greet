@@ -7,15 +7,19 @@ part 'data_cache_config.g.dart';
 @JsonSerializable()
 class DataCacheConfig {
   @HiveField(0)
+  @JsonKey(name: 'ttl_seconds')
   final int ttlSeconds;
   
   @HiveField(1)
+   @JsonKey(name: 'strategy')
   final String strategy;
   
   @HiveField(2)
+   @JsonKey(name: 'persistence')
   final bool persistence;
   
   @HiveField(3)
+   @JsonKey(name: 'encryption')
   final bool encryption;
 
   DataCacheConfig({

@@ -9,15 +9,19 @@ part 'image_cache_config.g.dart';
 @JsonSerializable()
 class ImageCacheConfig {
   @HiveField(0)
+  @JsonKey(name: 'ttl_seconds')
   final int ttlSeconds;
   
   @HiveField(1)
+  @JsonKey(name: 'strategy')
   final String strategy;
   
   @HiveField(2)
+  @JsonKey(name: 'max_size_mb')
   final int maxSizeMb;
   
   @HiveField(3)
+  @JsonKey(name: 'compression')
   final CompressionConfig compression;
 
   ImageCacheConfig({

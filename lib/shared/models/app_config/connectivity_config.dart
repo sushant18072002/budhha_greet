@@ -7,9 +7,11 @@ part 'connectivity_config.g.dart';
 @JsonSerializable()
 class ConnectivityConfig {
   @HiveField(0)
+  @JsonKey(name: 'offline_support')
   final bool offlineSupport;
   
   @HiveField(1)
+  @JsonKey(name: 'sync_interval_seconds')
   final int syncIntervalSeconds;
 
   ConnectivityConfig({

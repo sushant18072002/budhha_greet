@@ -7,12 +7,15 @@ part 'popular_item.g.dart';
 @JsonSerializable()
 class PopularItems {
   @HiveField(0)
+   @JsonKey(name: '')
   final List<String> templateIds;
   
   @HiveField(1)
+   @JsonKey(name: '')
   final List<String> quoteIds;
   
   @HiveField(2)
+   @JsonKey(name: '')
   final List<String> backgroundIds;
 
   PopularItems({

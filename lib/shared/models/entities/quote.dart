@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import '../analytics/audit.dart';
 import '../analytics/metrics.dart';
+import '../style/style.dart';
 import 'translation.dart';
 
 part 'quote.g.dart';
@@ -11,6 +12,7 @@ part 'quote.g.dart';
 @JsonSerializable()
 class QuoteCollection {
   @HiveField(0)
+   @JsonKey(name: 'data')
   final List<Quote> data;
 
   QuoteCollection({
@@ -27,33 +29,43 @@ class QuoteCollection {
 @JsonSerializable()
 class Quote {
   @HiveField(0)
+   @JsonKey(name: 'uuid')
   final String uuid;
   
   @HiveField(1)
+   @JsonKey(name: 'translations')
   final Map<String, Translation> translations;
   
   @HiveField(2)
+   @JsonKey(name: 'author_id')
   final String authorId;
   
   @HiveField(3)
+   @JsonKey(name: 'source_id')
   final String sourceId;
   
   @HiveField(4)
+   @JsonKey(name: 'category_ids')
   final List<String> categoryIds;
   
   @HiveField(5)
+   @JsonKey(name: 'tag_ids')
   final List<String> tagIds;
   
   @HiveField(6)
+   @JsonKey(name: 'style')
   final Style style;
   
   @HiveField(7)
+   @JsonKey(name: 'metadata')
   final QuoteMetadata metadata;
   
   @HiveField(8)
+  @JsonKey(name: 'metrics')
   final Metrics metrics;
   
   @HiveField(9)
+  @JsonKey(name: 'audit')
   final Audit audit;
 
   Quote({
@@ -79,15 +91,19 @@ class Quote {
 @JsonSerializable()
 class QuoteMetadata {
   @HiveField(0)
+   @JsonKey(name: 'original_language')
   final String originalLanguage;
   
   @HiveField(1)
+   @JsonKey(name: 'moderation_status')
   final String moderationStatus;
   
   @HiveField(2)
+   @JsonKey(name: 'moderation_date')
   final DateTime moderationDate;
   
   @HiveField(3)
+   @JsonKey(name: 'moderation_by')
   final String moderationBy;
 
   QuoteMetadata({

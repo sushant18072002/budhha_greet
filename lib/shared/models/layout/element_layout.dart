@@ -11,15 +11,19 @@ part 'element_layout.g.dart';
 @JsonSerializable()
 class ElementLayout {
   @HiveField(0)
+  @JsonKey(name: 'position')
   final Position position;
   
   @HiveField(1)
+  @JsonKey(name: 'size')
   final Size size;
   
   @HiveField(2)
+  @JsonKey(name: 'padding')
   final double padding;
   
   @HiveField(3)
+  @JsonKey(name: 'safe_area')
   final SafeArea? safeArea;
 
   ElementLayout({

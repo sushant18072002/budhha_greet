@@ -8,7 +8,7 @@ part of 'system_cache_config.dart';
 
 class SystemCacheConfigAdapter extends TypeAdapter<SystemCacheConfig> {
   @override
-  final int typeId = 28;
+  final int typeId = 78;
 
   @override
   SystemCacheConfig read(BinaryReader reader) {

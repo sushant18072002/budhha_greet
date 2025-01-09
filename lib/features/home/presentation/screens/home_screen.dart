@@ -1,7 +1,7 @@
 import 'package:buddha_greet/core/routes/app_routes.dart';
-import 'package:buddha_greet/features/home/data/models/template/template.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../shared/models/entities/template.dart';
 import '../controllers/home_controller.dart';
 import '../../../../shared/theme/app_colors.dart';
 import '../../../../shared/theme/app_text_styles.dart';
@@ -31,7 +31,7 @@ class HomeScreen extends GetView<HomeController> {
                   const SizedBox(height: 16),
                   _buildCategories(),
                  // const SizedBox(height: 16),
-                  MorningTemplatesWidget()
+                 // MorningTemplatesWidget()
                 ],
               ),
             ),
@@ -171,7 +171,7 @@ class HomeScreen extends GetView<HomeController> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: controller.categories.length,
               itemBuilder: (context, index) {
-                return _buildCategoryCard(controller.categories[index]);
+                return _buildCategoryCard(controller.categories[index].translations.entries.first.value.name);
               },
             ),
           ),
@@ -305,7 +305,7 @@ class HomeScreen extends GetView<HomeController> {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
-                card.backgroundId,
+                '',
                 height: 350 ,
                 fit: BoxFit.cover,
               ),

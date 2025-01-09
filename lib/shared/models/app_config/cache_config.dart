@@ -7,12 +7,15 @@ part 'cache_config.g.dart';
 @JsonSerializable()
 class CacheConfig {
   @HiveField(0)
+  @JsonKey(name: 'ttl_seconds')
   final int ttlSeconds;
   
   @HiveField(1)
+  @JsonKey(name: 'priority')
   final String priority;
   
   @HiveField(2)
+  @JsonKey(name: 'preload')
   final bool preload;
 
   CacheConfig({

@@ -7,18 +7,23 @@ part 'audit.g.dart';
 @JsonSerializable()
 class Audit {
   @HiveField(0)
+   @JsonKey(name: 'created_at')
   final DateTime createdAt;
   
   @HiveField(1)
+   @JsonKey(name: 'created_by')
   final String createdBy;
   
   @HiveField(2)
+   @JsonKey(name: 'modified_at')
   final DateTime modifiedAt;
   
   @HiveField(3)
+   @JsonKey(name: 'modified_by')
   final String modifiedBy;
   
   @HiveField(4)
+   @JsonKey(name: 'version')
   final int version;
 
   Audit({

@@ -7,9 +7,11 @@ part 'safe_area.g.dart';
 @JsonSerializable()
 class SafeArea {
   @HiveField(0)
+  @JsonKey(name: 'top')
   final double top;
   
   @HiveField(1)
+  @JsonKey(name: 'bottom')
   final double bottom;
 
   SafeArea({

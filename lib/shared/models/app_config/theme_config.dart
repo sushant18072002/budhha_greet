@@ -6,9 +6,11 @@ part 'theme_config.g.dart';
 @JsonSerializable()
 class ThemeConfig {
   @HiveField(0)
+  @JsonKey(name: 'dark_mode_support')
   final bool darkModeSupport;
   
   @HiveField(1)
+  @JsonKey(name: 'dynamic_colors')
   final bool dynamicColors;
 
   ThemeConfig({

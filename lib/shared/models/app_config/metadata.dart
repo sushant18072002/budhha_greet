@@ -7,12 +7,15 @@ part 'metadata.g.dart';
 @JsonSerializable()
 class Metadata {
   @HiveField(0)
+  @JsonKey(name: 'schema_version')
   final String schemaVersion;
-  
+
   @HiveField(1)
+  @JsonKey(name: 'last_updated')
   final DateTime lastUpdated;
-  
+
   @HiveField(2)
+  @JsonKey(name: 'min_app_version')
   final String minAppVersion;
 
   Metadata({
@@ -21,8 +24,8 @@ class Metadata {
     required this.minAppVersion,
   });
 
-  factory Metadata.fromJson(Map<String, dynamic> json) => 
-    _$MetadataFromJson(json);
-  
+  factory Metadata.fromJson(Map<String, dynamic> json) =>
+      _$MetadataFromJson(json);
+
   Map<String, dynamic> toJson() => _$MetadataToJson(this);
 }

@@ -1,17 +1,19 @@
 import 'dart:math';
-import 'package:buddha_greet/features/quote_library/data/models/quote_model.dart';
+import 'package:buddha_greet/shared/models/entities/category.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../core/services/database_service.dart';
-import '../../../image_detail/data/models/background_model.dart';
-import '../../data/models/template/template.dart';
+import '../../../../shared/models/entities/background.dart';
+import '../../../../shared/models/entities/quote.dart';
+import '../../../../shared/models/entities/template.dart';
+
 
 class HomeController extends GetxController {
-  final DatabaseService _dbService = DatabaseService.instance;
+ final _dbService = Get.find<DatabaseService>();
 
   final RxList<Template> featuredTemplates = <Template>[].obs;
   final RxList<Template> morningTemplates = <Template>[].obs;
-  final RxList<String> categories = <String>[].obs;
+  final RxList<Category> categories = <Category>[].obs;
   final RxList<Map<String, dynamic>> carouselItems =
       <Map<String, dynamic>>[].obs;
   final RxBool isLoading = true.obs;
@@ -62,7 +64,7 @@ class HomeController extends GetxController {
       }
 
       // Load categories
-      final allCategories = await _dbService.getCategories();
+      final allCategories = await _dbService.getAllCategories();
       categories.value = allCategories;
 
       // Prepare carousel items
@@ -75,40 +77,40 @@ class HomeController extends GetxController {
   }
 
   Future<List<Template>> _getValidTemplatesForCarousel() async {
-    final allTemplates = await _dbService.getTemplates();
+    final allTemplates = await _dbService.getAllTemplates();
     final validTemplates = <Template>[];
     print(" allTemplates ${allTemplates.length}");
     for (var template in allTemplates) {
       debugPrint(
-          "template \n {start} ${template.title.entries.first} backgroundId ${template.backgroundId} id ${template.id} greeting ${template.greeting.isEmpty} greeting ${template.greeting[currentLanguage.value]?.isEmpty}");
+          "template \n {start} ${template.translations[currentLanguage.value]?.greeting} backgroundId ${template.composition.backgroundId} id ${template.uuid} greeting ${template.translations.entries.first.value.greeting.isEmpty}");
       // Check if template has a greeting
-      if (template.greeting.isEmpty ||
-          template.greeting[currentLanguage.value]?.isEmpty == true) {
+      if (
+          template.translations[currentLanguage.value]?.greeting == true) {
         continue;
       }
-      print("template template.quoteId ${template.quoteId} ");
+      print("template template.quoteId ${template.composition.quoteId} ");
       // Check if template has a quote
-      if (template.quoteId == null) {
+      if (template.composition.quoteId == null) {
         continue;
       }
-      print("template template.getQuoteById ${template.quoteId} ");
+      print("template template.getQuoteById ${template.composition.quoteId} ");
       // Get and verify the quote exists
-      final quote = await getQuoteById(template.quoteId!);
+      final quote = await getQuoteById(template.composition.quoteId!);
       print(
-          "template quote ${quote}  quote.text[currentLanguage.value]?.isEmpty ${quote?.text[currentLanguage.value]?.isEmpty}");
-      if (quote == null || quote.text[currentLanguage.value]?.isEmpty == true) {
+          "template quote ${quote}  quote.text[currentLanguage.value]?.isEmpty ${quote?.translations[currentLanguage.value]?.text.isEmpty}");
+      if (quote == null || quote.translations[currentLanguage.value]?.text.isEmpty == true) {
         continue;
       }
 
       // Get and verify the background has an image
       final background =
-          await getBackgroundById(template.backgroundId);
+          await getBackgroundById(template.composition.backgroundId);
       print(
-          "template background ${background}   background.type != 'image'  ${background?.type != 'image'} imageUrl ${background?.imageUrl}");
+          "template background ${background}   background.type != 'image'  ${background?.type != 'image'} imageUrl ${background?.visualData.image}");
       if (background == null ||
           background.type != 'image' ||
-          background.imageUrl == null ||
-          background.imageUrl!.isEmpty) {
+          background.type != null ||
+          background.visualData.image!=null) {
         continue;
       }
 
@@ -124,19 +126,19 @@ class HomeController extends GetxController {
     final items = <Map<String, dynamic>>[];
 
     for (var template in featuredTemplates) {
-      final background =await getBackgroundById(template.backgroundId);
-      final quote = await getQuoteById(template.quoteId!);
+      final background =await getBackgroundById(template.composition.backgroundId);
+      final quote = await getQuoteById(template.composition.quoteId);
 
       // Double-check that we have all required components
       if (background != null &&
           background.type == 'image' &&
-          background.imageUrl != null &&
+          background.visualData.image != null &&
           quote != null) {
         items.add({
           'template': template,
           'background': background,
           'quote': quote,
-          'greeting': template.greeting[currentLanguage.value] ?? '',
+          'greeting': template.translations[currentLanguage.value]!.greeting ?? '',
         });
       }
     }
@@ -151,7 +153,7 @@ class HomeController extends GetxController {
     try {
       isMorningTemplatesLoading.value = true;
       // Load morning templates
-      final allTemplates = await _dbService.getTemplates(
+      final allTemplates = await _dbService.getAllTemplates(
        // category: 'morning',
       );
       morningTemplates.value = allTemplates;
@@ -165,10 +167,10 @@ class HomeController extends GetxController {
 
   Future<Quote?> getQuoteById(String quoteId)async{
     debugPrint("getQuoteById ${quoteId}");
-    return await _dbService.getQuoteById(quoteId);
+    return await _dbService.getQuote(quoteId);
   }
   Future<Background?> getBackgroundById(String quoteId)async{
-    return await _dbService.getBackgroundById(quoteId);
+    return await _dbService.getBackground(quoteId);
   }
 
   void toggleFavorite(String id) {

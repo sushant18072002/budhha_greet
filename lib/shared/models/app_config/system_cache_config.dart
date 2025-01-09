@@ -6,13 +6,15 @@ import 'image_cache_config.dart';
 
 part 'system_cache_config.g.dart';
 
-@HiveType(typeId: 28)
+@HiveType(typeId: 78)
 @JsonSerializable()
 class SystemCacheConfig{
   @HiveField(0)
+  @JsonKey(name: 'image')
   final ImageCacheConfig image;
   
   @HiveField(1)
+  @JsonKey(name: 'data')
   final DataCacheConfig data;
 
   SystemCacheConfig({

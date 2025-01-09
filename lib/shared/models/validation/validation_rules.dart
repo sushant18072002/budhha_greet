@@ -10,9 +10,11 @@ part 'validation_rules.g.dart';
 @JsonSerializable()
 class ValidationRules {
   @HiveField(0)
+   @JsonKey(name: 'quotes')
   final QuoteValidation quotes;
   
   @HiveField(1)
+   @JsonKey(name: 'templates')
   final TemplateValidation templates;
 
   ValidationRules({

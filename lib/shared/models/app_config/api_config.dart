@@ -10,15 +10,19 @@ part 'api_config.g.dart';
 @JsonSerializable()
 class ApiConfig {
   @HiveField(0)
+  @JsonKey(name: 'base_url')
   final String baseUrl;
   
   @HiveField(1)
+  @JsonKey(name: 'timeout_ms')
   final int timeoutMs;
   
   @HiveField(2)
+  @JsonKey(name: 'retry')
   final RetryConfig retry;
   
   @HiveField(3)
+  @JsonKey(name: 'rate_limit')
   final RateLimitConfig rateLimit;
 
   ApiConfig({
