@@ -19,7 +19,7 @@ class TextValidationAdapter extends TypeAdapter<TextValidation> {
     return TextValidation(
       maxLength: fields[0] as int,
       minLength: fields[1] as int,
-      allowedCharacters: fields[2] as String,
+      allowedCharacters: fields[2] as String?,
     );
   }
 
@@ -52,14 +52,14 @@ class TextValidationAdapter extends TypeAdapter<TextValidation> {
 
 TextValidation _$TextValidationFromJson(Map<String, dynamic> json) =>
     TextValidation(
-      maxLength: (json['maxLength'] as num).toInt(),
-      minLength: (json['minLength'] as num).toInt(),
-      allowedCharacters: json['allowedCharacters'] as String,
+      maxLength: (json['max_length'] as num).toInt(),
+      minLength: (json['min_length'] as num).toInt(),
+      allowedCharacters: json['allowed_characters'] as String?,
     );
 
 Map<String, dynamic> _$TextValidationToJson(TextValidation instance) =>
     <String, dynamic>{
-      'maxLength': instance.maxLength,
-      'minLength': instance.minLength,
-      'allowedCharacters': instance.allowedCharacters,
+      'max_length': instance.maxLength,
+      'min_length': instance.minLength,
+      'allowed_characters': instance.allowedCharacters,
     };

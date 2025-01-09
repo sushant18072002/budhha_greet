@@ -49,12 +49,12 @@ class AuthorValidationAdapter extends TypeAdapter<AuthorValidation> {
 
 AuthorValidation _$AuthorValidationFromJson(Map<String, dynamic> json) =>
     AuthorValidation(
-      maxLength: (json['maxLength'] as num).toInt(),
-      minLength: (json['minLength'] as num).toInt(),
+      maxLength: (json['max_length'] as num).toInt(),
+      minLength: (json['min_length'] as num).toInt(),
     );
 
 Map<String, dynamic> _$AuthorValidationToJson(AuthorValidation instance) =>
     <String, dynamic>{
-      'maxLength': instance.maxLength,
-      'minLength': instance.minLength,
+      'max_length': instance.maxLength,
+      'min_length': instance.minLength,
     };

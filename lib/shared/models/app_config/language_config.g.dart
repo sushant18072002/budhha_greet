@@ -54,13 +54,13 @@ LanguageConfig _$LanguageConfigFromJson(Map<String, dynamic> json) =>
     LanguageConfig(
       supported:
           (json['supported'] as List<dynamic>).map((e) => e as String).toList(),
-      defaultLang: json['defaultLang'] as String,
+      defaultLang: json['default'] as String,
       fallback: json['fallback'] as String,
     );
 
 Map<String, dynamic> _$LanguageConfigToJson(LanguageConfig instance) =>
     <String, dynamic>{
       'supported': instance.supported,
-      'defaultLang': instance.defaultLang,
+      'default': instance.defaultLang,
       'fallback': instance.fallback,
     };

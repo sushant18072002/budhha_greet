@@ -23,13 +23,14 @@ class TypographyAdapter extends TypeAdapter<Typography> {
       letterSpacing: fields[3] as double,
       lineHeight: fields[4] as double,
       textAlign: fields[5] as String,
+      textTransform: fields[6] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Typography obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.fontFamily)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class TypographyAdapter extends TypeAdapter<Typography> {
       ..writeByte(4)
       ..write(obj.lineHeight)
       ..writeByte(5)
-      ..write(obj.textAlign);
+      ..write(obj.textAlign)
+      ..writeByte(6)
+      ..write(obj.textTransform);
   }
 
   @override
@@ -60,20 +63,22 @@ class TypographyAdapter extends TypeAdapter<Typography> {
 // **************************************************************************
 
 Typography _$TypographyFromJson(Map<String, dynamic> json) => Typography(
-      fontFamily: json['fontFamily'] as String,
-      fontSize: FontSize.fromJson(json['fontSize'] as Map<String, dynamic>),
-      fontWeight: json['fontWeight'] as String,
-      letterSpacing: (json['letterSpacing'] as num).toDouble(),
-      lineHeight: (json['lineHeight'] as num).toDouble(),
-      textAlign: json['textAlign'] as String,
+      fontFamily: json['font_family'] as String,
+      fontSize: FontSize.fromJson(json['font_size'] as Map<String, dynamic>),
+      fontWeight: json['font_weight'] as String,
+      letterSpacing: (json['letter_spacing'] as num).toDouble(),
+      lineHeight: (json['line_height'] as num).toDouble(),
+      textAlign: json['text_align'] as String,
+      textTransform: json['text_transform'] as String?,
     );
 
 Map<String, dynamic> _$TypographyToJson(Typography instance) =>
     <String, dynamic>{
-      'fontFamily': instance.fontFamily,
-      'fontSize': instance.fontSize,
-      'fontWeight': instance.fontWeight,
-      'letterSpacing': instance.letterSpacing,
-      'lineHeight': instance.lineHeight,
-      'textAlign': instance.textAlign,
+      'font_family': instance.fontFamily,
+      'font_size': instance.fontSize,
+      'font_weight': instance.fontWeight,
+      'letter_spacing': instance.letterSpacing,
+      'line_height': instance.lineHeight,
+      'text_align': instance.textAlign,
+      'text_transform': instance.textTransform,
     };

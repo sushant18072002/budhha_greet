@@ -50,13 +50,13 @@ class TypographyValidationAdapter extends TypeAdapter<TypographyValidation> {
 TypographyValidation _$TypographyValidationFromJson(
         Map<String, dynamic> json) =>
     TypographyValidation(
-      minFontSize: (json['minFontSize'] as num).toInt(),
-      maxFontSize: (json['maxFontSize'] as num).toInt(),
+      minFontSize: (json['min_font_size'] as num).toInt(),
+      maxFontSize: (json['max_font_size'] as num).toInt(),
     );
 
 Map<String, dynamic> _$TypographyValidationToJson(
         TypographyValidation instance) =>
     <String, dynamic>{
-      'minFontSize': instance.minFontSize,
-      'maxFontSize': instance.maxFontSize,
+      'min_font_size': instance.minFontSize,
+      'max_font_size': instance.maxFontSize,
     };

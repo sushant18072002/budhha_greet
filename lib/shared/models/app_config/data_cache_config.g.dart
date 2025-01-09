@@ -55,7 +55,7 @@ class DataCacheConfigAdapter extends TypeAdapter<DataCacheConfig> {
 
 DataCacheConfig _$DataCacheConfigFromJson(Map<String, dynamic> json) =>
     DataCacheConfig(
-      ttlSeconds: (json['ttlSeconds'] as num).toInt(),
+      ttlSeconds: (json['ttl_seconds'] as num).toInt(),
       strategy: json['strategy'] as String,
       persistence: json['persistence'] as bool,
       encryption: json['encryption'] as bool,
@@ -63,7 +63,7 @@ DataCacheConfig _$DataCacheConfigFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$DataCacheConfigToJson(DataCacheConfig instance) =>
     <String, dynamic>{
-      'ttlSeconds': instance.ttlSeconds,
+      'ttl_seconds': instance.ttlSeconds,
       'strategy': instance.strategy,
       'persistence': instance.persistence,
       'encryption': instance.encryption,

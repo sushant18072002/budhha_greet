@@ -7,11 +7,11 @@ part 'author_validation.g.dart';
 @JsonSerializable()
 class AuthorValidation {
   @HiveField(0)
-   @JsonKey(name: '')
+   @JsonKey(name: 'max_length')
   final int maxLength;
   
   @HiveField(1)
-   @JsonKey(name: '')
+   @JsonKey(name: 'min_length')
   final int minLength;
 
   AuthorValidation({

@@ -10,11 +10,11 @@ part 'template_validation.g.dart';
 @JsonSerializable()
 class TemplateValidation {
   @HiveField(0)
-   @JsonKey(name: '')
+   @JsonKey(name: 'greeting')
   final TextValidation greeting;
   
   @HiveField(1)
-   @JsonKey(name: '')
+   @JsonKey(name: 'typography')
   final TypographyValidation typography;
 
   TemplateValidation({

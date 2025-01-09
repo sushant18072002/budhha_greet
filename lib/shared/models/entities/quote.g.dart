@@ -165,13 +165,13 @@ Quote _$QuoteFromJson(Map<String, dynamic> json) => Quote(
       translations: (json['translations'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(k, Translation.fromJson(e as Map<String, dynamic>)),
       ),
-      authorId: json['authorId'] as String,
-      sourceId: json['sourceId'] as String,
-      categoryIds: (json['categoryIds'] as List<dynamic>)
+      authorId: json['author_id'] as String,
+      sourceId: json['source_id'] as String,
+      categoryIds: (json['category_ids'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
       tagIds:
-          (json['tagIds'] as List<dynamic>).map((e) => e as String).toList(),
+          (json['tag_ids'] as List<dynamic>).map((e) => e as String).toList(),
       style: Style.fromJson(json['style'] as Map<String, dynamic>),
       metadata:
           QuoteMetadata.fromJson(json['metadata'] as Map<String, dynamic>),
@@ -182,10 +182,10 @@ Quote _$QuoteFromJson(Map<String, dynamic> json) => Quote(
 Map<String, dynamic> _$QuoteToJson(Quote instance) => <String, dynamic>{
       'uuid': instance.uuid,
       'translations': instance.translations,
-      'authorId': instance.authorId,
-      'sourceId': instance.sourceId,
-      'categoryIds': instance.categoryIds,
-      'tagIds': instance.tagIds,
+      'author_id': instance.authorId,
+      'source_id': instance.sourceId,
+      'category_ids': instance.categoryIds,
+      'tag_ids': instance.tagIds,
       'style': instance.style,
       'metadata': instance.metadata,
       'metrics': instance.metrics,
@@ -194,16 +194,16 @@ Map<String, dynamic> _$QuoteToJson(Quote instance) => <String, dynamic>{
 
 QuoteMetadata _$QuoteMetadataFromJson(Map<String, dynamic> json) =>
     QuoteMetadata(
-      originalLanguage: json['originalLanguage'] as String,
-      moderationStatus: json['moderationStatus'] as String,
-      moderationDate: DateTime.parse(json['moderationDate'] as String),
-      moderationBy: json['moderationBy'] as String,
+      originalLanguage: json['original_language'] as String,
+      moderationStatus: json['moderation_status'] as String,
+      moderationDate: DateTime.parse(json['moderation_date'] as String),
+      moderationBy: json['moderation_by'] as String,
     );
 
 Map<String, dynamic> _$QuoteMetadataToJson(QuoteMetadata instance) =>
     <String, dynamic>{
-      'originalLanguage': instance.originalLanguage,
-      'moderationStatus': instance.moderationStatus,
-      'moderationDate': instance.moderationDate.toIso8601String(),
-      'moderationBy': instance.moderationBy,
+      'original_language': instance.originalLanguage,
+      'moderation_status': instance.moderationStatus,
+      'moderation_date': instance.moderationDate.toIso8601String(),
+      'moderation_by': instance.moderationBy,
     };

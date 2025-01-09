@@ -54,16 +54,16 @@ class ApiConfigAdapter extends TypeAdapter<ApiConfig> {
 // **************************************************************************
 
 ApiConfig _$ApiConfigFromJson(Map<String, dynamic> json) => ApiConfig(
-      baseUrl: json['baseUrl'] as String,
-      timeoutMs: (json['timeoutMs'] as num).toInt(),
+      baseUrl: json['base_url'] as String,
+      timeoutMs: (json['timeout_ms'] as num).toInt(),
       retry: RetryConfig.fromJson(json['retry'] as Map<String, dynamic>),
       rateLimit:
-          RateLimitConfig.fromJson(json['rateLimit'] as Map<String, dynamic>),
+          RateLimitConfig.fromJson(json['rate_limit'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ApiConfigToJson(ApiConfig instance) => <String, dynamic>{
-      'baseUrl': instance.baseUrl,
-      'timeoutMs': instance.timeoutMs,
+      'base_url': instance.baseUrl,
+      'timeout_ms': instance.timeoutMs,
       'retry': instance.retry,
-      'rateLimit': instance.rateLimit,
+      'rate_limit': instance.rateLimit,
     };

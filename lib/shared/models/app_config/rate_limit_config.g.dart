@@ -49,12 +49,12 @@ class RateLimitConfigAdapter extends TypeAdapter<RateLimitConfig> {
 
 RateLimitConfig _$RateLimitConfigFromJson(Map<String, dynamic> json) =>
     RateLimitConfig(
-      requestsPerMinute: (json['requestsPerMinute'] as num).toInt(),
-      burstSize: (json['burstSize'] as num).toInt(),
+      requestsPerMinute: (json['requests_per_minute'] as num).toInt(),
+      burstSize: (json['burst_size'] as num).toInt(),
     );
 
 Map<String, dynamic> _$RateLimitConfigToJson(RateLimitConfig instance) =>
     <String, dynamic>{
-      'requestsPerMinute': instance.requestsPerMinute,
-      'burstSize': instance.burstSize,
+      'requests_per_minute': instance.requestsPerMinute,
+      'burst_size': instance.burstSize,
     };

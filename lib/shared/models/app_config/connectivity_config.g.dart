@@ -49,12 +49,12 @@ class ConnectivityConfigAdapter extends TypeAdapter<ConnectivityConfig> {
 
 ConnectivityConfig _$ConnectivityConfigFromJson(Map<String, dynamic> json) =>
     ConnectivityConfig(
-      offlineSupport: json['offlineSupport'] as bool,
-      syncIntervalSeconds: (json['syncIntervalSeconds'] as num).toInt(),
+      offlineSupport: json['offline_support'] as bool,
+      syncIntervalSeconds: (json['sync_interval_seconds'] as num).toInt(),
     );
 
 Map<String, dynamic> _$ConnectivityConfigToJson(ConnectivityConfig instance) =>
     <String, dynamic>{
-      'offlineSupport': instance.offlineSupport,
-      'syncIntervalSeconds': instance.syncIntervalSeconds,
+      'offline_support': instance.offlineSupport,
+      'sync_interval_seconds': instance.syncIntervalSeconds,
     };

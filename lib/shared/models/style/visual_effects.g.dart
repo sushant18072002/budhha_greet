@@ -54,12 +54,12 @@ VisualEffects _$VisualEffectsFromJson(Map<String, dynamic> json) =>
     VisualEffects(
       opacity: (json['opacity'] as num).toDouble(),
       blur: (json['blur'] as num).toDouble(),
-      blendMode: json['blendMode'] as String,
+      blendMode: json['blend_mode'] as String,
     );
 
 Map<String, dynamic> _$VisualEffectsToJson(VisualEffects instance) =>
     <String, dynamic>{
       'opacity': instance.opacity,
       'blur': instance.blur,
-      'blendMode': instance.blendMode,
+      'blend_mode': instance.blendMode,
     };

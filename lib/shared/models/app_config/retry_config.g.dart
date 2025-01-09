@@ -48,12 +48,12 @@ class RetryConfigAdapter extends TypeAdapter<RetryConfig> {
 // **************************************************************************
 
 RetryConfig _$RetryConfigFromJson(Map<String, dynamic> json) => RetryConfig(
-      maxAttempts: (json['maxAttempts'] as num).toInt(),
-      backoffMs: (json['backoffMs'] as num).toInt(),
+      maxAttempts: (json['max_attempts'] as num).toInt(),
+      backoffMs: (json['backoff_ms'] as num).toInt(),
     );
 
 Map<String, dynamic> _$RetryConfigToJson(RetryConfig instance) =>
     <String, dynamic>{
-      'maxAttempts': instance.maxAttempts,
-      'backoffMs': instance.backoffMs,
+      'max_attempts': instance.maxAttempts,
+      'backoff_ms': instance.backoffMs,
     };

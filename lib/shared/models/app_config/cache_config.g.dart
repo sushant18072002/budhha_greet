@@ -51,14 +51,14 @@ class CacheConfigAdapter extends TypeAdapter<CacheConfig> {
 // **************************************************************************
 
 CacheConfig _$CacheConfigFromJson(Map<String, dynamic> json) => CacheConfig(
-      ttlSeconds: (json['ttlSeconds'] as num).toInt(),
+      ttlSeconds: (json['ttl_seconds'] as num).toInt(),
       priority: json['priority'] as String,
       preload: json['preload'] as bool,
     );
 
 Map<String, dynamic> _$CacheConfigToJson(CacheConfig instance) =>
     <String, dynamic>{
-      'ttlSeconds': instance.ttlSeconds,
+      'ttl_seconds': instance.ttlSeconds,
       'priority': instance.priority,
       'preload': instance.preload,
     };

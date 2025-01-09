@@ -20,7 +20,7 @@ class BackgroundAdapter extends TypeAdapter<Background> {
       uuid: fields[0] as String,
       id: fields[1] as String,
       type: fields[2] as String,
-      translations: (fields[3] as Map).cast<String, Translation>(),
+      translations: (fields[3] as Map).cast<String, BackGroundTranslation>(),
       visualData: fields[4] as VisualData,
       visualEffects: fields[5] as VisualEffects,
       categoryIds: (fields[6] as List).cast<String>(),
@@ -470,6 +470,46 @@ class BackgroundSchemaAdapter extends TypeAdapter<BackgroundSchema> {
           typeId == other.typeId;
 }
 
+class BackGroundTranslationAdapter extends TypeAdapter<BackGroundTranslation> {
+  @override
+  final int typeId = 81;
+
+  @override
+  BackGroundTranslation read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return BackGroundTranslation(
+      title: fields[0] as String,
+      description: fields[1] as String?,
+      semanticLabel: fields[2] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, BackGroundTranslation obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.title)
+      ..writeByte(1)
+      ..write(obj.description)
+      ..writeByte(2)
+      ..write(obj.semanticLabel);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BackGroundTranslationAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
@@ -479,23 +519,24 @@ Background _$BackgroundFromJson(Map<String, dynamic> json) => Background(
       id: json['id'] as String,
       type: json['type'] as String,
       translations: (json['translations'] as Map<String, dynamic>).map(
-        (k, e) => MapEntry(k, Translation.fromJson(e as Map<String, dynamic>)),
+        (k, e) => MapEntry(
+            k, BackGroundTranslation.fromJson(e as Map<String, dynamic>)),
       ),
       visualData:
-          VisualData.fromJson(json['visualData'] as Map<String, dynamic>),
-      visualEffects:
-          VisualEffects.fromJson(json['visualEffects'] as Map<String, dynamic>),
-      categoryIds: (json['categoryIds'] as List<dynamic>)
+          VisualData.fromJson(json['visual_data'] as Map<String, dynamic>),
+      visualEffects: VisualEffects.fromJson(
+          json['visual_effects'] as Map<String, dynamic>),
+      categoryIds: (json['category_ids'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
       tagIds:
-          (json['tagIds'] as List<dynamic>).map((e) => e as String).toList(),
+          (json['tag_ids'] as List<dynamic>).map((e) => e as String).toList(),
       attribution:
           Attribution.fromJson(json['attribution'] as Map<String, dynamic>),
       optimization:
           Optimization.fromJson(json['optimization'] as Map<String, dynamic>),
       cacheConfig:
-          CacheConfig.fromJson(json['cacheConfig'] as Map<String, dynamic>),
+          CacheConfig.fromJson(json['cache_config'] as Map<String, dynamic>),
       audit: Audit.fromJson(json['audit'] as Map<String, dynamic>),
     );
 
@@ -505,13 +546,13 @@ Map<String, dynamic> _$BackgroundToJson(Background instance) =>
       'id': instance.id,
       'type': instance.type,
       'translations': instance.translations,
-      'visualData': instance.visualData,
-      'visualEffects': instance.visualEffects,
-      'categoryIds': instance.categoryIds,
-      'tagIds': instance.tagIds,
+      'visual_data': instance.visualData,
+      'visual_effects': instance.visualEffects,
+      'category_ids': instance.categoryIds,
+      'tag_ids': instance.tagIds,
       'attribution': instance.attribution,
       'optimization': instance.optimization,
-      'cacheConfig': instance.cacheConfig,
+      'cache_config': instance.cacheConfig,
       'audit': instance.audit,
     };
 
@@ -654,4 +695,20 @@ Map<String, dynamic> _$BackgroundSchemaToJson(BackgroundSchema instance) =>
       'indexes': instance.indexes,
       'required': instance.required,
       'unique': instance.unique,
+    };
+
+BackGroundTranslation _$BackGroundTranslationFromJson(
+        Map<String, dynamic> json) =>
+    BackGroundTranslation(
+      title: json['title'] as String,
+      description: json['description'] as String?,
+      semanticLabel: json['semantic_label'] as String?,
+    );
+
+Map<String, dynamic> _$BackGroundTranslationToJson(
+        BackGroundTranslation instance) =>
+    <String, dynamic>{
+      'title': instance.title,
+      'description': instance.description,
+      'semantic_label': instance.semanticLabel,
     };

@@ -230,7 +230,7 @@ Map<String, dynamic> _$CategoryCollectionToJson(CategoryCollection instance) =>
 CategorySchema _$CategorySchemaFromJson(Map<String, dynamic> json) =>
     CategorySchema(
       type: json['type'] as String,
-      idPrefix: json['idPrefix'] as String,
+      idPrefix: json['id_prefix'] as String,
       indexes:
           (json['indexes'] as List<dynamic>).map((e) => e as String).toList(),
       required:
@@ -240,7 +240,7 @@ CategorySchema _$CategorySchemaFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CategorySchemaToJson(CategorySchema instance) =>
     <String, dynamic>{
       'type': instance.type,
-      'idPrefix': instance.idPrefix,
+      'id_prefix': instance.idPrefix,
       'indexes': instance.indexes,
       'required': instance.required,
     };
@@ -248,7 +248,7 @@ Map<String, dynamic> _$CategorySchemaToJson(CategorySchema instance) =>
 Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
       id: json['id'] as String,
       type: json['type'] as String,
-      parentId: json['parentId'] as String?,
+      parentId: json['parent_id'] as String?,
       translations: (json['translations'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(
             k, CategoryTranslation.fromJson(e as Map<String, dynamic>)),
@@ -261,7 +261,7 @@ Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
 Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
       'id': instance.id,
       'type': instance.type,
-      'parentId': instance.parentId,
+      'parent_id': instance.parentId,
       'translations': instance.translations,
       'metadata': instance.metadata,
       'audit': instance.audit,

@@ -8,7 +8,7 @@ part of 'template.dart';
 
 class TemplateCollectionAdapter extends TypeAdapter<TemplateCollection> {
   @override
-  final int typeId = 77;
+  final int typeId = 80;
 
   @override
   TemplateCollection read(BinaryReader reader) {
@@ -199,15 +199,18 @@ class StyleConfigAdapter extends TypeAdapter<StyleConfig> {
     };
     return StyleConfig(
       greeting: fields[0] as ElementStyle,
+      quote: fields[1] as ElementStyle?,
     );
   }
 
   @override
   void write(BinaryWriter writer, StyleConfig obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.greeting);
+      ..write(obj.greeting)
+      ..writeByte(1)
+      ..write(obj.quote);
   }
 
   @override
@@ -323,14 +326,14 @@ Template _$TemplateFromJson(Map<String, dynamic> json) => Template(
       composition:
           Composition.fromJson(json['composition'] as Map<String, dynamic>),
       layoutConfig:
-          LayoutConfig.fromJson(json['layoutConfig'] as Map<String, dynamic>),
+          LayoutConfig.fromJson(json['layout_config'] as Map<String, dynamic>),
       styleConfig:
-          StyleConfig.fromJson(json['styleConfig'] as Map<String, dynamic>),
-      categoryIds: (json['categoryIds'] as List<dynamic>)
+          StyleConfig.fromJson(json['style_config'] as Map<String, dynamic>),
+      categoryIds: (json['category_ids'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
       tagIds:
-          (json['tagIds'] as List<dynamic>).map((e) => e as String).toList(),
+          (json['tag_ids'] as List<dynamic>).map((e) => e as String).toList(),
       metadata:
           TemplateMetadata.fromJson(json['metadata'] as Map<String, dynamic>),
       metrics: Metrics.fromJson(json['metrics'] as Map<String, dynamic>),
@@ -341,10 +344,10 @@ Map<String, dynamic> _$TemplateToJson(Template instance) => <String, dynamic>{
       'uuid': instance.uuid,
       'translations': instance.translations,
       'composition': instance.composition,
-      'layoutConfig': instance.layoutConfig,
-      'styleConfig': instance.styleConfig,
-      'categoryIds': instance.categoryIds,
-      'tagIds': instance.tagIds,
+      'layout_config': instance.layoutConfig,
+      'style_config': instance.styleConfig,
+      'category_ids': instance.categoryIds,
+      'tag_ids': instance.tagIds,
       'metadata': instance.metadata,
       'metrics': instance.metrics,
       'audit': instance.audit,
@@ -355,7 +358,7 @@ TemplateTranslation _$TemplateTranslationFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       description: json['description'] as String,
       greeting: json['greeting'] as String,
-      semanticLabel: json['semanticLabel'] as String,
+      semanticLabel: json['semantic_label'] as String,
     );
 
 Map<String, dynamic> _$TemplateTranslationToJson(
@@ -364,31 +367,35 @@ Map<String, dynamic> _$TemplateTranslationToJson(
       'title': instance.title,
       'description': instance.description,
       'greeting': instance.greeting,
-      'semanticLabel': instance.semanticLabel,
+      'semantic_label': instance.semanticLabel,
     };
 
 Composition _$CompositionFromJson(Map<String, dynamic> json) => Composition(
-      backgroundId: json['backgroundId'] as String,
-      quoteId: json['quoteId'] as String,
+      backgroundId: json['background_id'] as String,
+      quoteId: json['quote_id'] as String,
       layout: json['layout'] as String,
-      aspectRatio: json['aspectRatio'] as String,
+      aspectRatio: json['aspect_ratio'] as String,
     );
 
 Map<String, dynamic> _$CompositionToJson(Composition instance) =>
     <String, dynamic>{
-      'backgroundId': instance.backgroundId,
-      'quoteId': instance.quoteId,
+      'background_id': instance.backgroundId,
+      'quote_id': instance.quoteId,
       'layout': instance.layout,
-      'aspectRatio': instance.aspectRatio,
+      'aspect_ratio': instance.aspectRatio,
     };
 
 StyleConfig _$StyleConfigFromJson(Map<String, dynamic> json) => StyleConfig(
       greeting: ElementStyle.fromJson(json['greeting'] as Map<String, dynamic>),
+      quote: json['quote'] == null
+          ? null
+          : ElementStyle.fromJson(json['quote'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$StyleConfigToJson(StyleConfig instance) =>
     <String, dynamic>{
       'greeting': instance.greeting,
+      'quote': instance.quote,
     };
 
 ElementStyle _$ElementStyleFromJson(Map<String, dynamic> json) => ElementStyle(
@@ -405,14 +412,14 @@ Map<String, dynamic> _$ElementStyleToJson(ElementStyle instance) =>
 
 TemplateMetadata _$TemplateMetadataFromJson(Map<String, dynamic> json) =>
     TemplateMetadata(
-      isPremium: json['isPremium'] as bool,
+      isPremium: json['is_premium'] as bool,
       status: json['status'] as String,
       version: (json['version'] as num).toInt(),
     );
 
 Map<String, dynamic> _$TemplateMetadataToJson(TemplateMetadata instance) =>
     <String, dynamic>{
-      'isPremium': instance.isPremium,
+      'is_premium': instance.isPremium,
       'status': instance.status,
       'version': instance.version,
     };

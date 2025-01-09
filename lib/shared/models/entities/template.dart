@@ -9,7 +9,7 @@ import '../style/typography.dart';
 
 part 'template.g.dart';
 
-@HiveType(typeId: 77)
+@HiveType(typeId: 80)
 @JsonSerializable()
 class TemplateCollection {
   @HiveField(0)

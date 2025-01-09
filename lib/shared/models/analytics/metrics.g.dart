@@ -57,14 +57,14 @@ Metrics _$MetricsFromJson(Map<String, dynamic> json) => Metrics(
       views: (json['views'] as num).toInt(),
       shares: (json['shares'] as num).toInt(),
       favorites: (json['favorites'] as num).toInt(),
-      lastInteraction: json['lastInteraction'] == null
+      lastInteraction: json['last_interaction'] == null
           ? null
-          : DateTime.parse(json['lastInteraction'] as String),
+          : DateTime.parse(json['last_interaction'] as String),
     );
 
 Map<String, dynamic> _$MetricsToJson(Metrics instance) => <String, dynamic>{
       'views': instance.views,
       'shares': instance.shares,
       'favorites': instance.favorites,
-      'lastInteraction': instance.lastInteraction?.toIso8601String(),
+      'last_interaction': instance.lastInteraction?.toIso8601String(),
     };

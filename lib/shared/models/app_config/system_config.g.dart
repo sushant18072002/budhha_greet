@@ -57,16 +57,16 @@ SystemConfig _$SystemConfigFromJson(Map<String, dynamic> json) => SystemConfig(
       languages:
           LanguageConfig.fromJson(json['languages'] as Map<String, dynamic>),
       appSettings:
-          AppSettings.fromJson(json['appSettings'] as Map<String, dynamic>),
+          AppSettings.fromJson(json['app_settings'] as Map<String, dynamic>),
       systemCacheConfig: SystemCacheConfig.fromJson(
-          json['systemCacheConfig'] as Map<String, dynamic>),
-      apiConfig: ApiConfig.fromJson(json['apiConfig'] as Map<String, dynamic>),
+          json['system_cache_config'] as Map<String, dynamic>),
+      apiConfig: ApiConfig.fromJson(json['api_config'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SystemConfigToJson(SystemConfig instance) =>
     <String, dynamic>{
       'languages': instance.languages,
-      'appSettings': instance.appSettings,
-      'systemCacheConfig': instance.systemCacheConfig,
-      'apiConfig': instance.apiConfig,
+      'app_settings': instance.appSettings,
+      'system_cache_config': instance.systemCacheConfig,
+      'api_config': instance.apiConfig,
     };

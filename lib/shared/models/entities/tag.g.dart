@@ -226,7 +226,7 @@ Map<String, dynamic> _$TagCollectionToJson(TagCollection instance) =>
 
 TagSchema _$TagSchemaFromJson(Map<String, dynamic> json) => TagSchema(
       type: json['type'] as String,
-      idPrefix: json['idPrefix'] as String,
+      idPrefix: json['id_prefix'] as String,
       indexes:
           (json['indexes'] as List<dynamic>).map((e) => e as String).toList(),
       required:
@@ -235,7 +235,7 @@ TagSchema _$TagSchemaFromJson(Map<String, dynamic> json) => TagSchema(
 
 Map<String, dynamic> _$TagSchemaToJson(TagSchema instance) => <String, dynamic>{
       'type': instance.type,
-      'idPrefix': instance.idPrefix,
+      'id_prefix': instance.idPrefix,
       'indexes': instance.indexes,
       'required': instance.required,
     };

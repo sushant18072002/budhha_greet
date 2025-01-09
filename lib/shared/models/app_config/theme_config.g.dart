@@ -48,12 +48,12 @@ class ThemeConfigAdapter extends TypeAdapter<ThemeConfig> {
 // **************************************************************************
 
 ThemeConfig _$ThemeConfigFromJson(Map<String, dynamic> json) => ThemeConfig(
-      darkModeSupport: json['darkModeSupport'] as bool,
-      dynamicColors: json['dynamicColors'] as bool,
+      darkModeSupport: json['dark_mode_support'] as bool,
+      dynamicColors: json['dynamic_colors'] as bool,
     );
 
 Map<String, dynamic> _$ThemeConfigToJson(ThemeConfig instance) =>
     <String, dynamic>{
-      'darkModeSupport': instance.darkModeSupport,
-      'dynamicColors': instance.dynamicColors,
+      'dark_mode_support': instance.darkModeSupport,
+      'dynamic_colors': instance.dynamicColors,
     };

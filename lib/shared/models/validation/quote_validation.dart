@@ -14,7 +14,7 @@ class QuoteValidation {
   final TextValidation text;
   
   @HiveField(1)
-   @JsonKey(name: '')
+   @JsonKey(name: 'author')
   final AuthorValidation author;
 
   QuoteValidation({

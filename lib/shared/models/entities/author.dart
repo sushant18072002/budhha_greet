@@ -57,7 +57,7 @@ class Author {
   final Map<String, AuthorTranslation> translations;
   
   @HiveField(2)
-  @JsonKey(name: '')
+  @JsonKey(name: 'audit')
   final Audit audit;
 
   Author({

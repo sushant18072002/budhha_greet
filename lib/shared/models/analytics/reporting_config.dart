@@ -8,19 +8,19 @@ part 'reporting_config.g.dart';
 @JsonSerializable()
 class ReportingConfig {
   @HiveField(0)
-   @JsonKey(name: '')
+   @JsonKey(name: 'daily_stats')
   final bool dailyStats;
   
   @HiveField(1)
-   @JsonKey(name: '')
+   @JsonKey(name: 'weekly_stats')
   final bool weeklyStats;
   
   @HiveField(2)
-   @JsonKey(name: '')
+   @JsonKey(name: 'monthly_stats')
   final bool monthlyStats;
   
   @HiveField(3)
-   @JsonKey(name: '')
+   @JsonKey(name: 'popular_items')
   final PopularItems popularItems;
 
   ReportingConfig({

@@ -57,17 +57,17 @@ class AuditAdapter extends TypeAdapter<Audit> {
 // **************************************************************************
 
 Audit _$AuditFromJson(Map<String, dynamic> json) => Audit(
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      createdBy: json['createdBy'] as String,
-      modifiedAt: DateTime.parse(json['modifiedAt'] as String),
-      modifiedBy: json['modifiedBy'] as String,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      createdBy: json['created_by'] as String,
+      modifiedAt: DateTime.parse(json['modified_at'] as String),
+      modifiedBy: json['modified_by'] as String,
       version: (json['version'] as num).toInt(),
     );
 
 Map<String, dynamic> _$AuditToJson(Audit instance) => <String, dynamic>{
-      'createdAt': instance.createdAt.toIso8601String(),
-      'createdBy': instance.createdBy,
-      'modifiedAt': instance.modifiedAt.toIso8601String(),
-      'modifiedBy': instance.modifiedBy,
+      'created_at': instance.createdAt.toIso8601String(),
+      'created_by': instance.createdBy,
+      'modified_at': instance.modifiedAt.toIso8601String(),
+      'modified_by': instance.modifiedBy,
       'version': instance.version,
     };

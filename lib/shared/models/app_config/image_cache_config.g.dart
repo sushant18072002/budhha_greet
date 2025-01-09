@@ -55,17 +55,17 @@ class ImageCacheConfigAdapter extends TypeAdapter<ImageCacheConfig> {
 
 ImageCacheConfig _$ImageCacheConfigFromJson(Map<String, dynamic> json) =>
     ImageCacheConfig(
-      ttlSeconds: (json['ttlSeconds'] as num).toInt(),
+      ttlSeconds: (json['ttl_seconds'] as num).toInt(),
       strategy: json['strategy'] as String,
-      maxSizeMb: (json['maxSizeMb'] as num).toInt(),
+      maxSizeMb: (json['max_size_mb'] as num).toInt(),
       compression: CompressionConfig.fromJson(
           json['compression'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ImageCacheConfigToJson(ImageCacheConfig instance) =>
     <String, dynamic>{
-      'ttlSeconds': instance.ttlSeconds,
+      'ttl_seconds': instance.ttlSeconds,
       'strategy': instance.strategy,
-      'maxSizeMb': instance.maxSizeMb,
+      'max_size_mb': instance.maxSizeMb,
       'compression': instance.compression,
     };

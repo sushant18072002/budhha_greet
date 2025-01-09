@@ -15,13 +15,13 @@ class TextValidation {
   final int minLength;
   
   @HiveField(2)
-   @JsonKey(name: 'allowed_characters')
-  final String allowedCharacters;
+  @JsonKey(name: 'allowed_characters')
+  final String? allowedCharacters;
 
   TextValidation({
     required this.maxLength,
     required this.minLength,
-    required this.allowedCharacters,
+    this.allowedCharacters,
   });
 
   factory TextValidation.fromJson(Map<String, dynamic> json) => 

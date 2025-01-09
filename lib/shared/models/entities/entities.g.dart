@@ -23,14 +23,15 @@ class EntitiesAdapter extends TypeAdapter<Entities> {
       sources: fields[3] as SourceCollection,
       quotes: fields[4] as QuoteCollection,
       backgrounds: fields[5] as BackgroundCollection,
-      templates: (fields[6] as Map).cast<String, Template>(),
+      templates: fields[6] as TemplateCollection,
+      tagCollection: fields[7] as TagCollection,
     );
   }
 
   @override
   void write(BinaryWriter writer, Entities obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.languages)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class EntitiesAdapter extends TypeAdapter<Entities> {
       ..writeByte(5)
       ..write(obj.backgrounds)
       ..writeByte(6)
-      ..write(obj.templates);
+      ..write(obj.templates)
+      ..writeByte(7)
+      ..write(obj.tagCollection);
   }
 
   @override
@@ -74,9 +77,10 @@ Entities _$EntitiesFromJson(Map<String, dynamic> json) => Entities(
       quotes: QuoteCollection.fromJson(json['quotes'] as Map<String, dynamic>),
       backgrounds: BackgroundCollection.fromJson(
           json['backgrounds'] as Map<String, dynamic>),
-      templates: (json['templates'] as Map<String, dynamic>).map(
-        (k, e) => MapEntry(k, Template.fromJson(e as Map<String, dynamic>)),
-      ),
+      templates: TemplateCollection.fromJson(
+          json['templates'] as Map<String, dynamic>),
+      tagCollection:
+          TagCollection.fromJson(json['tags'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$EntitiesToJson(Entities instance) => <String, dynamic>{
@@ -87,4 +91,5 @@ Map<String, dynamic> _$EntitiesToJson(Entities instance) => <String, dynamic>{
       'quotes': instance.quotes,
       'backgrounds': instance.backgrounds,
       'templates': instance.templates,
+      'tags': instance.tagCollection,
     };

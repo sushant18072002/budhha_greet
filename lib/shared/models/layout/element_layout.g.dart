@@ -58,9 +58,9 @@ ElementLayout _$ElementLayoutFromJson(Map<String, dynamic> json) =>
       position: Position.fromJson(json['position'] as Map<String, dynamic>),
       size: Size.fromJson(json['size'] as Map<String, dynamic>),
       padding: (json['padding'] as num).toDouble(),
-      safeArea: json['safeArea'] == null
+      safeArea: json['safe_area'] == null
           ? null
-          : SafeArea.fromJson(json['safeArea'] as Map<String, dynamic>),
+          : SafeArea.fromJson(json['safe_area'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ElementLayoutToJson(ElementLayout instance) =>
@@ -68,5 +68,5 @@ Map<String, dynamic> _$ElementLayoutToJson(ElementLayout instance) =>
       'position': instance.position,
       'size': instance.size,
       'padding': instance.padding,
-      'safeArea': instance.safeArea,
+      'safe_area': instance.safeArea,
     };

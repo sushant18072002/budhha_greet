@@ -52,12 +52,12 @@ class MetadataAdapter extends TypeAdapter<Metadata> {
 
 Metadata _$MetadataFromJson(Map<String, dynamic> json) => Metadata(
       schemaVersion: json['schema_version'] as String,
-      lastUpdated: DateTime.parse(json['lastUpdated'] as String),
-      minAppVersion: json['minAppVersion'] as String,
+      lastUpdated: DateTime.parse(json['last_updated'] as String),
+      minAppVersion: json['min_app_version'] as String,
     );
 
 Map<String, dynamic> _$MetadataToJson(Metadata instance) => <String, dynamic>{
-      'schemaVersion': instance.schemaVersion,
-      'lastUpdated': instance.lastUpdated.toIso8601String(),
-      'minAppVersion': instance.minAppVersion,
+      'schema_version': instance.schemaVersion,
+      'last_updated': instance.lastUpdated.toIso8601String(),
+      'min_app_version': instance.minAppVersion,
     };

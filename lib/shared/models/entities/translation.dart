@@ -1,9 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import '../style/font_size.dart';
-import '../style/style_colors.dart';
-
 part 'translation.g.dart';
 
 @HiveType(typeId: 10)

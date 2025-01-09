@@ -33,7 +33,7 @@ class Typography {
    @JsonKey(name: 'text_align')
   final String textAlign;
 
-   @HiveField(5)
+   @HiveField(6)
    @JsonKey(name: 'text_transform')
   final String? textTransform;
 

@@ -41,7 +41,9 @@ import '../../shared/models/layout/position.dart';
 import '../../shared/models/layout/safe_area.dart';
 import '../../shared/models/layout/size.dart';
 import '../../shared/models/style/font_size.dart';
+import '../../shared/models/style/style.dart';
 import '../../shared/models/style/style_colors.dart';
+import '../../shared/models/style/typography.dart';
 import '../../shared/models/style/visual_data.dart';
 import '../../shared/models/style/visual_effects.dart';
 import '../../shared/models/validation/author_validation.dart';
@@ -128,14 +130,14 @@ class DatabaseService extends GetxService {
 
         // Store initial configuration
         await _storeInitialConfig(data);
-
+         print('JSON data _storeInitialConfig successfully');
         final entities = data['entities'] as Map<String, dynamic>;
         await Future.wait([
           _storeQuotes(entities['quotes'] ?? []),
           _storeBackgrounds(entities['backgrounds'] ?? []),
           _storeTemplates(entities['templates'] ?? []),
           _storeCategories(entities['categories'] ?? []),
-          _storeAuthors(entities['authors'] ?? []),
+          _storeAuthors(entities['authors']),
           _storeSources(entities['sources'] ?? []),
           _storeTags(entities['tags'] ?? []),
         ]);
@@ -262,7 +264,7 @@ class DatabaseService extends GetxService {
         systemConfig: SystemConfig.fromJson(data['system_config'] ?? {}),
         entities: Entities.fromJson(data['entities'] ?? {}),
         validationRules: ValidationRules.fromJson(data['validation_rules']??{}),
-        analyticsConfig :AnalyticsConfig.fromJson(data['validation_rules']??{})
+        analyticsConfig :AnalyticsConfig.fromJson(data['analytics_config']??{})
         );
     await configBox.put('current', config);
   }
@@ -319,18 +321,24 @@ class DatabaseService extends GetxService {
     }
   }
 
-  Future<void> _storeAuthors(List<dynamic> authors) async {
-    for (final authorData in authors) {
-      if (authorData is Map<String, dynamic>) {
-        try {
-          final author = Author.fromJson(authorData);
-          await authorsBox.put(author.uuid, author);
-        } catch (e) {
-          print('Error storing author: ${authorData['uuid']} - $e');
-        }
+  Future<void> _storeAuthors(dynamic authorsData) async {
+  if (authorsData == null) return;
+  
+  // First convert to AuthorCollection to handle the wrapper object
+  if (authorsData is Map<String, dynamic>) {
+    try {
+      final authorCollection = AuthorCollection.fromJson(authorsData);
+      // Now process the actual author list
+      for (final author in authorCollection.data) {
+        await authorsBox.put(author.uuid, author);
       }
+    } catch (e) {
+      print('Error processing author collection: $e');
     }
+  } else {
+    print('Invalid authors data format: $authorsData');
   }
+}
 
   Future<void> _storeSources(List<dynamic> sources) async {
     for (final sourceData in sources) {

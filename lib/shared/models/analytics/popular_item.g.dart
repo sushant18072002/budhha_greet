@@ -51,19 +51,19 @@ class PopularItemsAdapter extends TypeAdapter<PopularItems> {
 // **************************************************************************
 
 PopularItems _$PopularItemsFromJson(Map<String, dynamic> json) => PopularItems(
-      templateIds: (json['templateIds'] as List<dynamic>)
+      templateIds: (json['template_ids'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
       quoteIds:
-          (json['quoteIds'] as List<dynamic>).map((e) => e as String).toList(),
-      backgroundIds: (json['backgroundIds'] as List<dynamic>)
+          (json['quote_ids'] as List<dynamic>).map((e) => e as String).toList(),
+      backgroundIds: (json['background_ids'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
     );
 
 Map<String, dynamic> _$PopularItemsToJson(PopularItems instance) =>
     <String, dynamic>{
-      'templateIds': instance.templateIds,
-      'quoteIds': instance.quoteIds,
-      'backgroundIds': instance.backgroundIds,
+      'template_ids': instance.templateIds,
+      'quote_ids': instance.quoteIds,
+      'background_ids': instance.backgroundIds,
     };

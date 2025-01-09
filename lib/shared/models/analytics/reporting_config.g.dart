@@ -55,17 +55,17 @@ class ReportingConfigAdapter extends TypeAdapter<ReportingConfig> {
 
 ReportingConfig _$ReportingConfigFromJson(Map<String, dynamic> json) =>
     ReportingConfig(
-      dailyStats: json['dailyStats'] as bool,
-      weeklyStats: json['weeklyStats'] as bool,
-      monthlyStats: json['monthlyStats'] as bool,
+      dailyStats: json['daily_stats'] as bool,
+      weeklyStats: json['weekly_stats'] as bool,
+      monthlyStats: json['monthly_stats'] as bool,
       popularItems:
-          PopularItems.fromJson(json['popularItems'] as Map<String, dynamic>),
+          PopularItems.fromJson(json['popular_items'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ReportingConfigToJson(ReportingConfig instance) =>
     <String, dynamic>{
-      'dailyStats': instance.dailyStats,
-      'weeklyStats': instance.weeklyStats,
-      'monthlyStats': instance.monthlyStats,
-      'popularItems': instance.popularItems,
+      'daily_stats': instance.dailyStats,
+      'weekly_stats': instance.weeklyStats,
+      'monthly_stats': instance.monthlyStats,
+      'popular_items': instance.popularItems,
     };

@@ -7,15 +7,15 @@ part 'tracking_config.g.dart';
 @JsonSerializable()
 class TrackingConfig {
   @HiveField(0)
-   @JsonKey(name: '')
+   @JsonKey(name: 'enabled')
   final bool enabled;
   
   @HiveField(1)
-   @JsonKey(name: '')
+   @JsonKey(name: 'metrics')
   final List<String> metrics;
   
   @HiveField(2)
-   @JsonKey(name: '')
+   @JsonKey(name: 'events')
   final List<String> events;
 
   TrackingConfig({
