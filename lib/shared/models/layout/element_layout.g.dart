@@ -18,7 +18,7 @@ class ElementLayoutAdapter extends TypeAdapter<ElementLayout> {
     };
     return ElementLayout(
       position: fields[0] as Position,
-      size: fields[1] as Size,
+      size: fields[1] as CustomSize,
       padding: fields[2] as double,
       safeArea: fields[3] as SafeArea?,
     );
@@ -56,7 +56,7 @@ class ElementLayoutAdapter extends TypeAdapter<ElementLayout> {
 ElementLayout _$ElementLayoutFromJson(Map<String, dynamic> json) =>
     ElementLayout(
       position: Position.fromJson(json['position'] as Map<String, dynamic>),
-      size: Size.fromJson(json['size'] as Map<String, dynamic>),
+      size: CustomSize.fromJson(json['size'] as Map<String, dynamic>),
       padding: (json['padding'] as num).toDouble(),
       safeArea: json['safe_area'] == null
           ? null

@@ -6,24 +6,24 @@ part of 'size.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class SizeAdapter extends TypeAdapter<Size> {
+class SizeAdapter extends TypeAdapter<CustomSize> {
   @override
   final int typeId = 36;
 
   @override
-  Size read(BinaryReader reader) {
+  CustomSize read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Size(
+    return CustomSize(
       width: fields[0] as double,
       height: fields[1] as double,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Size obj) {
+  void write(BinaryWriter writer, CustomSize obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
@@ -47,12 +47,12 @@ class SizeAdapter extends TypeAdapter<Size> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-Size _$SizeFromJson(Map<String, dynamic> json) => Size(
+CustomSize _$SizeFromJson(Map<String, dynamic> json) => CustomSize(
       width: (json['width'] as num).toDouble(),
       height: (json['height'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$SizeToJson(Size instance) => <String, dynamic>{
+Map<String, dynamic> _$SizeToJson(CustomSize instance) => <String, dynamic>{
       'width': instance.width,
       'height': instance.height,
     };

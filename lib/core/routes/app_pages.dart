@@ -4,9 +4,6 @@ import 'package:get/get.dart';
 import '../../features/greeting_creator/presentation/screens/creator_screen.dart';
 import '../../features/home/presentation/binding/home_binding.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
-import '../../features/home/presentation/screens/tem.dart';
-import '../../features/image_detail/presentation/binding/image_detail_binding.dart';
-import '../../features/quote_library/presentation/screens/quote_library_screen.dart';
 import 'app_routes.dart';
 
 class AppPages {

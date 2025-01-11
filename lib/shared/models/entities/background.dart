@@ -1,4 +1,3 @@
-import 'package:buddha_greet/shared/models/entities/translation.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -347,7 +346,7 @@ class BackgroundSchema {
   Map<String, dynamic> toJson() => _$BackgroundSchemaToJson(this);
 }
 
-@HiveType(typeId: 81)
+@HiveType(typeId: 80)
 @JsonSerializable()
 class BackGroundTranslation {
   @HiveField(0)

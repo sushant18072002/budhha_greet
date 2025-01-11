@@ -472,7 +472,7 @@ class BackgroundSchemaAdapter extends TypeAdapter<BackgroundSchema> {
 
 class BackGroundTranslationAdapter extends TypeAdapter<BackGroundTranslation> {
   @override
-  final int typeId = 81;
+  final int typeId = 80;
 
   @override
   BackGroundTranslation read(BinaryReader reader) {

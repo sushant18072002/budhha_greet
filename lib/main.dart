@@ -18,7 +18,7 @@ void main() async {
 }
 
 class BuddhaGreetApp extends StatelessWidget {
-  const BuddhaGreetApp({Key? key}) : super(key: key);
+  const BuddhaGreetApp({super.key});
 
   @override
   Widget build(BuildContext context) {

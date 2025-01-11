@@ -30,9 +30,9 @@ class HomeController extends GetxController {
   Future<void> initializeController() async {
   try {
     // Wait for database to be initialized
-    if (!_dbService.isInitialized) {
-      await _dbService.init();
-    }
+    // if (!_dbService.isInitialized) {
+    //   await _dbService.init();
+    // }
     await loadInitialData();
     await loadMorningTemplatesInitialData();
     currentLanguage.value = _dbService.currentLanguage.value;
@@ -173,9 +173,6 @@ class HomeController extends GetxController {
     return await _dbService.getBackground(quoteId);
   }
 
-  void toggleFavorite(String id) {
-    // Implementation
-  }
   void toggleViewMode(){
     isGridView.value=!isGridView.value;
   }
@@ -183,4 +180,18 @@ class HomeController extends GetxController {
   Future<void> refreshData() async {
     await loadInitialData();
   }
+  void shareTemplate(Template template){
+
+  }
+
+  void toggleFavorite(Template template){
+
+  }
+  void onTemplateSelected(Template template){
+
+  }
+  bool isFavorite(String id){
+      return true;
+  }
+
 }

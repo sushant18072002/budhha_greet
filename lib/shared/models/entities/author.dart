@@ -2,31 +2,8 @@ import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../analytics/audit.dart';
-import '../app_config/data_cache_config.dart';
-import '../app_config/image_cache_config.dart';
 
 part 'author.g.dart';
-
-@HiveType(typeId: 79)
-@JsonSerializable()
-class SystemCacheConfig{
-  @HiveField(0)
-  final ImageCacheConfig image;
-  
-  @HiveField(1)
-  final DataCacheConfig data;
-
-  SystemCacheConfig({
-    required this.image,
-    required this.data,
-  });
-
-  factory SystemCacheConfig.fromJson(Map<String, dynamic> json) => 
-    _$SystemCacheConfigFromJson(json);
-  
-  Map<String, dynamic> toJson() => _$SystemCacheConfigToJson(this);
-}
-
 
 @HiveType(typeId: 70)
 @JsonSerializable()

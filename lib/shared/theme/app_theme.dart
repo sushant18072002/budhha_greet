@@ -11,7 +11,6 @@ class AppTheme {
         primary: AppColors.amber600,
         secondary: AppColors.amber500,
         surface: AppColors.white,
-        background: AppColors.gray50,
         error: Colors.red,
       ),
       appBarTheme: AppBarTheme(

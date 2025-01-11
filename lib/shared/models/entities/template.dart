@@ -9,7 +9,7 @@ import '../style/typography.dart';
 
 part 'template.g.dart';
 
-@HiveType(typeId: 80)
+@HiveType(typeId: 79)
 @JsonSerializable()
 class TemplateCollection {
   @HiveField(0)
@@ -156,15 +156,15 @@ class Composition {
 @JsonSerializable()
 class StyleConfig {
   @HiveField(0)
-  @JsonKey(name: 'greeting')
-  final ElementStyle greeting;
+  @JsonKey(name: 'title')
+  final ElementStyle title;
 
   @HiveField(1)
   @JsonKey(name: 'quote')
   final ElementStyle? quote;
 
   StyleConfig({
-    required this.greeting,
+    required this.title,
     this.quote
   });
 

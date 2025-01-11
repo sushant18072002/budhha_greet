@@ -106,6 +106,7 @@ class GreetingController extends GetxController {
 
 class GreetingScreen extends GetView<GreetingController> {
   GreetingScreen({Key? key}) : super(key: key);
+  @override
   final controller = Get.put(GreetingController());
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,7 @@ part 'size.g.dart';
 
 @HiveType(typeId: 36)
 @JsonSerializable()
-class Size {
+class CustomSize {
   @HiveField(0)
   @JsonKey(name: 'width')
   final double width;
@@ -14,12 +14,12 @@ class Size {
   @JsonKey(name: 'height')
   final double height;
 
-  Size({
+  CustomSize({
     required this.width,
     required this.height,
   });
 
-  factory Size.fromJson(Map<String, dynamic> json) => 
+  factory CustomSize.fromJson(Map<String, dynamic> json) => 
     _$SizeFromJson(json);
   
   Map<String, dynamic> toJson() => _$SizeToJson(this);

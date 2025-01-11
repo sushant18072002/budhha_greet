@@ -22,6 +22,7 @@ import '../../shared/models/app_config/language_config.dart';
 import '../../shared/models/app_config/metadata.dart';
 import '../../shared/models/app_config/rate_limit_config.dart';
 import '../../shared/models/app_config/retry_config.dart';
+import '../../shared/models/app_config/system_cache_config.dart';
 import '../../shared/models/app_config/system_config.dart';
 import '../../shared/models/app_config/theme_config.dart';
 import '../../shared/models/entities/author.dart';
@@ -56,7 +57,7 @@ import '../../shared/models/validation/validation_rules.dart';
 class DatabaseService extends GetxService {
   static DatabaseService get to => Get.find();
 
-  // Boxes
+  // Box definitions with type safety
   late Box<AppConfig> configBox;
   late Box<Quote> quotesBox;
   late Box<Background> backgroundsBox;
@@ -66,7 +67,7 @@ class DatabaseService extends GetxService {
   late Box<Source> sourcesBox;
   late Box<Tag> tagsBox;
 
-  // Box Names
+  // Constants
   static const String configBoxName = 'appConfig';
   static const String quotesBoxName = 'quotes';
   static const String backgroundsBoxName = 'backgrounds';
@@ -76,103 +77,69 @@ class DatabaseService extends GetxService {
   static const String sourcesBoxName = 'sources';
   static const String tagsBoxName = 'tags';
 
+  // Observable state
   final RxString currentLanguage = 'en'.obs;
   final RxList<String> supportedLanguages = <String>['en'].obs;
   final RxMap<String, dynamic> cache = <String, dynamic>{}.obs;
+  final RxBool isInitialized = false.obs;
 
-  bool isInitialized = false;
-
+  // Initialize the database service
   Future<DatabaseService> init() async {
-    if (isInitialized) return this;
+    if (isInitialized.value) return this;
 
     try {
-      // Get application documents directory
       final appDocumentDir =
           await path_provider.getApplicationDocumentsDirectory();
-
-      // Initialize Hive
       Hive.init(appDocumentDir.path);
 
-      // Register all adapters
-      _registerAdapters();
-
-      // Open all boxes
+      await _registerAdapters();
       await _openBoxes();
-
-      // Load initial data
       await _loadInitialData();
-
-      // Initialize cache
       await _initializeCache();
 
-      isInitialized = true;
+      isInitialized.value = true;
       return this;
-    } catch (e) {
-      print('Error in database initialization: $e');
-
-      await _closeBoxes();
+    } catch (e, stackTrace) {
+      print('Error initializing database: $e');
+      print('Stack trace: $stackTrace');
+      await _safeCloseBoxes();
       rethrow;
     }
   }
 
-  Future<void> _loadInitialData() async {
-    if (true) {
-      try {
-        print('Loading initial data from JSON...');
-        final String jsonContent =
-            await rootBundle.loadString('assets/data/app_data.json');
-        final Map<String, dynamic> data = json.decode(jsonContent);
-        print('JSON data loaded successfully');
-
-        if (!_validateDataStructure(data)) {
-          throw Exception('Invalid data structure in app_data.json');
-        }
-
-        // Store initial configuration
-        await _storeInitialConfig(data);
-         print('JSON data _storeInitialConfig successfully');
-        final entities = data['entities'] as Map<String, dynamic>;
-        await Future.wait([
-          _storeQuotes(entities['quotes'] ?? []),
-          _storeBackgrounds(entities['backgrounds'] ?? []),
-          _storeTemplates(entities['templates'] ?? []),
-          _storeCategories(entities['categories'] ?? []),
-          _storeAuthors(entities['authors']),
-          _storeSources(entities['sources'] ?? []),
-          _storeTags(entities['tags'] ?? []),
-        ]);
-
-        //await configBox.put('isInitialized', true);
-        print('Initial data loaded successfully');
-      } catch (e, stackTrace) {
-        print('Error loading initial data: $e');
-        print('Stack trace: $stackTrace');
-        //await configBox.put('isInitialized', false);
-        rethrow;
-      }
-    }
-  }
-
-  void _registerAdapters() {
-    // Register all type adapters
-    Hive.registerAdapter(ApiConfigAdapter());
+  // Register all Hive adapters
+  Future<void> _registerAdapters() async {
+    try {
+      
+    // Core Config Models - typeId: 0-4
+    Hive.registerAdapter(AppConfigAdapter());
     Hive.registerAdapter(MetadataAdapter());
     Hive.registerAdapter(SystemConfigAdapter());
     Hive.registerAdapter(LanguageConfigAdapter());
     Hive.registerAdapter(AppSettingsAdapter());
+
+    // System Settings - typeId: 5-7
     Hive.registerAdapter(ThemeConfigAdapter());
     Hive.registerAdapter(EntitiesAdapter());
     Hive.registerAdapter(LanguageAdapter());
+
+    // Core Entity Models - typeId: 8-10
     Hive.registerAdapter(QuoteAdapter());
     Hive.registerAdapter(BackgroundAdapter());
     Hive.registerAdapter(TranslationAdapter());
+
+    // Style & Typography - typeId: 11-14 
     Hive.registerAdapter(StyleAdapter());
     Hive.registerAdapter(TypographyAdapter());
     Hive.registerAdapter(FontSizeAdapter());
     Hive.registerAdapter(StyleColorsAdapter());
+
+    // Quote Related - typeId: 15-17
     Hive.registerAdapter(QuoteMetadataAdapter());
     Hive.registerAdapter(MetricsAdapter());
     Hive.registerAdapter(AuditAdapter());
+
+    // Visual Data Models - typeId: 18-25
     Hive.registerAdapter(VisualDataAdapter());
     Hive.registerAdapter(ImageDataAdapter());
     Hive.registerAdapter(ImageVariantAdapter());
@@ -181,60 +148,102 @@ class DatabaseService extends GetxService {
     Hive.registerAdapter(ColorDataAdapter());
     Hive.registerAdapter(ColorPaletteAdapter());
     Hive.registerAdapter(VisualEffectsAdapter());
+
+    // Attribution & Optimization - typeId: 26-28
     Hive.registerAdapter(AttributionAdapter());
     Hive.registerAdapter(OptimizationAdapter());
     Hive.registerAdapter(CacheConfigAdapter());
+
+    // Template Related - typeId: 29-31
     Hive.registerAdapter(TemplateAdapter());
     Hive.registerAdapter(TemplateTranslationAdapter());
     Hive.registerAdapter(CompositionAdapter());
+
+    // Layout Related - typeId: 32-37
     Hive.registerAdapter(LayoutConfigAdapter());
     Hive.registerAdapter(OrientationLayoutAdapter());
     Hive.registerAdapter(ElementLayoutAdapter());
     Hive.registerAdapter(PositionAdapter());
     Hive.registerAdapter(SizeAdapter());
     Hive.registerAdapter(SafeAreaAdapter());
+
+    // Style Config - typeId: 38-40
     Hive.registerAdapter(StyleConfigAdapter());
     Hive.registerAdapter(ElementStyleAdapter());
     Hive.registerAdapter(TemplateMetadataAdapter());
+
+    // Validation Rules - typeId: 41-46
     Hive.registerAdapter(ValidationRulesAdapter());
     Hive.registerAdapter(QuoteValidationAdapter());
     Hive.registerAdapter(TextValidationAdapter());
     Hive.registerAdapter(AuthorValidationAdapter());
     Hive.registerAdapter(TemplateValidationAdapter());
     Hive.registerAdapter(TypographyValidationAdapter());
+
+    // Analytics Config - typeId: 47-50
     Hive.registerAdapter(AnalyticsConfigAdapter());
     Hive.registerAdapter(TrackingConfigAdapter());
     Hive.registerAdapter(ReportingConfigAdapter());
     Hive.registerAdapter(PopularItemsAdapter());
+
+    // Connectivity Config - typeId: 51-54
     Hive.registerAdapter(ConnectivityConfigAdapter());
     Hive.registerAdapter(RetryConfigAdapter());
     Hive.registerAdapter(RateLimitConfigAdapter());
-    Hive.registerAdapter(ImageCacheConfigAdapter());
     Hive.registerAdapter(CompressionConfigAdapter());
+     // API Config
+    Hive.registerAdapter(ApiConfigAdapter());
+
+    // Cache Configs - typeId: 55-57
+    Hive.registerAdapter(ImageCacheConfigAdapter());
     Hive.registerAdapter(DataCacheConfigAdapter());
+    Hive.registerAdapter(SystemCacheConfigAdapter());
+
+    // Category Related - typeId: 58-62
     Hive.registerAdapter(CategoryCollectionAdapter());
     Hive.registerAdapter(CategorySchemaAdapter());
     Hive.registerAdapter(CategoryAdapter());
     Hive.registerAdapter(CategoryTranslationAdapter());
     Hive.registerAdapter(CategoryMetadataAdapter());
+
+    // Background Related - typeId: 63-64
     Hive.registerAdapter(BackgroundCollectionAdapter());
     Hive.registerAdapter(BackgroundSchemaAdapter());
-    Hive.registerAdapter(SystemCacheConfigAdapter());
+
+    // Tag Related - typeId: 65-69
     Hive.registerAdapter(TagCollectionAdapter());
     Hive.registerAdapter(TagSchemaAdapter());
     Hive.registerAdapter(TagAdapter());
     Hive.registerAdapter(TagTranslationAdapter());
     Hive.registerAdapter(TagMetadataAdapter());
+
+    // Author Related - typeId: 70-71
     Hive.registerAdapter(AuthorCollectionAdapter());
-    Hive.registerAdapter(AuthorAdapter());
     Hive.registerAdapter(AuthorTranslationAdapter());
-    Hive.registerAdapter(SourceCollectionAdapter());
-    Hive.registerAdapter(SourceAdapter());
-    Hive.registerAdapter(SourceTranslationAdapter());
+    Hive.registerAdapter(AuthorAdapter());
+
+    // Source Related
+    Hive.registerAdapter(SourceCollectionAdapter()); // 73 
+    Hive.registerAdapter(SourceAdapter());  //74
+    Hive.registerAdapter(SourceTranslationAdapter()); //75
+
+    Hive.registerAdapter(LanguageCollectionAdapter()); //76
+    Hive.registerAdapter(QuoteCollectionAdapter());  //77
+
+    
+    Hive.registerAdapter(TemplateCollectionAdapter());  //79
+
+    Hive.registerAdapter(BackGroundTranslationAdapter()); //80
+   
+  
+    } catch (e) {
+      print('Error registering adapters: $e');
+      rethrow;
+    }
   }
 
+  // Open all Hive boxes
   Future<void> _openBoxes() async {
-    // Open all boxes
     configBox = await Hive.openBox<AppConfig>(configBoxName);
     quotesBox = await Hive.openBox<Quote>(quotesBoxName);
     backgroundsBox = await Hive.openBox<Background>(backgroundsBoxName);
@@ -245,6 +254,41 @@ class DatabaseService extends GetxService {
     tagsBox = await Hive.openBox<Tag>(tagsBoxName);
   }
 
+  // Load initial data from JSON
+  Future<void> _loadInitialData() async {
+    AppConfig? currentConfig = configBox.get('current');
+     if (currentConfig == null || !currentConfig.isInitialized) {
+    //if(true){
+      try {
+        final String jsonContent =
+            await rootBundle.loadString('assets/data/app_data.json');
+        final Map<String, dynamic> data = json.decode(jsonContent);
+
+        if (!_validateDataStructure(data)) {
+          throw Exception('Invalid data structure in app_data.json');
+        }
+
+        await _storeInitialConfig(data);
+        await _storeEntities(data['entities']);
+
+        currentConfig = configBox.get('current');
+        if (currentConfig != null) {
+          currentConfig.isInitialized = true;
+          await configBox.put('current', currentConfig);
+        }
+      } catch (e, stackTrace) {
+        print('Error loading initial data: $e');
+        print('Stack trace: $stackTrace');
+        if (currentConfig != null) {
+          currentConfig.isInitialized = false;
+          await configBox.put('current', currentConfig);
+        }
+        rethrow;
+      }
+    }
+  }
+
+  // Validate JSON data structure
   bool _validateDataStructure(Map<String, dynamic> data) {
     final requiredKeys = [
       'metadata',
@@ -253,126 +297,148 @@ class DatabaseService extends GetxService {
       'validation_rules',
       'analytics_config'
     ];
-
     return requiredKeys.every((key) => data.containsKey(key));
   }
 
+  // Store initial configuration
   Future<void> _storeInitialConfig(Map<String, dynamic> data) async {
-    print("metadata  ${data['metadata']}");
     final config = AppConfig(
-        metadata: Metadata.fromJson(data['metadata']??{}),
+        metadata: Metadata.fromJson(data['metadata'] ?? {}),
         systemConfig: SystemConfig.fromJson(data['system_config'] ?? {}),
         entities: Entities.fromJson(data['entities'] ?? {}),
-        validationRules: ValidationRules.fromJson(data['validation_rules']??{}),
-        analyticsConfig :AnalyticsConfig.fromJson(data['analytics_config']??{})
-        );
+        validationRules:
+            ValidationRules.fromJson(data['validation_rules'] ?? {}),
+        analyticsConfig:
+            AnalyticsConfig.fromJson(data['analytics_config'] ?? {}));
     await configBox.put('current', config);
   }
 
-  Future<void> _storeQuotes(List<dynamic> quotes) async {
-    for (final quoteData in quotes) {
-      if (quoteData is Map<String, dynamic>) {
-        try {
-          final quote = Quote.fromJson(quoteData);
-          await quotesBox.put(quote.uuid, quote);
-        } catch (e) {
-          print('Error storing quote: ${quoteData['uuid']} - $e');
+  // Store all entities
+  Future<void> _storeEntities(Map<String, dynamic> entities) async {
+
+    await Future.wait([
+    _storeEntityCollection<Quote, QuoteCollection>(
+      data: entities['quotes'],
+      box: quotesBox,
+      fromJson: Quote.fromJson,
+      getId: (item) => item.uuid,
+      collectionFromJson: QuoteCollection.fromJson,
+    ),
+    _storeEntityCollection<Background, BackgroundCollection>(
+      data: entities['backgrounds'],
+      box: backgroundsBox,
+      fromJson: Background.fromJson,
+      getId: (item) => item.uuid,
+      collectionFromJson: BackgroundCollection.fromJson,
+    ),
+    _storeEntityCollection<Category, CategoryCollection>(
+      data: entities['categories'],
+      box: categoriesBox,
+      fromJson: Category.fromJson,
+      getId: (item) => item.id,
+      collectionFromJson: CategoryCollection.fromJson,
+    ),
+    _storeEntityCollection<Template, TemplateCollection>(
+      data: entities['templates'],
+      box: templatesBox,
+      fromJson: Template.fromJson,
+      getId: (item) => item.uuid,
+      collectionFromJson: TemplateCollection.fromJson,
+    ),
+    _storeEntityCollection<Author, AuthorCollection>(
+      data: entities['authors'],
+      box: authorsBox,
+      fromJson: Author.fromJson,
+      getId: (item) => item.uuid,
+      collectionFromJson: AuthorCollection.fromJson,
+    ),
+    _storeEntityCollection<Source, SourceCollection>(
+      data: entities['sources'],
+      box: sourcesBox,
+      fromJson: Source.fromJson,
+      getId: (item) => item.uuid,
+      collectionFromJson:  SourceCollection.fromJson,
+    ),
+    _storeEntityCollection<Tag, TagCollection>(
+      data: entities['tags'],
+      box: tagsBox,
+      fromJson: Tag.fromJson,
+      getId: (item) => item.id,
+      collectionFromJson: TagCollection.fromJson,
+    ),
+    
+  ]);
+}
+
+Future<void> _storeEntityCollection<T, C>({
+  required dynamic data,
+  required Box<T> box,
+  required T Function(Map<String, dynamic>) fromJson,
+  required String Function(T) getId,
+  C Function(Map<String, dynamic>)? collectionFromJson,
+}) async {
+  try {
+    if (data == null) return;
+
+    if (data is Map<String, dynamic> && data.containsKey('data')) {
+      // Use the collectionFromJson method to parse data
+      final collection = collectionFromJson?.call(data);
+      if (collection is C && (collection as dynamic).data is List) {
+        for (final item in (collection as dynamic).data) {
+          if (item is T) {
+            await box.put(getId(item), item);
+          }
         }
       }
+      return;
     }
-  }
 
-  Future<void> _storeBackgrounds(List<dynamic> backgrounds) async {
-    for (final bgData in backgrounds) {
-      if (bgData is Map<String, dynamic>) {
-        try {
-          final background = Background.fromJson(bgData);
-          await backgroundsBox.put(background.uuid, background);
-        } catch (e) {
-          print('Error storing background: ${bgData['uuid']} - $e');
+    if (data is List) {
+      for (final item in data) {
+        if (item is Map<String, dynamic>) {
+          final entity = fromJson(item);
+          await box.put(getId(entity), entity);
         }
       }
+      return;
     }
-  }
 
-  Future<void> _storeTemplates(List<dynamic> templates) async {
-    for (final templateData in templates) {
-      if (templateData is Map<String, dynamic>) {
-        try {
-          final template = Template.fromJson(templateData);
-          await templatesBox.put(template.uuid, template);
-        } catch (e) {
-          print('Error storing template: ${templateData['uuid']} - $e');
-        }
-      }
+    if (data is Map<String, dynamic>) {
+      final entity = fromJson(data);
+      await box.put(getId(entity), entity);
     }
-  }
-
-  Future<void> _storeCategories(List<dynamic> categories) async {
-    for (final categoryData in categories) {
-      if (categoryData is Map<String, dynamic>) {
-        try {
-          final category = Category.fromJson(categoryData);
-          await categoriesBox.put(category.id, category);
-        } catch (e) {
-          print('Error storing category: ${categoryData['id']} - $e');
-        }
-      }
-    }
-  }
-
-  Future<void> _storeAuthors(dynamic authorsData) async {
-  if (authorsData == null) return;
-  
-  // First convert to AuthorCollection to handle the wrapper object
-  if (authorsData is Map<String, dynamic>) {
-    try {
-      final authorCollection = AuthorCollection.fromJson(authorsData);
-      // Now process the actual author list
-      for (final author in authorCollection.data) {
-        await authorsBox.put(author.uuid, author);
-      }
-    } catch (e) {
-      print('Error processing author collection: $e');
-    }
-  } else {
-    print('Invalid authors data format: $authorsData');
+  } catch (e, stackTrace) {
+    print('Error storing ${T.toString()} collection: $e');
+    print('Stack trace: $stackTrace');
+    rethrow;
   }
 }
 
-  Future<void> _storeSources(List<dynamic> sources) async {
-    for (final sourceData in sources) {
-      if (sourceData is Map<String, dynamic>) {
-        try {
-          final source = Source.fromJson(sourceData);
-          await sourcesBox.put(source.uuid, source);
-        } catch (e) {
-          print('Error storing source: ${sourceData['uuid']} - $e');
+
+  // Special handling for author collection
+  Future<void> _storeAuthorCollection(dynamic authorsData) async {
+    if (authorsData == null) return;
+
+    if (authorsData is Map<String, dynamic>) {
+      try {
+        final authorCollection = AuthorCollection.fromJson(authorsData);
+        for (final author in authorCollection.data) {
+          await authorsBox.put(author.uuid, author);
         }
+      } catch (e) {
+        print('Error processing author collection: $e');
       }
     }
   }
 
-  Future<void> _storeTags(List<dynamic> tags) async {
-    for (final tagData in tags) {
-      if (tagData is Map<String, dynamic>) {
-        try {
-          final tag = Tag.fromJson(tagData);
-          await tagsBox.put(tag.id, tag);
-        } catch (e) {
-          print('Error storing tag: ${tagData['id']} - $e');
-        }
-      }
-    }
-  }
-
+  // Initialize cache
   Future<void> _initializeCache() async {
     try {
       cache.value = {
         'supportedLanguages': currentLanguage.value,
-        'categories': await getAllCategories(),
-        'authors': await getAllAuthors(),
-        'tags': await getAllTags(),
+        'categories': getAllCategories(),
+        'authors': getAllAuthors(),
+        'tags': getAllTags(),
       };
     } catch (e) {
       print('Error initializing cache: $e');
@@ -380,7 +446,80 @@ class DatabaseService extends GetxService {
     }
   }
 
-  // Export/Import Operations
+  // CRUD Operations for each entity type
+  // AppConfig
+  Future<void> saveAppConfig(AppConfig config) async =>
+      await configBox.put('current', config);
+  AppConfig? getAppConfig() => configBox.get('current');
+
+  // Quotes
+  Future<void> saveQuote(Quote quote) async =>
+      await quotesBox.put(quote.uuid, quote);
+  Quote? getQuote(String uuid) => quotesBox.get(uuid);
+  List<Quote> getAllQuotes() => quotesBox.values.toList();
+  Future<void> deleteQuote(String uuid) async => await quotesBox.delete(uuid);
+
+  // Backgrounds
+  Future<void> saveBackground(Background background) async =>
+      await backgroundsBox.put(background.uuid, background);
+  Background? getBackground(String uuid) => backgroundsBox.get(uuid);
+  List<Background> getAllBackgrounds() => backgroundsBox.values.toList();
+  Future<void> deleteBackground(String uuid) async =>
+      await backgroundsBox.delete(uuid);
+
+  // Templates
+  Future<void> saveTemplate(Template template) async =>
+      await templatesBox.put(template.uuid, template);
+  Template? getTemplate(String uuid) => templatesBox.get(uuid);
+  List<Template> getAllTemplates() => templatesBox.values.toList();
+  Future<void> deleteTemplate(String uuid) async =>
+      await templatesBox.delete(uuid);
+
+  // Categories
+  Future<void> saveCategory(Category category) async =>
+      await categoriesBox.put(category.id, category);
+  Category? getCategory(String id) => categoriesBox.get(id);
+  List<Category> getAllCategories() => categoriesBox.values.toList();
+  Future<void> deleteCategory(String id) async =>
+      await categoriesBox.delete(id);
+
+  // Authors
+  Future<void> saveAuthor(Author author) async =>
+      await authorsBox.put(author.uuid, author);
+  Author? getAuthor(String uuid) => authorsBox.get(uuid);
+  List<Author> getAllAuthors() => authorsBox.values.toList();
+  Future<void> deleteAuthor(String uuid) async => await authorsBox.delete(uuid);
+
+  // Sources
+  Future<void> saveSource(Source source) async =>
+      await sourcesBox.put(source.uuid, source);
+  Source? getSource(String uuid) => sourcesBox.get(uuid);
+  List<Source> getAllSources() => sourcesBox.values.toList();
+  Future<void> deleteSource(String uuid) async => await sourcesBox.delete(uuid);
+
+  // Tags
+  Future<void> saveTag(Tag tag) async => await tagsBox.put(tag.id, tag);
+  Tag? getTag(String id) => tagsBox.get(id);
+  List<Tag> getAllTags() => tagsBox.values.toList();
+  Future<void> deleteTag(String id) async => await tagsBox.delete(id);
+
+  // Bulk operations
+  Future<void> saveQuotes(List<Quote> quotes) async =>
+      await quotesBox.putAll({for (var q in quotes) q.uuid: q});
+  Future<void> saveBackgrounds(List<Background> backgrounds) async =>
+      await backgroundsBox.putAll({for (var b in backgrounds) b.uuid: b});
+  Future<void> saveTemplates(List<Template> templates) async =>
+      await templatesBox.putAll({for (var t in templates) t.uuid: t});
+  Future<void> saveCategories(List<Category> categories) async =>
+      await categoriesBox.putAll({for (var c in categories) c.id: c});
+  Future<void> saveAuthors(List<Author> authors) async =>
+      await authorsBox.putAll({for (var a in authors) a.uuid: a});
+  Future<void> saveSources(List<Source> sources) async =>
+      await sourcesBox.putAll({for (var s in sources) s.uuid: s});
+  Future<void> saveTags(List<Tag> tags) async =>
+      await tagsBox.putAll({for (var t in tags) t.id: t});
+
+  // Export/Import operations
   Future<Map<String, dynamic>> exportData() async {
     return {
       'config': configBox.get('current')?.toJson(),
@@ -396,7 +535,7 @@ class DatabaseService extends GetxService {
   }
 
   Future<void> importData(Map<String, dynamic> data) async {
-    await _closeBoxes();
+    await _safeCloseBoxes();
     await _openBoxes();
 
     try {
@@ -404,15 +543,15 @@ class DatabaseService extends GetxService {
         await configBox.put('current', AppConfig.fromJson(data['config']));
       }
 
-      await Future.wait([
-        _storeQuotes(data['quotes'] ?? []),
-        _storeBackgrounds(data['backgrounds'] ?? []),
-        _storeTemplates(data['templates'] ?? []),
-        _storeCategories(data['categories'] ?? []),
-        _storeAuthors(data['authors'] ?? []),
-        _storeSources(data['sources'] ?? []),
-        _storeTags(data['tags'] ?? [])
-      ]);
+      await _storeEntities({
+        'quotes': data['quotes'],
+        'backgrounds': data['backgrounds'],
+        'templates': data['templates'],
+        'categories': data['categories'],
+        'authors': {'data': data['authors']},
+        'sources': data['sources'],
+        'tags': data['tags']
+      });
 
       await _initializeCache();
     } catch (e) {
@@ -421,196 +560,7 @@ class DatabaseService extends GetxService {
     }
   }
 
-  // Close boxes
-  Future<void> _closeBoxes() async {
-    await Future.wait([
-      configBox.close(),
-      quotesBox.close(),
-      backgroundsBox.close(),
-      templatesBox.close(),
-      categoriesBox.close(),
-      authorsBox.close(),
-      sourcesBox.close(),
-      tagsBox.close(),
-    ]);
-  }
-
-  // AppConfig Operations
-  Future<void> saveAppConfig(AppConfig config) async {
-    await configBox.put('current', config);
-  }
-
-  AppConfig? getAppConfig() {
-    return configBox.get('current');
-  }
-
-  // Quote Operations
-  Future<void> saveQuote(Quote quote) async {
-    await quotesBox.put(quote.uuid, quote);
-  }
-
-  Future<void> saveQuotes(List<Quote> quotes) async {
-    final Map<String, Quote> quotesMap = {
-      for (var quote in quotes) quote.uuid: quote
-    };
-    await quotesBox.putAll(quotesMap);
-  }
-
-  Quote? getQuote(String uuid) {
-    return quotesBox.get(uuid);
-  }
-
-  List<Quote> getAllQuotes() {
-    return quotesBox.values.toList();
-  }
-
-  Future<void> deleteQuote(String uuid) async {
-    await quotesBox.delete(uuid);
-  }
-
-  // Background Operations
-  Future<void> saveBackground(Background background) async {
-    await backgroundsBox.put(background.uuid, background);
-  }
-
-  Future<void> saveBackgrounds(List<Background> backgrounds) async {
-    final Map<String, Background> backgroundsMap = {
-      for (var bg in backgrounds) bg.uuid: bg
-    };
-    await backgroundsBox.putAll(backgroundsMap);
-  }
-
-  Background? getBackground(String uuid) {
-    return backgroundsBox.get(uuid);
-  }
-
-  List<Background> getAllBackgrounds() {
-    return backgroundsBox.values.toList();
-  }
-
-  Future<void> deleteBackground(String uuid) async {
-    await backgroundsBox.delete(uuid);
-  }
-
-  // Template Operations
-  Future<void> saveTemplate(Template template) async {
-    await templatesBox.put(template.uuid, template);
-  }
-
-  Future<void> saveTemplates(List<Template> templates) async {
-    final Map<String, Template> templatesMap = {
-      for (var template in templates) template.uuid: template
-    };
-    await templatesBox.putAll(templatesMap);
-  }
-
-  Template? getTemplate(String uuid) {
-    return templatesBox.get(uuid);
-  }
-
-  List<Template> getAllTemplates() {
-    return templatesBox.values.toList();
-  }
-
-  Future<void> deleteTemplate(String uuid) async {
-    await templatesBox.delete(uuid);
-  }
-
-  // Category Operations
-  Future<void> saveCategory(Category category) async {
-    await categoriesBox.put(category.id, category);
-  }
-
-  Future<void> saveCategories(List<Category> categories) async {
-    final Map<String, Category> categoriesMap = {
-      for (var category in categories) category.id: category
-    };
-    await categoriesBox.putAll(categoriesMap);
-  }
-
-  Category? getCategory(String id) {
-    return categoriesBox.get(id);
-  }
-
-  List<Category> getAllCategories() {
-    return categoriesBox.values.toList();
-  }
-
-  Future<void> deleteCategory(String id) async {
-    await categoriesBox.delete(id);
-  }
-
-  // Author Operations
-  Future<void> saveAuthor(Author author) async {
-    await authorsBox.put(author.uuid, author);
-  }
-
-  Future<void> saveAuthors(List<Author> authors) async {
-    final Map<String, Author> authorsMap = {
-      for (var author in authors) author.uuid: author
-    };
-    await authorsBox.putAll(authorsMap);
-  }
-
-  Author? getAuthor(String uuid) {
-    return authorsBox.get(uuid);
-  }
-
-  List<Author> getAllAuthors() {
-    return authorsBox.values.toList();
-  }
-
-  Future<void> deleteAuthor(String uuid) async {
-    await authorsBox.delete(uuid);
-  }
-
-  // Source Operations
-  Future<void> saveSource(Source source) async {
-    await sourcesBox.put(source.uuid, source);
-  }
-
-  Future<void> saveSources(List<Source> sources) async {
-    final Map<String, Source> sourcesMap = {
-      for (var source in sources) source.uuid: source
-    };
-    await sourcesBox.putAll(sourcesMap);
-  }
-
-  Source? getSource(String uuid) {
-    return sourcesBox.get(uuid);
-  }
-
-  List<Source> getAllSources() {
-    return sourcesBox.values.toList();
-  }
-
-  Future<void> deleteSource(String uuid) async {
-    await sourcesBox.delete(uuid);
-  }
-
-  // Tag Operations
-  Future<void> saveTag(Tag tag) async {
-    await tagsBox.put(tag.id, tag);
-  }
-
-  Future<void> saveTags(List<Tag> tags) async {
-    final Map<String, Tag> tagsMap = {for (var tag in tags) tag.id: tag};
-    await tagsBox.putAll(tagsMap);
-  }
-
-  Tag? getTag(String id) {
-    return tagsBox.get(id);
-  }
-
-  List<Tag> getAllTags() {
-    return tagsBox.values.toList();
-  }
-
-  Future<void> deleteTag(String id) async {
-    await tagsBox.delete(id);
-  }
-
-  // Clear all data
+  // Utility methods
   Future<void> clearAll() async {
     await Future.wait([
       configBox.clear(),
@@ -624,24 +574,206 @@ class DatabaseService extends GetxService {
     ]);
   }
 
-  // Close all boxes
-  Future<void> closeBoxes() async {
-    await Future.wait([
-      configBox.close(),
-      quotesBox.close(),
-      backgroundsBox.close(),
-      templatesBox.close(),
-      categoriesBox.close(),
-      authorsBox.close(),
-      sourcesBox.close(),
-      tagsBox.close(),
-    ]);
+   Future<void> _safeCloseBoxes() async {
+    try {
+      await Future.wait([
+        if (configBox.isOpen == true) configBox.close(),
+        if (quotesBox.isOpen == true) quotesBox.close(),
+        if (backgroundsBox.isOpen == true) backgroundsBox.close(),
+        if (templatesBox.isOpen == true) templatesBox.close(),
+        if (categoriesBox.isOpen == true) categoriesBox.close(),
+        if (authorsBox.isOpen == true) authorsBox.close(),
+        if (sourcesBox.isOpen == true) sourcesBox.close(),
+        if (tagsBox.isOpen == true) tagsBox.close(),
+      ]);
+    } catch (e) {
+      print('Error closing boxes: $e');
+    }
   }
 
-  // Dispose service
+  // // Search functionality
+  // List<Quote> searchQuotes(String query) {
+  //   query = query.toLowerCase();
+  //   return quotesBox.values.where((quote) {
+  //     return quote.content.toLowerCase().contains(query) ||
+  //            quote.author?.name.toLowerCase().contains(query) == true ||
+  //            quote.tags.any((tag) => tag.toLowerCase().contains(query));
+  //   }).toList();
+  // }
+
+  // List<Author> searchAuthors(String query) {
+  //   query = query.toLowerCase();
+  //   return authorsBox.values.where((author) {
+  //     return author.name.toLowerCase().contains(query) ||
+  //            author.description?.toLowerCase().contains(query) == true;
+  //   }).toList();
+  // }
+
+  // List<Tag> searchTags(String query) {
+  //   query = query.toLowerCase();
+  //   return tagsBox.values.where((tag) {
+  //     return tag.name.toLowerCase().contains(query) ||
+  //            tag.description?.toLowerCase().contains(query) == true;
+  //   }).toList();
+  // }
+
+  // Language related methods
+  Future<void> setCurrentLanguage(String languageCode) async {
+    currentLanguage.value = languageCode;
+    // await _updateCacheForLanguage(languageCode);
+  }
+
+  // Future<void> _updateCacheForLanguage(String languageCode) async {
+  //   try {
+  //     final categories = await getAllCategories();
+  //     final authors = await getAllAuthors();
+  //     final tags = await getAllTags();
+
+  //     cache.value = {
+  //       ...cache,
+  //       'currentLanguage': languageCode,
+  //       'categories': categories.map((c) => c.getTranslation(languageCode)).toList(),
+  //       'authors': authors.map((a) => a.getTranslation(languageCode)).toList(),
+  //       'tags': tags.map((t) => t.getTranslation(languageCode)).toList(),
+  //     };
+  //   } catch (e) {
+  //     print('Error updating cache for language $languageCode: $e');
+  //   }
+  // }
+
+  // Filter methods
+
+  List<Quote> getQuotesByCategory(String categoryId) {
+    return quotesBox.values
+        .where((quote) => quote.categoryIds.contains(categoryId))
+        .toList();
+  }
+
+  List<Quote> getQuotesByAuthor(String authorId) {
+    return quotesBox.values
+        .where((quote) => quote.authorId == authorId)
+        .toList();
+  }
+
+  List<Quote> getQuotesByTag(String tagId) {
+    return quotesBox.values
+        .where((quote) => quote.tagIds.contains(tagId))
+        .toList();
+  }
+
+  // Background related methods
+  List<Background> getBackgroundsByCategory(String categoryId) {
+    return backgroundsBox.values
+        .where((bg) => bg.categoryIds.contains(categoryId))
+        .toList();
+  }
+
+  List<Background> getBackgroundsByTag(String tagId) {
+    return backgroundsBox.values
+        .where((bg) => bg.tagIds.contains(tagId))
+        .toList();
+  }
+
+  // Template related methods
+  List<Template> getTemplatesByCategory(String categoryId) {
+    return templatesBox.values
+        .where((template) => template.categoryIds.contains(categoryId))
+        .toList();
+  }
+
+  List<Template> getTemplatesByTag(String tagId) {
+    return templatesBox.values
+        .where((template) => template.tagIds.contains(tagId))
+        .toList();
+  }
+
+  // Statistics and analytics methods
+  Map<String, dynamic> getDatabaseStats() {
+    return {
+      'totalQuotes': quotesBox.length,
+      'totalAuthors': authorsBox.length,
+      'totalBackgrounds': backgroundsBox.length,
+      'totalTemplates': templatesBox.length,
+      'totalCategories': categoriesBox.length,
+      'totalTags': tagsBox.length,
+      'totalSources': sourcesBox.length,
+      'lastUpdated': DateTime.now().toIso8601String(),
+    };
+  }
+
+  // Validation methods
+  // bool validateQuote(Quote quote) {
+  //   final config = getAppConfig();
+  //   if (config == null) return false;
+
+  //   final validation = config.validationRules.quotes;
+  //   if (validation == null) return true;
+
+  //   return quote.content.length >= validation.minLength &&
+  //          quote.content.length <= validation.maxLength &&
+  //          (validation.requiredFields.every((field) {
+  //            switch (field) {
+  //              case 'author': return quote.author != null;
+  //              case 'source': return quote.source != null;
+  //              case 'categories': return quote.categories.isNotEmpty;
+  //              case 'tags': return quote.tags.isNotEmpty;
+  //              default: return true;
+  //            }
+  //          }));
+  // }
+
+  // Error handling and recovery methods
+  Future<bool> verifyDatabaseIntegrity() async {
+    try {
+      // Verify all boxes are open and accessible
+      if (!configBox.isOpen ||
+          !quotesBox.isOpen ||
+          !backgroundsBox.isOpen ||
+          !templatesBox.isOpen ||
+          !categoriesBox.isOpen ||
+          !authorsBox.isOpen ||
+          !sourcesBox.isOpen ||
+          !tagsBox.isOpen) {
+        return false;
+      }
+
+      // Verify essential data
+      if (getAppConfig() == null) {
+        return false;
+      }
+
+      return true;
+    } catch (e) {
+      print('Database integrity check failed: $e');
+      return false;
+    }
+  }
+
+  Future<void> repairDatabase() async {
+    try {
+      await _safeCloseBoxes();
+      await _openBoxes();
+      await _loadInitialData();
+      await _initializeCache();
+    } catch (e) {
+      print('Database repair failed: $e');
+      rethrow;
+    }
+  }
+
+  // Cleanup and disposal methods
+  Future<void> dispose() async {
+    try {
+      await _safeCloseBoxes();
+      cache.clear();
+    } catch (e) {
+      print('Error during database disposal: $e');
+    }
+  }
+
   @override
   void onClose() {
-    closeBoxes();
+    dispose();
     super.onClose();
   }
 }

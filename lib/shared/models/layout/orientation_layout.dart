@@ -10,15 +10,15 @@ part 'orientation_layout.g.dart';
 @JsonSerializable()
 class OrientationLayout {
   @HiveField(0)
-  @JsonKey(name: 'greeting')
-  final ElementLayout greeting;
+  @JsonKey(name: 'title')
+  final ElementLayout title;
   
   @HiveField(1)
   @JsonKey(name: 'quote')
   final ElementLayout quote;
 
   OrientationLayout({
-    required this.greeting,
+    required this.title,
     required this.quote,
   });
 

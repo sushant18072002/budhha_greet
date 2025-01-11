@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 
-import '../../../home/presentation/screens/tem.dart';
 
 class ImageDetailBinding implements Bindings {
   @override

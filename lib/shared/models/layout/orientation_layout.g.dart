@@ -17,7 +17,7 @@ class OrientationLayoutAdapter extends TypeAdapter<OrientationLayout> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return OrientationLayout(
-      greeting: fields[0] as ElementLayout,
+      title: fields[0] as ElementLayout,
       quote: fields[1] as ElementLayout,
     );
   }
@@ -27,7 +27,7 @@ class OrientationLayoutAdapter extends TypeAdapter<OrientationLayout> {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.greeting)
+      ..write(obj.title)
       ..writeByte(1)
       ..write(obj.quote);
   }
@@ -49,13 +49,12 @@ class OrientationLayoutAdapter extends TypeAdapter<OrientationLayout> {
 
 OrientationLayout _$OrientationLayoutFromJson(Map<String, dynamic> json) =>
     OrientationLayout(
-      greeting:
-          ElementLayout.fromJson(json['greeting'] as Map<String, dynamic>),
+      title: ElementLayout.fromJson(json['title'] as Map<String, dynamic>),
       quote: ElementLayout.fromJson(json['quote'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$OrientationLayoutToJson(OrientationLayout instance) =>
     <String, dynamic>{
-      'greeting': instance.greeting,
+      'title': instance.title,
       'quote': instance.quote,
     };

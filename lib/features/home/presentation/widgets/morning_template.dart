@@ -1,343 +1,444 @@
-// import 'package:buddha_greet/features/image_detail/data/models/background_model.dart';
-// import 'package:buddha_greet/shared/models/background_text_area/background_text_area.dart';
-// import 'package:buddha_greet/shared/models/background_text_position/background_text_position.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import '../../../../shared/theme/app_colors.dart';
-// import '../../../../shared/theme/app_text_styles.dart';
-// import '../controllers/home_controller.dart';
-// import '../../data/models/template/template.dart';
+import 'dart:ui';
 
-// class MorningTemplatesWidget extends GetView<HomeController> {
-//   const MorningTemplatesWidget({Key? key}) : super(key: key);
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         _buildHeader(),
-//         _buildTemplatesList(),
-//       ],
-//     );
-//   }
+import '../../../../shared/models/entities/background.dart';
+import '../../../../shared/models/entities/category.dart';
+import '../../../../shared/models/entities/quote.dart';
+import '../../../../shared/models/entities/template.dart';
+import '../controllers/home_controller.dart';
 
-//   Widget _buildHeader() {
-//     return Padding(
-//       padding: const EdgeInsets.all(16),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Text(
-//             'Good Morning Images',
-//             style: AppTextStyles.headlineMedium,
-//           ),
-//           Obx(() => IconButton(
-//                 icon: Icon(
-//                   controller.isGridView.value
-//                       ? Icons.grid_view
-//                       : Icons.view_list,
-//                   color: AppColors.amber600,
-//                 ),
-//                 onPressed: controller.toggleViewMode,
-//               )),
-//         ],
-//       ),
-//     );
-//   }
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-//   Widget _buildTemplatesList() {
-//     return Obx(() {
-//       if (controller.isMorningTemplatesLoading.value) {
-//         return const Center(child: CircularProgressIndicator());
-//       }
+class MorningTemplatesWidget extends GetView<HomeController> {
+  const MorningTemplatesWidget({Key? key}) : super(key: key);
 
-//       return AnimatedSwitcher(
-//         duration: const Duration(milliseconds: 300),
-//         child:
-//             controller.isGridView.value ? _buildGridView() : _buildListView(),
-//       );
-//     });
-//   }
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(),
+          Obx(() => _buildContent(constraints)),
+        ],
+      );
+    });
+  }
 
-//   Widget _buildGridView() {
-//     return GridView.builder(
-//       padding: const EdgeInsets.symmetric(horizontal: 16),
-//       shrinkWrap: true,
-//       physics: const NeverScrollableScrollPhysics(),
-//       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//         crossAxisCount: 2,
-//         crossAxisSpacing: 16,
-//         mainAxisSpacing: 16,
-//         childAspectRatio: 9 / 16, // Portrait aspect ratio
-//       ),
-//       itemCount: controller.morningTemplates.length,
-//       itemBuilder: (context, index) => _buildTemplateCard(
-//         controller.morningTemplates[index],
-//         isGridView: true,
-//       ),
-//     );
-//   }
+  Widget _buildHeader() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Good Morning Images',
+            style: Get.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Colors.brown[800],
+              letterSpacing: 0.2,
+            ),
+          ),
+          _buildViewToggle(),
+        ],
+      ),
+    );
+  }
 
-//   Widget _buildListView() {
-//     return ListView.builder(
-//       padding: const EdgeInsets.symmetric(horizontal: 16),
-//       shrinkWrap: true,
-//       physics: const NeverScrollableScrollPhysics(),
-//       itemCount: controller.morningTemplates.length,
-//       itemBuilder: (context, index) => Padding(
-//         padding: const EdgeInsets.only(bottom: 16),
-//         child: _buildTemplateCard(
-//           controller.morningTemplates[index],
-//           isGridView: false,
-//         ),
-//       ),
-//     );
-//   }
+  Widget _buildViewToggle() {
+    return Obx(
+      () => Container(
+        decoration: BoxDecoration(
+          color: Colors.amber[50],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(8),
+            onTap: controller.toggleViewMode,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Icon(
+                controller.isGridView.value ? Icons.grid_view : Icons.view_list,
+                color: Colors.amber[600],
+                size: 24,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-//   Widget _buildTemplateCard(Template template, {required bool isGridView}) {
-//     return Hero(
-//       tag: 'template-${template.id}',
-//       child: GestureDetector(
-//         onTap: () => _navigateToDetail(template),
-//         child: LayoutBuilder(
-//           builder: (context, constraints) {
-//             final isPortrait = constraints.maxWidth < constraints.maxHeight;
-//             return Container(
-//                 height: isGridView ? null : 200,
-//                 decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(16),
-//                   boxShadow: [
-//                     BoxShadow(
-//                       color: AppColors.harmonyPurple.withOpacity(0.2),
-//                       blurRadius: 8,
-//                       offset: const Offset(0, 4),
-//                     ),
-//                   ],
-//                 ),
-//                 child: _buildBackground(template, isPortrait));
-//           },
-//         ),
-//       ),
-//     );
-//   }
+  Widget _buildContent(BoxConstraints constraints) {
+    if (controller.isMorningTemplatesLoading.value) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.amber[600]!),
+          ),
+        ),
+      );
+    }
 
-//   Widget _buildBackground(Template template, bool isPortrait) {
-//     return FutureBuilder(
-//       future: controller.getBackgroundById(template.backgroundId),
-//       builder: (context, snapshot) {
-//         if (!snapshot.hasData) {
-//           return Container(color: Colors.grey[300]);
-//         }
-//         final background = snapshot.data!;
-//         return _cardTemplate(template, background, isPortrait);
-//       },
-//     );
-//   }
+    return controller.isGridView.value
+        ? _buildGridView(constraints)
+        : _buildListView(constraints);
+  }
 
-//   Widget _backgroundCard(Background background) {
-//     if (background.type == 'image' && background.imageUrl != null) {
-//       return Image.asset(
-//         background.imageUrl!,
-//         fit: BoxFit.cover,
-//       );
-//     } else if (background.type == 'gradient' && background.gradient != null) {
-//       return Container(
-//         decoration: BoxDecoration(
-//           gradient: LinearGradient(
-//             colors: (background.gradient!['colors'] as List)
-//                 .map((c) => Color(int.parse(c.replaceAll('#', '0xFF'))))
-//                 .toList(),
-//             begin: Alignment.topLeft,
-//             end: Alignment.bottomRight,
-//             transform: GradientRotation(
-//                 (background.gradient!['angle'] as num).toDouble() * 3.14 / 180),
-//           ),
-//         ),
-//       );
-//     }
-//     return Container(color: Colors.grey[300]);
-//   }
+  Widget _buildGridView(BoxConstraints constraints) {
+    final crossAxisCount = _calculateGridCrossAxisCount(constraints.maxWidth);
+    final spacing = _calculateSpacing(constraints.maxWidth);
+    final horizontalPadding = spacing;
+    final availableWidth = constraints.maxWidth - (horizontalPadding * 2);
+    final itemWidth =
+        (availableWidth - (spacing * (crossAxisCount - 1))) / crossAxisCount;
+    final itemHeight = itemWidth * (16 / 9);
 
-//   Widget _cardTemplate(
-//       Template template, Background background, bool isPortrait) {
-//     return ClipRRect(
-//         borderRadius: BorderRadius.circular(16),
-//         child: Stack(
-//           fit: StackFit.expand,
-//           children: [
-//             _backgroundCard(background),
-//             _buildGradientOverlay(),
-//             _buildGreetingText(template, background, isPortrait),
-//             if (template.quoteId != null) _buildQuoteText(template,background, isPortrait),
-//             _buildShareButton(template),
-//           ],
-//         ));
-//   }
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
+          mainAxisSpacing: spacing,
+          crossAxisSpacing: spacing,
+          childAspectRatio: 9 / 16,
+        ),
+        itemCount: controller.morningTemplates.length,
+        itemBuilder: (context, index) => _buildTemplateCard(
+          template: controller.morningTemplates[index],
+          isGridView: true,
+          maxWidth: itemWidth,
+          maxHeight: itemHeight,
+          constraints: constraints,
+        ),
+      ),
+    );
+  }
 
-//   Widget _buildGradientOverlay() {
-//     return Container(
-//       decoration: BoxDecoration(
-//         gradient: LinearGradient(
-//           begin: Alignment.topCenter,
-//           end: Alignment.bottomCenter,
-//           colors: [
-//             Colors.transparent,
-//             Colors.black.withOpacity(0.7),
-//           ],
-//           stops: const [0.4, 1.0],
-//         ),
-//       ),
-//     );
-//   }
+  Widget _buildListView(BoxConstraints constraints) {
+    final spacing = _calculateSpacing(constraints.maxWidth);
+    final horizontalPadding = spacing;
+    final availableWidth = constraints.maxWidth - (horizontalPadding * 2);
+    final itemHeight = availableWidth * (9 / 16);
 
-//   Widget _buildGreetingText(
-//       Template template, Background background, bool isPortrait) {
-//     final greeting = template.greeting[controller.currentLanguage.value] ?? '';
-//     final textStyle = template.style.greeting;
-//     final textArea = background.textAreas.firstWhere(
-//         (area) => area.id == 'greeting',
-//         orElse: () => BackgroundTextArea(
-//             id: 'greeting',
-//             portrait:
-//                 BackgroundTextPosition(x: 0.5, y: 0.3, width: 0.8, height: 0.2),
-//             landscape: BackgroundTextPosition(
-//                 x: 0.5, y: 0.25, width: 0.7, height: 0.15)));
-//     final position = isPortrait ? textArea.portrait : textArea.landscape;
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+      itemCount: controller.morningTemplates.length,
+      itemBuilder: (context, index) => Padding(
+        padding: EdgeInsets.only(bottom: spacing),
+        child: _buildTemplateCard(
+          template: controller.morningTemplates[index],
+          isGridView: false,
+          maxWidth: availableWidth,
+          maxHeight: itemHeight,
+          constraints: constraints,
+        ),
+      ),
+    );
+  }
 
-//     return Positioned(
-//       left: position.x * 100,
-//       top: position.y * 100,
-//       width: position.width * 100,
-//       height: position.height * 100,
-//       child: Transform.rotate(
-//         angle: position.rotation * 3.14 / 180,
-//         child: Text(
-//           greeting,
-//           style: TextStyle(
-//             fontSize: textStyle.fontSize,
-//             fontFamily: textStyle.fontFamily,
-//             color: Color(
-//               int.parse(textStyle.colorHex.replaceAll('#', '0xFF')),
-//             ),
-//             shadows: textStyle.effects.contains('shadow')
-//                 ? [
-//                     const Shadow(
-//                       offset: Offset(0, 2),
-//                       blurRadius: 4,
-//                       color: Colors.black45,
-//                     )
-//                   ]
-//                 : null,
-//           ),
-//           textAlign: TextAlign.center,
-//         ),
-//       ),
-//     );
-//   }
+  Widget _buildTemplateCard({
+    required Template template,
+    required bool isGridView,
+    required double maxWidth,
+    required double maxHeight,
+    required BoxConstraints constraints,
+  }) {
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: maxWidth,
+        maxHeight: maxHeight,
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            _buildBackgroundImage(template),
+            _buildGradientOverlay(isGridView),
+            _buildTemplateContent(template, isGridView, constraints),
+            _buildInteractionLayer(template),
+          ],
+        ),
+      ),
+    );
+  }
 
-//   Widget _buildQuoteText(Template template,Background background, bool isPortrait) {
-//     return FutureBuilder(
-//       future: controller.getQuoteById(template.quoteId!),
-//       builder: (context, snapshot) {
-//         if (!snapshot.hasData) return const SizedBox();
+  Widget _buildBackgroundImage(Template template) {
+    return Hero(
+      tag: 'template_${template.uuid}',
+      child: FutureBuilder<Background?>(
+        future: controller.getBackgroundById(template.composition.backgroundId),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const ColoredBox(
+              color: Colors.black12,
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
 
-//         final quote = snapshot.data!;
-//         final text = quote.text[controller.currentLanguage.value] ?? '';
-//         final author = quote.author[controller.currentLanguage.value] ?? '';
-//         final textStyle = template.style.quote;
-//         final textArea= background.textAreas
-//               .firstWhere((area) => area.id == 'quote', 
-//                   orElse: () => BackgroundTextArea(
-//                     id: 'quote',
-//                     portrait:  BackgroundTextPosition(x: 0.5, y: 0.3, width: 0.8, height: 0.2),
-//                     landscape: BackgroundTextPosition(x: 0.5, y: 0.25, width: 0.7, height: 0.15)
-//                   ));
-//      final position = isPortrait 
-//               ? textArea.portrait
-//               : textArea.landscape;
+          final background = snapshot.data!;
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+            child: Image.asset(
+              background.visualData.image?.original ?? '',
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(
+                color: Colors.grey[300],
+                child: const Center(
+                  child:
+                      Icon(Icons.broken_image, color: Colors.white, size: 48),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 
-//         return Positioned(
-//           left: position.x * 100,
-//           top: position.y * 100,
-//           width: position.width * 100,
-//           height: position.height * 100,
-//           child: Transform.rotate(
-//             angle: position.rotation * 3.14 / 180,
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-//                 Text(
-//                   text,
-//                   style: TextStyle(
-//                     fontSize: textStyle.fontSize,
-//                     fontFamily: textStyle.fontFamily,
-//                     color: Color(
-//                       int.parse(textStyle.colorHex.replaceAll('#', '0xFF')),
-//                     ),
-//                     shadows: textStyle.effects.contains('shadow')
-//                         ? [
-//                             const Shadow(
-//                               offset: Offset(0, 2),
-//                               blurRadius: 4,
-//                               color: Colors.black45,
-//                             )
-//                           ]
-//                         : null,
-//                   ),
-//                   textAlign: TextAlign.center,
-//                 ),
-//                 if (author.isNotEmpty) ...[
-//                   const SizedBox(height: 8),
-//                   Text(
-//                     '- $author',
-//                     style: TextStyle(
-//                       fontSize: textStyle.fontSize * 0.8,
-//                       fontFamily: textStyle.fontFamily,
-//                       color: Color(
-//                         int.parse(textStyle.colorHex.replaceAll('#', '0xFF')),
-//                       ),
-//                       shadows: textStyle.effects.contains('shadow')
-//                           ? [
-//                               const Shadow(
-//                                 offset: Offset(0, 2),
-//                                 blurRadius: 4,
-//                                 color: Colors.black45,
-//                               )
-//                             ]
-//                           : null,
-//                     ),
-//                     textAlign: TextAlign.center,
-//                   ),
-//                 ],
-//               ],
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
+  Widget _buildGradientOverlay(bool isGridView) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.black.withOpacity(0.4),
+            Colors.transparent,
+            Colors.black.withOpacity(isGridView ? 0.7 : 0.5),
+          ],
+          stops: const [0.0, 0.3, 1.0],
+        ),
+      ),
+    );
+  }
 
-//   Widget _buildShareButton(Template template) {
-//     return Positioned(
-//       top: 8,
-//       right: 8,
-//       child: IconButton(
-//         icon: const Icon(
-//           Icons.share_rounded,
-//           color: Colors.white,
-//           size: 24,
-//         ),
-//         onPressed: () => _handleShare(template),
-//       ),
-//     );
-//   }
+  Widget _buildTemplateContent(
+    Template template,
+    bool isGridView,
+    BoxConstraints constraints,
+  ) {
+    final translation = template.translations[controller.currentLanguage.value];
+    if (translation == null) return const SizedBox.shrink();
 
-//   void _navigateToDetail(Template template) {
-//     Get.toNamed('/template-detail', arguments: template);
-//   }
+    final isSmallScreen = constraints.maxWidth < 600;
+    final padding = isGridView ? 12.0 : 16.0;
 
-//   void _handleShare(Template template) {
-//     // Implement share functionality
-//   }
-// }
+    return Padding(
+      padding: EdgeInsets.all(padding),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildTitle(translation.title, isSmallScreen, isGridView),
+          const Spacer(),
+          _buildQuote(template, isSmallScreen, isGridView),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTitle(String title, bool isSmallScreen, bool isGridView) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: isGridView ? 8 : 12,
+            vertical: isGridView ? 6 : 8,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            title,
+            style: Get.textTheme.titleLarge!.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+              fontSize: isSmallScreen ? 18 : 22,
+              letterSpacing: 0.3,
+              shadows: [
+                Shadow(
+                  color: Colors.black.withOpacity(0.5),
+                  offset: const Offset(0, 1),
+                  blurRadius: 2,
+                ),
+              ],
+            ),
+            textAlign: TextAlign.center,
+            maxLines: isGridView ? 2 : 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuote(Template template, bool isSmallScreen, bool isGridView) {
+    return FutureBuilder<Quote?>(
+      future: controller.getQuoteById(template.composition.quoteId),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const SizedBox.shrink();
+
+        final quoteText =
+            snapshot.data?.translations[controller.currentLanguage.value]?.text;
+        if (quoteText == null) return const SizedBox.shrink();
+
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: isGridView ? 8 : 12,
+                vertical: isGridView ? 6 : 8,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                quoteText,
+                style: Get.textTheme.bodyLarge!.copyWith(
+                  color: Colors.white,
+                  fontSize: isSmallScreen ? 14 : 16,
+                  height: 1.5,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withOpacity(0.5),
+                      offset: const Offset(0, 1),
+                      blurRadius: 2,
+                    ),
+                  ],
+                ),
+                textAlign: TextAlign.center,
+                maxLines: isGridView ? 3 : 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildInteractionLayer(Template template) {
+    return Stack(
+      children: [
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => controller.onTemplateSelected(template),
+            splashColor: Colors.white24,
+            highlightColor: Colors.white10,
+          ),
+        ),
+        Positioned(
+          top: 8,
+          right: 8,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildActionButton(
+                icon: Icons.share_rounded,
+                onTap: () => controller.shareTemplate(template),
+              ),
+              const SizedBox(width: 8),
+              _buildActionButton(
+                icon: Icons.favorite_border_rounded,
+                onTap: () => controller.toggleFavorite(template),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionButton({
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.3),
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: ClipOval(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onTap,
+              customBorder: const CircleBorder(),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Icon(
+                  icon,
+                  color: Colors.white,
+                  size: 20,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withOpacity(0.5),
+                      offset: const Offset(0, 1),
+                      blurRadius: 2,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  double _calculateSpacing(double width) {
+    if (width <= 600) return 12;
+    if (width <= 900) return 16;
+    return 20;
+  }
+
+  int _calculateGridCrossAxisCount(double width) {
+    if (width <= 600) return 2;
+    if (width <= 900) return 3;
+    if (width <= 1200) return 4;
+    return 5;
+  }
+}
+
+// Helper extension for responsive calculations
+extension ResponsiveExtension on num {
+  double get responsive => this * (Get.width / 375);
+}

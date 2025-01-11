@@ -16,7 +16,7 @@ class ElementLayout {
   
   @HiveField(1)
   @JsonKey(name: 'size')
-  final Size size;
+  final CustomSize size;
   
   @HiveField(2)
   @JsonKey(name: 'padding')

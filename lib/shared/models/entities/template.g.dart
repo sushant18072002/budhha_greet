@@ -8,7 +8,7 @@ part of 'template.dart';
 
 class TemplateCollectionAdapter extends TypeAdapter<TemplateCollection> {
   @override
-  final int typeId = 80;
+  final int typeId = 79;
 
   @override
   TemplateCollection read(BinaryReader reader) {
@@ -198,7 +198,7 @@ class StyleConfigAdapter extends TypeAdapter<StyleConfig> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return StyleConfig(
-      greeting: fields[0] as ElementStyle,
+      title: fields[0] as ElementStyle,
       quote: fields[1] as ElementStyle?,
     );
   }
@@ -208,7 +208,7 @@ class StyleConfigAdapter extends TypeAdapter<StyleConfig> {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.greeting)
+      ..write(obj.title)
       ..writeByte(1)
       ..write(obj.quote);
   }
@@ -386,7 +386,7 @@ Map<String, dynamic> _$CompositionToJson(Composition instance) =>
     };
 
 StyleConfig _$StyleConfigFromJson(Map<String, dynamic> json) => StyleConfig(
-      greeting: ElementStyle.fromJson(json['greeting'] as Map<String, dynamic>),
+      title: ElementStyle.fromJson(json['title'] as Map<String, dynamic>),
       quote: json['quote'] == null
           ? null
           : ElementStyle.fromJson(json['quote'] as Map<String, dynamic>),
@@ -394,7 +394,7 @@ StyleConfig _$StyleConfigFromJson(Map<String, dynamic> json) => StyleConfig(
 
 Map<String, dynamic> _$StyleConfigToJson(StyleConfig instance) =>
     <String, dynamic>{
-      'greeting': instance.greeting,
+      'title': instance.title,
       'quote': instance.quote,
     };
 

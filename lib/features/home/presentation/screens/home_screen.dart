@@ -10,7 +10,7 @@ import 'package:card_swiper/card_swiper.dart';
 import '../widgets/morning_template.dart';
 
 class HomeScreen extends GetView<HomeController> {
-  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +30,8 @@ class HomeScreen extends GetView<HomeController> {
                   _buildCarousel(context),
                   const SizedBox(height: 16),
                   _buildCategories(),
-                 // const SizedBox(height: 16),
-                 // MorningTemplatesWidget()
+                  const SizedBox(height: 16),
+                  MorningTemplatesWidget()
                 ],
               ),
             ),
