@@ -613,6 +613,11 @@
           },
           "layout_config": {
             "responsive": true,
+            "breakpoints": {
+              "small": 600,
+              "medium": 900,
+              "large": 1200
+            },
             "portrait": {
               "title": {
                 "position": {
@@ -627,6 +632,38 @@
                 "safe_area": {
                   "top": 44,
                   "bottom": 34
+                },
+                "visual_effects": {
+                  "blur": {
+                    "enabled": true,
+                    "sigma": {
+                      "x": {
+                        "base": 2,
+                        "min": 1,
+                        "max": 5
+                      },
+                      "y": {
+                        "base": 2,
+                        "min": 1,
+                        "max": 5
+                      }
+                    },
+                    "quality": "high"
+                  },
+                  "border_radius": {
+                    "base": 8,
+                    "min": 4,
+                    "max": 16,
+                    "scale_factor": 1.2
+                  },
+                  "background": {
+                    "opacity": {
+                      "base": 0.3,
+                      "min": 0.1,
+                      "max": 0.5
+                    },
+                    "color": "0xFF000000"
+                  }
                 }
               },
               "quote": {
@@ -638,7 +675,39 @@
                   "width": 80,
                   "height": 30
                 },
-                "padding": 16
+                "padding": 16,
+                "visual_effects": {
+                  "blur": {
+                    "enabled": true,
+                    "sigma": {
+                      "x": {
+                        "base": 2,
+                        "min": 1,
+                        "max": 5
+                      },
+                      "y": {
+                        "base": 2,
+                        "min": 1,
+                        "max": 5
+                      }
+                    },
+                    "quality": "high"
+                  },
+                  "border_radius": {
+                    "base": 8,
+                    "min": 4,
+                    "max": 16,
+                    "scale_factor": 1.2
+                  },
+                  "background": {
+                    "opacity": {
+                      "base": 0.2,
+                      "min": 0.1,
+                      "max": 0.4
+                    },
+                    "color": "0xFF000000"
+                  }
+                }
               }
             },
             "landscape": {
@@ -655,6 +724,38 @@
                 "safe_area": {
                   "top": 0,
                   "bottom": 21
+                },
+                "visual_effects": {
+                  "blur": {
+                    "enabled": true,
+                    "sigma": {
+                      "x": {
+                        "base": 2.5,
+                        "min": 1,
+                        "max": 5
+                      },
+                      "y": {
+                        "base": 2.5,
+                        "min": 1,
+                        "max": 5
+                      }
+                    },
+                    "quality": "high"
+                  },
+                  "border_radius": {
+                    "base": 10,
+                    "min": 6,
+                    "max": 20,
+                    "scale_factor": 1.3
+                  },
+                  "background": {
+                    "opacity": {
+                      "base": 0.25,
+                      "min": 0.1,
+                      "max": 0.4
+                    },
+                    "color": "0xFF000000"
+                  }
                 }
               },
               "quote": {
@@ -666,11 +767,109 @@
                   "width": 65,
                   "height": 35
                 },
-                "padding": 16
+                "padding": 16,
+                "visual_effects": {
+                  "blur": {
+                    "enabled": true,
+                    "sigma": {
+                      "x": {
+                        "base": 2.5,
+                        "min": 1,
+                        "max": 5
+                      },
+                      "y": {
+                        "base": 2.5,
+                        "min": 1,
+                        "max": 5
+                      }
+                    },
+                    "quality": "high"
+                  },
+                  "border_radius": {
+                    "base": 10,
+                    "min": 6,
+                    "max": 20,
+                    "scale_factor": 1.3
+                  },
+                  "background": {
+                    "opacity": {
+                      "base": 0.15,
+                      "min": 0.1,
+                      "max": 0.3
+                    },
+                    "color": "0xFF000000"
+                  }
+                }
+              },
+              "layout_adjustments": {
+                "spacing": {
+                  "between_elements": 24,
+                  "horizontal_margin": 32,
+                  "vertical_margin": 16
+                },
+                "alignment": {
+                  "title": "center",
+                  "quote": "center"
+                },
+                "constraints": {
+                  "max_width": {
+                    "title": 800,
+                    "quote": 1000
+                  },
+                  "min_height": {
+                    "title": 60,
+                    "quote": 100
+                  }
+                }
+              },
+              "responsive_behavior": {
+                "breakpoints": {
+                  "small": {
+                    "max_width": 800,
+                    "title_scale": 0.8,
+                    "quote_scale": 0.85,
+                    "spacing_scale": 0.9
+                  },
+                  "medium": {
+                    "max_width": 1200,
+                    "title_scale": 0.9,
+                    "quote_scale": 0.95,
+                    "spacing_scale": 1.0
+                  },
+                  "large": {
+                    "max_width": 1600,
+                    "title_scale": 1.0,
+                    "quote_scale": 1.0,
+                    "spacing_scale": 1.1
+                  }
+                }
               }
             }
           },
           "style_config": {
+            "common": {
+              "gradient_overlay": {
+                "enabled": true,
+                "stops": [
+                  {
+                    "color": "0x00000000",
+                    "position": 0.4
+                  },
+                  {
+                    "color": "0xB3000000",
+                    "position": 1.0
+                  }
+                ],
+                "angle": 180
+              },
+              "animations": {
+                "transition_duration": 300,
+                "hover": {
+                  "scale": 1.02,
+                  "duration": 200
+                }
+              }
+            },
             "title": {
               "typography": {
                 "font_family": "Poppins",
@@ -688,7 +887,15 @@
               },
               "colors": {
                 "text": "0xFFFFFFFF",
-                "shadow": "0x80000000"
+                "shadow": {
+                  "color": "0x80000000",
+                  "offset": {
+                    "x": 0,
+                    "y": 1
+                  },
+                  "blur_radius": 2,
+                  "opacity": 0.5
+                }
               }
             },
             "quote": {
@@ -708,7 +915,52 @@
               },
               "colors": {
                 "text": "0xFFFFFFFF",
-                "shadow": "0x80000000"
+                "shadow": {
+                  "color": "0x80000000",
+                  "offset": {
+                    "x": 0,
+                    "y": 1
+                  },
+                  "blur_radius": 2,
+                  "opacity": 0.5
+                }
+              }
+            },
+            "action_buttons": {
+              "size": 20,
+              "background": {
+                "opacity": 0.3,
+                "color": "0xFF000000"
+              },
+              "blur": {
+                "enabled": true,
+                "sigma": {
+                  "x": 3,
+                  "y": 3
+                }
+              },
+              "shadow": {
+                "color": "0x33000000",
+                "offset": {
+                  "x": 0,
+                  "y": 2
+                },
+                "blur_radius": 4
+              }
+            }
+          },
+          "responsive_config": {
+            "grid": {
+              "spacing": {
+                "small": 12,
+                "medium": 16,
+                "large": 20
+              },
+              "columns": {
+                "small": 2,
+                "medium": 3,
+                "large": 4,
+                "xlarge": 5
               }
             }
           },
