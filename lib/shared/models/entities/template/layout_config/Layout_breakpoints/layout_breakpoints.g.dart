@@ -1,35 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'size.dart';
+part of 'layout_breakpoints.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CustomSizeAdapter extends TypeAdapter<CustomSize> {
+class LayoutBreakpointsAdapter extends TypeAdapter<LayoutBreakpoints> {
   @override
-  final int typeId = 36;
+  final int typeId = 87;
 
   @override
-  CustomSize read(BinaryReader reader) {
+  LayoutBreakpoints read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CustomSize(
-      width: fields[0] as double,
-      height: fields[1] as double,
+    return LayoutBreakpoints(
+      small: fields[0] as int,
+      medium: fields[1] as int,
+      large: fields[2] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, CustomSize obj) {
+  void write(BinaryWriter writer, LayoutBreakpoints obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.width)
+      ..write(obj.small)
       ..writeByte(1)
-      ..write(obj.height);
+      ..write(obj.medium)
+      ..writeByte(2)
+      ..write(obj.large);
   }
 
   @override
@@ -38,7 +41,7 @@ class CustomSizeAdapter extends TypeAdapter<CustomSize> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CustomSizeAdapter &&
+      other is LayoutBreakpointsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -47,13 +50,16 @@ class CustomSizeAdapter extends TypeAdapter<CustomSize> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-CustomSize _$CustomSizeFromJson(Map<String, dynamic> json) => CustomSize(
-      width: (json['width'] as num).toDouble(),
-      height: (json['height'] as num).toDouble(),
+LayoutBreakpoints _$LayoutBreakpointsFromJson(Map<String, dynamic> json) =>
+    LayoutBreakpoints(
+      small: (json['small'] as num).toInt(),
+      medium: (json['medium'] as num).toInt(),
+      large: (json['large'] as num).toInt(),
     );
 
-Map<String, dynamic> _$CustomSizeToJson(CustomSize instance) =>
+Map<String, dynamic> _$LayoutBreakpointsToJson(LayoutBreakpoints instance) =>
     <String, dynamic>{
-      'width': instance.width,
-      'height': instance.height,
+      'small': instance.small,
+      'medium': instance.medium,
+      'large': instance.large,
     };

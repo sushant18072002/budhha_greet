@@ -1,35 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'size.dart';
+part of 'min_height.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CustomSizeAdapter extends TypeAdapter<CustomSize> {
+class MinHeightAdapter extends TypeAdapter<MinHeight> {
   @override
-  final int typeId = 36;
+  final int typeId = 103;
 
   @override
-  CustomSize read(BinaryReader reader) {
+  MinHeight read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CustomSize(
-      width: fields[0] as double,
-      height: fields[1] as double,
+    return MinHeight(
+      title: fields[0] as double,
+      quote: fields[1] as double,
     );
   }
 
   @override
-  void write(BinaryWriter writer, CustomSize obj) {
+  void write(BinaryWriter writer, MinHeight obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.width)
+      ..write(obj.title)
       ..writeByte(1)
-      ..write(obj.height);
+      ..write(obj.quote);
   }
 
   @override
@@ -38,7 +38,7 @@ class CustomSizeAdapter extends TypeAdapter<CustomSize> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CustomSizeAdapter &&
+      other is MinHeightAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -47,13 +47,12 @@ class CustomSizeAdapter extends TypeAdapter<CustomSize> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-CustomSize _$CustomSizeFromJson(Map<String, dynamic> json) => CustomSize(
-      width: (json['width'] as num).toDouble(),
-      height: (json['height'] as num).toDouble(),
+MinHeight _$MinHeightFromJson(Map<String, dynamic> json) => MinHeight(
+      title: (json['title'] as num).toDouble(),
+      quote: (json['quote'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$CustomSizeToJson(CustomSize instance) =>
-    <String, dynamic>{
-      'width': instance.width,
-      'height': instance.height,
+Map<String, dynamic> _$MinHeightToJson(MinHeight instance) => <String, dynamic>{
+      'title': instance.title,
+      'quote': instance.quote,
     };

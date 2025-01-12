@@ -1,35 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'size.dart';
+part of 'background.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CustomSizeAdapter extends TypeAdapter<CustomSize> {
+class BackgroundAdapter extends TypeAdapter<Background> {
   @override
-  final int typeId = 36;
+  final int typeId = 84;
 
   @override
-  CustomSize read(BinaryReader reader) {
+  Background read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CustomSize(
-      width: fields[0] as double,
-      height: fields[1] as double,
+    return Background(
+      opacity: fields[0] as OpacityConfig,
+      color: fields[1] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, CustomSize obj) {
+  void write(BinaryWriter writer, Background obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.width)
+      ..write(obj.opacity)
       ..writeByte(1)
-      ..write(obj.height);
+      ..write(obj.color);
   }
 
   @override
@@ -38,7 +38,7 @@ class CustomSizeAdapter extends TypeAdapter<CustomSize> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CustomSizeAdapter &&
+      other is BackgroundAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -47,13 +47,13 @@ class CustomSizeAdapter extends TypeAdapter<CustomSize> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-CustomSize _$CustomSizeFromJson(Map<String, dynamic> json) => CustomSize(
-      width: (json['width'] as num).toDouble(),
-      height: (json['height'] as num).toDouble(),
+Background _$BackgroundFromJson(Map<String, dynamic> json) => Background(
+      opacity: OpacityConfig.fromJson(json['opacity'] as Map<String, dynamic>),
+      color: json['color'] as String,
     );
 
-Map<String, dynamic> _$CustomSizeToJson(CustomSize instance) =>
+Map<String, dynamic> _$BackgroundToJson(Background instance) =>
     <String, dynamic>{
-      'width': instance.width,
-      'height': instance.height,
+      'opacity': instance.opacity,
+      'color': instance.color,
     };

@@ -31,7 +31,7 @@ class HomeScreen extends GetView<HomeController> {
                   const SizedBox(height: 16),
                   _buildCategories(),
                   const SizedBox(height: 16),
-                  MorningTemplatesWidget()
+                  IntelligentTemplateGrid()
                 ],
               ),
             ),

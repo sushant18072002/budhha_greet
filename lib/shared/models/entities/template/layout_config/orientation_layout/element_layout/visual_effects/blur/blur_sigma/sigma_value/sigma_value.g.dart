@@ -1,35 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'size.dart';
+part of 'sigma_value.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CustomSizeAdapter extends TypeAdapter<CustomSize> {
+class SigmaValueAdapter extends TypeAdapter<SigmaValue> {
   @override
-  final int typeId = 36;
+  final int typeId = 82;
 
   @override
-  CustomSize read(BinaryReader reader) {
+  SigmaValue read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CustomSize(
-      width: fields[0] as double,
-      height: fields[1] as double,
+    return SigmaValue(
+      base: fields[0] as double,
+      min: fields[1] as double,
+      max: fields[2] as double,
     );
   }
 
   @override
-  void write(BinaryWriter writer, CustomSize obj) {
+  void write(BinaryWriter writer, SigmaValue obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.width)
+      ..write(obj.base)
       ..writeByte(1)
-      ..write(obj.height);
+      ..write(obj.min)
+      ..writeByte(2)
+      ..write(obj.max);
   }
 
   @override
@@ -38,7 +41,7 @@ class CustomSizeAdapter extends TypeAdapter<CustomSize> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CustomSizeAdapter &&
+      other is SigmaValueAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -47,13 +50,15 @@ class CustomSizeAdapter extends TypeAdapter<CustomSize> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-CustomSize _$CustomSizeFromJson(Map<String, dynamic> json) => CustomSize(
-      width: (json['width'] as num).toDouble(),
-      height: (json['height'] as num).toDouble(),
+SigmaValue _$SigmaValueFromJson(Map<String, dynamic> json) => SigmaValue(
+      base: (json['base'] as num).toDouble(),
+      min: (json['min'] as num).toDouble(),
+      max: (json['max'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$CustomSizeToJson(CustomSize instance) =>
+Map<String, dynamic> _$SigmaValueToJson(SigmaValue instance) =>
     <String, dynamic>{
-      'width': instance.width,
-      'height': instance.height,
+      'base': instance.base,
+      'min': instance.min,
+      'max': instance.max,
     };

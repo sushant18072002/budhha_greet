@@ -1,35 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'size.dart';
+part of 'hover_animation.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CustomSizeAdapter extends TypeAdapter<CustomSize> {
+class HoverAnimationAdapter extends TypeAdapter<HoverAnimation> {
   @override
-  final int typeId = 36;
+  final int typeId = 92;
 
   @override
-  CustomSize read(BinaryReader reader) {
+  HoverAnimation read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CustomSize(
-      width: fields[0] as double,
-      height: fields[1] as double,
+    return HoverAnimation(
+      scale: fields[0] as double,
+      duration: fields[1] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, CustomSize obj) {
+  void write(BinaryWriter writer, HoverAnimation obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.width)
+      ..write(obj.scale)
       ..writeByte(1)
-      ..write(obj.height);
+      ..write(obj.duration);
   }
 
   @override
@@ -38,7 +38,7 @@ class CustomSizeAdapter extends TypeAdapter<CustomSize> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CustomSizeAdapter &&
+      other is HoverAnimationAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -47,13 +47,14 @@ class CustomSizeAdapter extends TypeAdapter<CustomSize> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-CustomSize _$CustomSizeFromJson(Map<String, dynamic> json) => CustomSize(
-      width: (json['width'] as num).toDouble(),
-      height: (json['height'] as num).toDouble(),
+HoverAnimation _$HoverAnimationFromJson(Map<String, dynamic> json) =>
+    HoverAnimation(
+      scale: (json['scale'] as num).toDouble(),
+      duration: (json['duration'] as num).toInt(),
     );
 
-Map<String, dynamic> _$CustomSizeToJson(CustomSize instance) =>
+Map<String, dynamic> _$HoverAnimationToJson(HoverAnimation instance) =>
     <String, dynamic>{
-      'width': instance.width,
-      'height': instance.height,
+      'scale': instance.scale,
+      'duration': instance.duration,
     };

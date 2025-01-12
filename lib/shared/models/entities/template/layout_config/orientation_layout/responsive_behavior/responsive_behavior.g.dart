@@ -1,35 +1,32 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'size.dart';
+part of 'responsive_behavior.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CustomSizeAdapter extends TypeAdapter<CustomSize> {
+class ResponsiveBehaviorAdapter extends TypeAdapter<ResponsiveBehavior> {
   @override
-  final int typeId = 36;
+  final int typeId = 108;
 
   @override
-  CustomSize read(BinaryReader reader) {
+  ResponsiveBehavior read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CustomSize(
-      width: fields[0] as double,
-      height: fields[1] as double,
+    return ResponsiveBehavior(
+      breakpoints: (fields[0] as Map).cast<String, ResponsiveBreakpoint>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, CustomSize obj) {
+  void write(BinaryWriter writer, ResponsiveBehavior obj) {
     writer
-      ..writeByte(2)
-      ..writeByte(0)
-      ..write(obj.width)
       ..writeByte(1)
-      ..write(obj.height);
+      ..writeByte(0)
+      ..write(obj.breakpoints);
   }
 
   @override
@@ -38,7 +35,7 @@ class CustomSizeAdapter extends TypeAdapter<CustomSize> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CustomSizeAdapter &&
+      other is ResponsiveBehaviorAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -47,13 +44,15 @@ class CustomSizeAdapter extends TypeAdapter<CustomSize> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-CustomSize _$CustomSizeFromJson(Map<String, dynamic> json) => CustomSize(
-      width: (json['width'] as num).toDouble(),
-      height: (json['height'] as num).toDouble(),
+ResponsiveBehavior _$ResponsiveBehaviorFromJson(Map<String, dynamic> json) =>
+    ResponsiveBehavior(
+      breakpoints: (json['breakpoints'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(
+            k, ResponsiveBreakpoint.fromJson(e as Map<String, dynamic>)),
+      ),
     );
 
-Map<String, dynamic> _$CustomSizeToJson(CustomSize instance) =>
+Map<String, dynamic> _$ResponsiveBehaviorToJson(ResponsiveBehavior instance) =>
     <String, dynamic>{
-      'width': instance.width,
-      'height': instance.height,
+      'breakpoints': instance.breakpoints,
     };

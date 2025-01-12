@@ -257,8 +257,8 @@ class DatabaseService extends GetxService {
   // Load initial data from JSON
   Future<void> _loadInitialData() async {
     AppConfig? currentConfig = configBox.get('current');
-     if (currentConfig == null || !currentConfig.isInitialized) {
-    //if(true){
+     //if (currentConfig == null || !currentConfig.isInitialized) {
+    if(true){
       try {
         final String jsonContent =
             await rootBundle.loadString('assets/data/app_data.json');

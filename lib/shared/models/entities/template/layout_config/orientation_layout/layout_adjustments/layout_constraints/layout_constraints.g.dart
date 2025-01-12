@@ -1,35 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'size.dart';
+part of 'layout_constraints.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CustomSizeAdapter extends TypeAdapter<CustomSize> {
+class LayoutConstraintsAdapter extends TypeAdapter<LayoutConstraints> {
   @override
-  final int typeId = 36;
+  final int typeId = 101;
 
   @override
-  CustomSize read(BinaryReader reader) {
+  LayoutConstraints read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CustomSize(
-      width: fields[0] as double,
-      height: fields[1] as double,
+    return LayoutConstraints(
+      maxWidth: fields[0] as MaxWidth,
+      minHeight: fields[1] as MinHeight,
     );
   }
 
   @override
-  void write(BinaryWriter writer, CustomSize obj) {
+  void write(BinaryWriter writer, LayoutConstraints obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.width)
+      ..write(obj.maxWidth)
       ..writeByte(1)
-      ..write(obj.height);
+      ..write(obj.minHeight);
   }
 
   @override
@@ -38,7 +38,7 @@ class CustomSizeAdapter extends TypeAdapter<CustomSize> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CustomSizeAdapter &&
+      other is LayoutConstraintsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -47,13 +47,14 @@ class CustomSizeAdapter extends TypeAdapter<CustomSize> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-CustomSize _$CustomSizeFromJson(Map<String, dynamic> json) => CustomSize(
-      width: (json['width'] as num).toDouble(),
-      height: (json['height'] as num).toDouble(),
+LayoutConstraints _$LayoutConstraintsFromJson(Map<String, dynamic> json) =>
+    LayoutConstraints(
+      maxWidth: MaxWidth.fromJson(json['max_width'] as Map<String, dynamic>),
+      minHeight: MinHeight.fromJson(json['min_height'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$CustomSizeToJson(CustomSize instance) =>
+Map<String, dynamic> _$LayoutConstraintsToJson(LayoutConstraints instance) =>
     <String, dynamic>{
-      'width': instance.width,
-      'height': instance.height,
+      'max_width': instance.maxWidth,
+      'min_height': instance.minHeight,
     };
