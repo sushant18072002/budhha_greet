@@ -8,7 +8,8 @@ import 'background.dart';
 import 'language.dart';
 import 'quote.dart';
 import 'source.dart';
-import 'template.dart';
+import 'template_collection/template_collection.dart';
+
 
 part 'entities.g.dart';
 
