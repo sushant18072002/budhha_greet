@@ -1,11 +1,11 @@
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'metrics.g.dart';
+part 'template_metrics.g.dart';
 
-@HiveType(typeId: 16)
+@HiveType(typeId: 116)
 @JsonSerializable()
-class Metrics {
+class TemplateMetrics {
   @HiveField(0)
   @JsonKey(name: 'views')
   final int views;
@@ -22,13 +22,13 @@ class Metrics {
   @JsonKey(name: 'last_used')
   final DateTime? lastUsed;
 
-  Metrics({
+  TemplateMetrics({
     required this.views,
     required this.shares,
     required this.favorites,
     this.lastUsed,
   });
 
-  factory Metrics.fromJson(Map<String, dynamic> json) => _$MetricsFromJson(json);
-  Map<String, dynamic> toJson() => _$MetricsToJson(this);
+  factory TemplateMetrics.fromJson(Map<String, dynamic> json) => _$TemplateMetricsFromJson(json);
+  Map<String, dynamic> toJson() => _$TemplateMetricsToJson(this);
 }

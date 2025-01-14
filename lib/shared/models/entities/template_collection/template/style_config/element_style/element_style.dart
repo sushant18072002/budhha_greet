@@ -9,7 +9,7 @@ export 'element_typography/element_typography.dart';
 
 part 'element_style.g.dart'; 
 
-@HiveType(typeId: 30)
+@HiveType(typeId: 117)
 @JsonSerializable()
 class ElementStyle {
   @HiveField(0)

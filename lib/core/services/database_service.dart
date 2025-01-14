@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:buddha_greet/shared/models/entities/template_collection/template/layout_config/orientation_layout/element_layout/layout_visual_effects/layout_blur/layout_blur_sigma/layout_sigma_value/layout_sigma_value.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
@@ -112,45 +113,57 @@ class DatabaseService extends GetxService {
       // Core Entity Models - typeId: 8-10
       Hive.registerAdapter(QuoteAdapter());     //8
       Hive.registerAdapter(BackgroundAdapter()); //9
-      Hive.registerAdapter(TranslationAdapter());
+      Hive.registerAdapter(TranslationAdapter()); //10
 
       // Style & Typography - typeId: 11-14
-      Hive.registerAdapter(QouteStyleAdapter());
-      Hive.registerAdapter(QouteTypographyAdapter());
-      Hive.registerAdapter(QouteFontSizeAdapter());
-      Hive.registerAdapter(QouteStyleColorsAdapter());
+      Hive.registerAdapter(QouteStyleAdapter()); //11
+      Hive.registerAdapter(QouteTypographyAdapter()); //12
+      Hive.registerAdapter(QouteFontSizeAdapter()); //13
+      Hive.registerAdapter(QouteStyleColorsAdapter()); //14
 
       // Quote Related - typeId: 15-17
-      Hive.registerAdapter(QuoteMetadataAdapter());
-      Hive.registerAdapter(AuditAdapter());
+      Hive.registerAdapter(QuoteMetadataAdapter()); //15
+      Hive.registerAdapter(MetricsAdapter()); //16
+      Hive.registerAdapter(AuditAdapter());  //17
 
       // Visual Data Models - typeId: 18-25
-      Hive.registerAdapter(VisualDataAdapter());
-      Hive.registerAdapter(ImageDataAdapter());
-      Hive.registerAdapter(ImageVariantAdapter());
-      Hive.registerAdapter(GradientDataAdapter());
-      Hive.registerAdapter(GradientStopAdapter());
-      Hive.registerAdapter(ColorDataAdapter());
-      Hive.registerAdapter(ColorPaletteAdapter());
-      Hive.registerAdapter(VisualEffectsAdapter());
+      Hive.registerAdapter(VisualDataAdapter()); //18
+      Hive.registerAdapter(ImageDataAdapter());  //19
+      Hive.registerAdapter(ImageVariantAdapter()); //20
+      Hive.registerAdapter(GradientDataAdapter()); //21
+      Hive.registerAdapter(GradientStopAdapter()); //22
+      Hive.registerAdapter(ColorDataAdapter());  //23
+      Hive.registerAdapter(ColorPaletteAdapter()); //24
+      Hive.registerAdapter(VisualEffectsAdapter()); //25
 
       // Attribution & Optimization - typeId: 26-28
-      Hive.registerAdapter(AttributionAdapter());
-      Hive.registerAdapter(OptimizationAdapter());
-      Hive.registerAdapter(CacheConfigAdapter());
+      Hive.registerAdapter(AttributionAdapter());  //26
+      Hive.registerAdapter(OptimizationAdapter()); //27
+      Hive.registerAdapter(CacheConfigAdapter()); //28
+      
 
       // Template Related - typeId: 29-31
     
-
+      Hive.registerAdapter(TemplateAdapter());//29
+      Hive.registerAdapter(TemplateTranslationAdapter());//30
+      Hive.registerAdapter(TemplateCompositionAdapter());//31
+      Hive.registerAdapter(LayoutConfigAdapter());//32
+      Hive.registerAdapter(OrientationLayoutAdapter()); //33
+      Hive.registerAdapter(ElementLayoutAdapter()); //34
+      Hive.registerAdapter(LayoutPositionAdapter()); //35
+      Hive.registerAdapter(LayoutSizeAdapter()); //36
+      Hive.registerAdapter(LayoutSafeAreaAdapter()); //37
       // Layout Related - typeId: 32-37
-
-      Hive.registerAdapter(QouteFontSizeAdapter());
      
 
       // Style Config - typeId: 38-40
-     
+      Hive.registerAdapter(StyleConfigAdapter()); //38
+      
+      Hive.registerAdapter(TemplateMetadataAdapter()); //40
+
+
       // Validation Rules - typeId: 41-46
-      Hive.registerAdapter(ValidationRulesAdapter());
+      Hive.registerAdapter(ValidationRulesAdapter()); // 41
       Hive.registerAdapter(QuoteValidationAdapter());
       Hive.registerAdapter(TextValidationAdapter());
       Hive.registerAdapter(AuthorValidationAdapter());
@@ -209,11 +222,13 @@ class DatabaseService extends GetxService {
 
       Hive.registerAdapter(TemplateCollectionAdapter()); //79
 
+
       Hive.registerAdapter(BackGroundTranslationAdapter()); //80
+      
 
       // Layout Visual Effects Related - New TypeIds starting from where paste-2.txt left off (80)
-      Hive.registerAdapter(LayoutBlurAdapter()); // 81
-      Hive.registerAdapter(LayoutBlurSigmaAdapter()); // 82
+      Hive.registerAdapter(LayoutSigmaValueAdapter()); // 82
+      Hive.registerAdapter(LayoutBlurSigmaAdapter()); // 81
       Hive.registerAdapter(LayoutBorderRadiusAdapter()); // 83
       Hive.registerAdapter(LayoutBackgroundAdapter()); // 84
       Hive.registerAdapter(LayoutOpacityConfigAdapter()); // 85
@@ -250,15 +265,22 @@ class DatabaseService extends GetxService {
       Hive.registerAdapter(GridColumnsAdapter()); // 106
       Hive.registerAdapter(ResponsiveBreakpointAdapter()); // 107
       Hive.registerAdapter(ResponsiveBehaviorAdapter()); // 108
-      Hive.registerAdapter(
-          BreakpointsAdapter()); // 309 (as specified in the code)
+      Hive.registerAdapter(BreakpointsAdapter()); // 109
 
 // Action Related
-      Hive.registerAdapter(ActionBackgroundAdapter()); // 202
-      Hive.registerAdapter(ActionBlurAdapter()); // 203
-      Hive.registerAdapter(ActionSigmaAdapter()); // 204
-      Hive.registerAdapter(ActionShadowAdapter()); // 205
-      Hive.registerAdapter(ActionOffsetAdapter()); // 206
+      Hive.registerAdapter(ActionBackgroundAdapter()); // 110
+      Hive.registerAdapter(ActionBlurAdapter()); // 111
+      Hive.registerAdapter(ActionSigmaAdapter()); // 112
+      Hive.registerAdapter(ActionShadowAdapter()); // 113
+      Hive.registerAdapter(ActionOffsetAdapter()); // 114
+      Hive.registerAdapter(LayoutBlurAdapter()); // 115
+      Hive.registerAdapter(TemplateMetricsAdapter()); //116
+      Hive.registerAdapter(ElementStyleAdapter()); //117
+      Hive.registerAdapter(ShadowOffsetAdapter()); //118
+      Hive.registerAdapter(GridConfigAdapter()); //119
+
+
+      
     } catch (e) {
       print('Error registering adapters: $e');
       rethrow;

@@ -9,7 +9,7 @@ export 'grid_spacing/grid_spacing.dart';
 
 part 'grid_config.g.dart';
 
-@HiveType(typeId: 104)
+@HiveType(typeId: 119)
 @JsonSerializable()
 class GridConfig {
   @HiveField(0)

@@ -19,8 +19,8 @@ class OrientationLayoutAdapter extends TypeAdapter<OrientationLayout> {
     return OrientationLayout(
       title: fields[0] as ElementLayout,
       quote: fields[1] as ElementLayout,
-      layoutAdjustments: fields[2] as LayoutAdjustments,
-      responsiveBehavior: fields[3] as ResponsiveBehavior,
+      layoutAdjustments: fields[2] as LayoutAdjustments?,
+      responsiveBehavior: fields[3] as ResponsiveBehavior?,
     );
   }
 
@@ -57,10 +57,14 @@ OrientationLayout _$OrientationLayoutFromJson(Map<String, dynamic> json) =>
     OrientationLayout(
       title: ElementLayout.fromJson(json['title'] as Map<String, dynamic>),
       quote: ElementLayout.fromJson(json['quote'] as Map<String, dynamic>),
-      layoutAdjustments: LayoutAdjustments.fromJson(
-          json['layout_adjustments'] as Map<String, dynamic>),
-      responsiveBehavior: ResponsiveBehavior.fromJson(
-          json['responsive_behavior'] as Map<String, dynamic>),
+      layoutAdjustments: json['layout_adjustments'] == null
+          ? null
+          : LayoutAdjustments.fromJson(
+              json['layout_adjustments'] as Map<String, dynamic>),
+      responsiveBehavior: json['responsive_behavior'] == null
+          ? null
+          : ResponsiveBehavior.fromJson(
+              json['responsive_behavior'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$OrientationLayoutToJson(OrientationLayout instance) =>

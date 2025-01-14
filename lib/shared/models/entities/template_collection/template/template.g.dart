@@ -26,7 +26,7 @@ class TemplateAdapter extends TypeAdapter<Template> {
       categoryIds: (fields[6] as List).cast<String>(),
       tagIds: (fields[7] as List).cast<String>(),
       metadata: fields[8] as TemplateMetadata,
-      metrics: fields[9] as Metrics,
+      metrics: fields[9] as TemplateMetrics,
       audit: fields[10] as Audit,
     );
   }
@@ -95,7 +95,8 @@ Template _$TemplateFromJson(Map<String, dynamic> json) => Template(
           (json['tag_ids'] as List<dynamic>).map((e) => e as String).toList(),
       metadata:
           TemplateMetadata.fromJson(json['metadata'] as Map<String, dynamic>),
-      metrics: Metrics.fromJson(json['metrics'] as Map<String, dynamic>),
+      metrics:
+          TemplateMetrics.fromJson(json['metrics'] as Map<String, dynamic>),
       audit: Audit.fromJson(json['audit'] as Map<String, dynamic>),
     );
 

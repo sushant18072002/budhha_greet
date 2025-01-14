@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'action_sigma.g.dart';
 
-@HiveType(typeId: 204)
+@HiveType(typeId: 112)
 @JsonSerializable()
 class ActionSigma {
   @HiveField(0)

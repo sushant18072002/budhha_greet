@@ -8,7 +8,7 @@ part of 'shadow_offset.dart';
 
 class ShadowOffsetAdapter extends TypeAdapter<ShadowOffset> {
   @override
-  final int typeId = 35;
+  final int typeId = 118;
 
   @override
   ShadowOffset read(BinaryReader reader) {

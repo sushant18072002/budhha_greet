@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'metrics.dart';
+part of 'template_metrics.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class MetricsAdapter extends TypeAdapter<Metrics> {
+class TemplateMetricsAdapter extends TypeAdapter<TemplateMetrics> {
   @override
-  final int typeId = 16;
+  final int typeId = 116;
 
   @override
-  Metrics read(BinaryReader reader) {
+  TemplateMetrics read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Metrics(
+    return TemplateMetrics(
       views: fields[0] as int,
       shares: fields[1] as int,
       favorites: fields[2] as int,
@@ -25,7 +25,7 @@ class MetricsAdapter extends TypeAdapter<Metrics> {
   }
 
   @override
-  void write(BinaryWriter writer, Metrics obj) {
+  void write(BinaryWriter writer, TemplateMetrics obj) {
     writer
       ..writeByte(4)
       ..writeByte(0)
@@ -44,7 +44,7 @@ class MetricsAdapter extends TypeAdapter<Metrics> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is MetricsAdapter &&
+      other is TemplateMetricsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -53,7 +53,8 @@ class MetricsAdapter extends TypeAdapter<Metrics> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-Metrics _$MetricsFromJson(Map<String, dynamic> json) => Metrics(
+TemplateMetrics _$TemplateMetricsFromJson(Map<String, dynamic> json) =>
+    TemplateMetrics(
       views: (json['views'] as num).toInt(),
       shares: (json['shares'] as num).toInt(),
       favorites: (json['favorites'] as num).toInt(),
@@ -62,7 +63,8 @@ Metrics _$MetricsFromJson(Map<String, dynamic> json) => Metrics(
           : DateTime.parse(json['last_used'] as String),
     );
 
-Map<String, dynamic> _$MetricsToJson(Metrics instance) => <String, dynamic>{
+Map<String, dynamic> _$TemplateMetricsToJson(TemplateMetrics instance) =>
+    <String, dynamic>{
       'views': instance.views,
       'shares': instance.shares,
       'favorites': instance.favorites,

@@ -8,7 +8,7 @@ part of 'action_blur.dart';
 
 class ActionBlurAdapter extends TypeAdapter<ActionBlur> {
   @override
-  final int typeId = 203;
+  final int typeId = 111;
 
   @override
   ActionBlur read(BinaryReader reader) {

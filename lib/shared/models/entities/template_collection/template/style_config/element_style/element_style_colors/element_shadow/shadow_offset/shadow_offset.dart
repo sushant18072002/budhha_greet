@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'shadow_offset.g.dart'; 
 
-@HiveType(typeId: 35)
+@HiveType(typeId: 118)
 @JsonSerializable()
 class ShadowOffset {
   @HiveField(0)

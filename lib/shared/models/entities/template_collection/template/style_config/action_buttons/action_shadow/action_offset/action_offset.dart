@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'action_offset.g.dart';
 
-@HiveType(typeId: 206)
+@HiveType(typeId: 114)
 @JsonSerializable()
 class ActionOffset {
   @HiveField(0)

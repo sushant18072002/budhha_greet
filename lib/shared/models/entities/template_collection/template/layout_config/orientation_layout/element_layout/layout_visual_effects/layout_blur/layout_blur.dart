@@ -7,7 +7,7 @@ export 'layout_blur_sigma/layout_blur_sigma.dart';
 
 part 'layout_blur.g.dart';
 
-@HiveType(typeId: 80)
+@HiveType(typeId: 115)
 @JsonSerializable()
 class LayoutBlur {
   @HiveField(0)

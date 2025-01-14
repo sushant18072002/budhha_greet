@@ -7,17 +7,17 @@ export 'action_offset/action_offset.dart';
 
 part 'action_shadow.g.dart';
 
-@HiveType(typeId: 205)
+@HiveType(typeId: 113)
 @JsonSerializable()
 class ActionShadow {
   @HiveField(0)
-  final String color;
+  final String? color;
 
   @HiveField(1)
-  final ActionOffset offset;
+  final ActionOffset? offset;
 
   @HiveField(2)
-  final double blurRadius;
+  final double? blurRadius;
 
   ActionShadow({
     required this.color,

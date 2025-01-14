@@ -8,7 +8,7 @@ part of 'action_offset.dart';
 
 class ActionOffsetAdapter extends TypeAdapter<ActionOffset> {
   @override
-  final int typeId = 206;
+  final int typeId = 114;
 
   @override
   ActionOffset read(BinaryReader reader) {

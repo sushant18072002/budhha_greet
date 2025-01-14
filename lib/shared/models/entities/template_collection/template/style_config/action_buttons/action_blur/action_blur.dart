@@ -7,7 +7,7 @@ export 'action_sigma/action_sigma.dart';
 
 part 'action_blur.g.dart';
 
-@HiveType(typeId: 203)
+@HiveType(typeId: 111)
 @JsonSerializable()
 class ActionBlur {
   @HiveField(0)

@@ -8,7 +8,7 @@ part of 'action_sigma.dart';
 
 class ActionSigmaAdapter extends TypeAdapter<ActionSigma> {
   @override
-  final int typeId = 204;
+  final int typeId = 112;
 
   @override
   ActionSigma read(BinaryReader reader) {

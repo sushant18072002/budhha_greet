@@ -8,7 +8,7 @@ part of 'layout_blur.dart';
 
 class LayoutBlurAdapter extends TypeAdapter<LayoutBlur> {
   @override
-  final int typeId = 80;
+  final int typeId = 115;
 
   @override
   LayoutBlur read(BinaryReader reader) {

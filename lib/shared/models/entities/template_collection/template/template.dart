@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import '../../../analytics/audit.dart';
 import 'layout_config/layout_config.dart';
-import 'metrics/metrics.dart';
+import 'template_metrics/template_metrics.dart';
 import 'responsive_config/responsive_config.dart';
 import 'style_config/style_config.dart';
 import 'template_composition/template_composition.dart';
@@ -12,7 +12,7 @@ import 'template_translation/template_translation.dart';
 
 export '../../../analytics/audit.dart';
 export 'layout_config/layout_config.dart';
-export 'metrics/metrics.dart';
+export 'template_metrics/template_metrics.dart';
 export 'responsive_config/responsive_config.dart';
 export 'style_config/style_config.dart';
 export 'template_composition/template_composition.dart';
@@ -62,7 +62,7 @@ class Template {
 
   @HiveField(9)
   @JsonKey(name: 'metrics')
-  final Metrics metrics;
+  final TemplateMetrics metrics;
 
   @HiveField(10)
   @JsonKey(name: 'audit')

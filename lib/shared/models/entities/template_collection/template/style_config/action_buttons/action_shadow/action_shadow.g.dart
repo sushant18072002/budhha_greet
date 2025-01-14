@@ -8,7 +8,7 @@ part of 'action_shadow.dart';
 
 class ActionShadowAdapter extends TypeAdapter<ActionShadow> {
   @override
-  final int typeId = 205;
+  final int typeId = 113;
 
   @override
   ActionShadow read(BinaryReader reader) {
@@ -17,9 +17,9 @@ class ActionShadowAdapter extends TypeAdapter<ActionShadow> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ActionShadow(
-      color: fields[0] as String,
-      offset: fields[1] as ActionOffset,
-      blurRadius: fields[2] as double,
+      color: fields[0] as String?,
+      offset: fields[1] as ActionOffset?,
+      blurRadius: fields[2] as double?,
     );
   }
 
@@ -51,9 +51,11 @@ class ActionShadowAdapter extends TypeAdapter<ActionShadow> {
 // **************************************************************************
 
 ActionShadow _$ActionShadowFromJson(Map<String, dynamic> json) => ActionShadow(
-      color: json['color'] as String,
-      offset: ActionOffset.fromJson(json['offset'] as Map<String, dynamic>),
-      blurRadius: (json['blurRadius'] as num).toDouble(),
+      color: json['color'] as String?,
+      offset: json['offset'] == null
+          ? null
+          : ActionOffset.fromJson(json['offset'] as Map<String, dynamic>),
+      blurRadius: (json['blurRadius'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$ActionShadowToJson(ActionShadow instance) =>

@@ -1,9 +1,9 @@
-
-import 'package:buddha_greet/shared/models/entities/template_collection/template/style_config/element_style/element_style_colors/element_shadow/shadow_offset/shadow_offset.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import 'shadow_offset/shadow_offset.dart';
 
+export 'shadow_offset/shadow_offset.dart';
 
 part 'element_shadow.g.dart'; 
 

@@ -8,8 +8,7 @@ export 'responsive_breakpoint/responsive_breakpoint.dart';
 part 'break_points.g.dart';
 
 
-@HiveType(typeId: 108)
-@HiveType(typeId: 309)
+@HiveType(typeId: 109)
 @JsonSerializable()
 class Breakpoints {
   @HiveField(0)

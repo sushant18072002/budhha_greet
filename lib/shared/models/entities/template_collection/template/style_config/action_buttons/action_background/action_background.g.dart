@@ -8,7 +8,7 @@ part of 'action_background.dart';
 
 class ActionBackgroundAdapter extends TypeAdapter<ActionBackground> {
   @override
-  final int typeId = 202;
+  final int typeId = 110;
 
   @override
   ActionBackground read(BinaryReader reader) {

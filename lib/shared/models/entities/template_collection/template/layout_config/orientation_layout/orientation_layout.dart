@@ -24,11 +24,11 @@ class OrientationLayout {
   
   @HiveField(2)
   @JsonKey(name: 'layout_adjustments')
-  final LayoutAdjustments layoutAdjustments;
+  final LayoutAdjustments? layoutAdjustments;
   
   @HiveField(3)
   @JsonKey(name: 'responsive_behavior')
-  final ResponsiveBehavior responsiveBehavior;
+  final ResponsiveBehavior? responsiveBehavior;
 
   OrientationLayout({
     required this.title,

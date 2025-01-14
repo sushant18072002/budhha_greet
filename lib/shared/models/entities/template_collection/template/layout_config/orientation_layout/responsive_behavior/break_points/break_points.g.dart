@@ -8,7 +8,7 @@ part of 'break_points.dart';
 
 class BreakpointsAdapter extends TypeAdapter<Breakpoints> {
   @override
-  final int typeId = 108;
+  final int typeId = 109;
 
   @override
   Breakpoints read(BinaryReader reader) {

@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'action_background.g.dart';
 
-@HiveType(typeId: 202)
+@HiveType(typeId: 110)
 @JsonSerializable()
 class ActionBackground {
   @HiveField(0)

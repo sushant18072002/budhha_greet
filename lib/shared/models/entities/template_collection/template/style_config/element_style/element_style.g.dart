@@ -8,7 +8,7 @@ part of 'element_style.dart';
 
 class ElementStyleAdapter extends TypeAdapter<ElementStyle> {
   @override
-  final int typeId = 30;
+  final int typeId = 117;
 
   @override
   ElementStyle read(BinaryReader reader) {

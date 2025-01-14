@@ -8,7 +8,7 @@ part of 'grid_config.dart';
 
 class GridConfigAdapter extends TypeAdapter<GridConfig> {
   @override
-  final int typeId = 104;
+  final int typeId = 119;
 
   @override
   GridConfig read(BinaryReader reader) {
