@@ -1,35 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'style_colors.dart';
+part of 'qoute_style.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class StyleColorsAdapter extends TypeAdapter<StyleColors> {
+class QouteStyleAdapter extends TypeAdapter<QouteStyle> {
   @override
-  final int typeId = 14;
+  final int typeId = 11;
 
   @override
-  StyleColors read(BinaryReader reader) {
+  QouteStyle read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return StyleColors(
-      text: fields[0] as String,
-      shadow: fields[1] as String,
+    return QouteStyle(
+      typography: fields[0] as QouteTypography,
+      colors: fields[1] as QouteStyleColors,
     );
   }
 
   @override
-  void write(BinaryWriter writer, StyleColors obj) {
+  void write(BinaryWriter writer, QouteStyle obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.text)
+      ..write(obj.typography)
       ..writeByte(1)
-      ..write(obj.shadow);
+      ..write(obj.colors);
   }
 
   @override
@@ -38,7 +38,7 @@ class StyleColorsAdapter extends TypeAdapter<StyleColors> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is StyleColorsAdapter &&
+      other is QouteStyleAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -47,13 +47,14 @@ class StyleColorsAdapter extends TypeAdapter<StyleColors> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-StyleColors _$StyleColorsFromJson(Map<String, dynamic> json) => StyleColors(
-      text: json['text'] as String,
-      shadow: json['shadow'] as String,
+QouteStyle _$QouteStyleFromJson(Map<String, dynamic> json) => QouteStyle(
+      typography:
+          QouteTypography.fromJson(json['typography'] as Map<String, dynamic>),
+      colors: QouteStyleColors.fromJson(json['colors'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$StyleColorsToJson(StyleColors instance) =>
+Map<String, dynamic> _$QouteStyleToJson(QouteStyle instance) =>
     <String, dynamic>{
-      'text': instance.text,
-      'shadow': instance.shadow,
+      'typography': instance.typography,
+      'colors': instance.colors,
     };

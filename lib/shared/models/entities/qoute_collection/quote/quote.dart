@@ -1,29 +1,17 @@
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import '../analytics/audit.dart';
-import '../analytics/metrics.dart';
-import '../style/style.dart';
-import 'translation.dart';
+import '../../../analytics/audit.dart';
+import '../../../analytics/metrics.dart';
+import 'qoute_style/qoute_style.dart';
+import '../../translation.dart';
+
+export  '../../../analytics/audit.dart';
+export '../../../analytics/metrics.dart';
+export 'qoute_style/qoute_style.dart';
+export '../../translation.dart';
 
 part 'quote.g.dart';
-
-@HiveType(typeId: 77)
-@JsonSerializable()
-class QuoteCollection {
-  @HiveField(0)
-   @JsonKey(name: 'data')
-  final List<Quote> data;
-
-  QuoteCollection({
-    required this.data,
-  });
-
-  factory QuoteCollection.fromJson(Map<String, dynamic> json) => 
-    _$QuoteCollectionFromJson(json);
-  
-  Map<String, dynamic> toJson() => _$QuoteCollectionToJson(this);
-}
 
 @HiveType(typeId: 8)
 @JsonSerializable()
@@ -54,7 +42,7 @@ class Quote {
   
   @HiveField(6)
    @JsonKey(name: 'style')
-  final Style style;
+  final QouteStyle style;
   
   @HiveField(7)
    @JsonKey(name: 'metadata')

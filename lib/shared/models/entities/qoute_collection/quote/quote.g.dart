@@ -6,40 +6,6 @@ part of 'quote.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class QuoteCollectionAdapter extends TypeAdapter<QuoteCollection> {
-  @override
-  final int typeId = 77;
-
-  @override
-  QuoteCollection read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return QuoteCollection(
-      data: (fields[0] as List).cast<Quote>(),
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, QuoteCollection obj) {
-    writer
-      ..writeByte(1)
-      ..writeByte(0)
-      ..write(obj.data);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is QuoteCollectionAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
 class QuoteAdapter extends TypeAdapter<Quote> {
   @override
   final int typeId = 8;
@@ -57,7 +23,7 @@ class QuoteAdapter extends TypeAdapter<Quote> {
       sourceId: fields[3] as String,
       categoryIds: (fields[4] as List).cast<String>(),
       tagIds: (fields[5] as List).cast<String>(),
-      style: fields[6] as Style,
+      style: fields[6] as QouteStyle,
       metadata: fields[7] as QuoteMetadata,
       metrics: fields[8] as Metrics,
       audit: fields[9] as Audit,
@@ -148,18 +114,6 @@ class QuoteMetadataAdapter extends TypeAdapter<QuoteMetadata> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-QuoteCollection _$QuoteCollectionFromJson(Map<String, dynamic> json) =>
-    QuoteCollection(
-      data: (json['data'] as List<dynamic>)
-          .map((e) => Quote.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-
-Map<String, dynamic> _$QuoteCollectionToJson(QuoteCollection instance) =>
-    <String, dynamic>{
-      'data': instance.data,
-    };
-
 Quote _$QuoteFromJson(Map<String, dynamic> json) => Quote(
       uuid: json['uuid'] as String,
       translations: (json['translations'] as Map<String, dynamic>).map(
@@ -172,7 +126,7 @@ Quote _$QuoteFromJson(Map<String, dynamic> json) => Quote(
           .toList(),
       tagIds:
           (json['tag_ids'] as List<dynamic>).map((e) => e as String).toList(),
-      style: Style.fromJson(json['style'] as Map<String, dynamic>),
+      style: QouteStyle.fromJson(json['style'] as Map<String, dynamic>),
       metadata:
           QuoteMetadata.fromJson(json['metadata'] as Map<String, dynamic>),
       metrics: Metrics.fromJson(json['metrics'] as Map<String, dynamic>),

@@ -5,8 +5,6 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../../shared/models/analytics/analytics_config.dart';
-import '../../shared/models/analytics/audit.dart';
-import '../../shared/models/analytics/metrics.dart';
 import '../../shared/models/analytics/popular_item.dart';
 import '../../shared/models/analytics/reporting_config.dart';
 import '../../shared/models/analytics/tracking_config.dart';
@@ -30,15 +28,10 @@ import '../../shared/models/entities/background.dart';
 import '../../shared/models/entities/category.dart';
 import '../../shared/models/entities/entities.dart';
 import '../../shared/models/entities/language.dart';
-import '../../shared/models/entities/quote.dart';
+import '../../shared/models/entities/qoute_collection/qoute_collection.dart';
 import '../../shared/models/entities/source.dart';
 import '../../shared/models/entities/tag.dart';
 import '../../shared/models/entities/template_collection/template_collection.dart';
-import '../../shared/models/entities/translation.dart';
-import '../../shared/models/style/font_size.dart';
-import '../../shared/models/style/style.dart';
-import '../../shared/models/style/style_colors.dart';
-import '../../shared/models/style/typography.dart';
 import '../../shared/models/style/visual_data.dart';
 import '../../shared/models/style/visual_effects.dart';
 import '../../shared/models/validation/author_validation.dart';
@@ -105,27 +98,27 @@ class DatabaseService extends GetxService {
   Future<void> _registerAdapters() async {
     try {
       // Core Config Models - typeId: 0-4
-      Hive.registerAdapter(AppConfigAdapter());
-      Hive.registerAdapter(MetadataAdapter());
-      Hive.registerAdapter(SystemConfigAdapter());
-      Hive.registerAdapter(LanguageConfigAdapter());
-      Hive.registerAdapter(AppSettingsAdapter());
+      Hive.registerAdapter(AppConfigAdapter()); //0
+      Hive.registerAdapter(MetadataAdapter());  //1
+      Hive.registerAdapter(SystemConfigAdapter()); //2
+      Hive.registerAdapter(LanguageConfigAdapter()); //3
+      Hive.registerAdapter(AppSettingsAdapter()); //4
 
       // System Settings - typeId: 5-7
-      Hive.registerAdapter(ThemeConfigAdapter());
-      Hive.registerAdapter(EntitiesAdapter());
-      Hive.registerAdapter(LanguageAdapter());
+      Hive.registerAdapter(ThemeConfigAdapter()); //5
+      Hive.registerAdapter(EntitiesAdapter());   //6
+      Hive.registerAdapter(LanguageAdapter());   //7
 
       // Core Entity Models - typeId: 8-10
-      Hive.registerAdapter(QuoteAdapter());
-      Hive.registerAdapter(BackgroundAdapter());
+      Hive.registerAdapter(QuoteAdapter());     //8
+      Hive.registerAdapter(BackgroundAdapter()); //9
       Hive.registerAdapter(TranslationAdapter());
 
       // Style & Typography - typeId: 11-14
-      Hive.registerAdapter(StyleAdapter());
-      Hive.registerAdapter(TypographyAdapter());
-      Hive.registerAdapter(FontSizeAdapter());
-      Hive.registerAdapter(StyleColorsAdapter());
+      Hive.registerAdapter(QouteStyleAdapter());
+      Hive.registerAdapter(QouteTypographyAdapter());
+      Hive.registerAdapter(QouteFontSizeAdapter());
+      Hive.registerAdapter(QouteStyleColorsAdapter());
 
       // Quote Related - typeId: 15-17
       Hive.registerAdapter(QuoteMetadataAdapter());
@@ -151,7 +144,7 @@ class DatabaseService extends GetxService {
 
       // Layout Related - typeId: 32-37
 
-      Hive.registerAdapter(FontSizeAdapter());
+      Hive.registerAdapter(QouteFontSizeAdapter());
      
 
       // Style Config - typeId: 38-40

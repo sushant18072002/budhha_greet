@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'background.dart';
 import 'language.dart';
-import 'quote.dart';
+import 'qoute_collection/qoute_collection.dart';
 import 'source.dart';
 import 'template_collection/template_collection.dart';
 

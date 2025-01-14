@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'font_size.dart';
+part of 'qoute_font_size.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class FontSizeAdapter extends TypeAdapter<FontSize> {
+class QouteFontSizeAdapter extends TypeAdapter<QouteFontSize> {
   @override
   final int typeId = 13;
 
   @override
-  FontSize read(BinaryReader reader) {
+  QouteFontSize read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return FontSize(
+    return QouteFontSize(
       base: fields[0] as double,
       min: fields[1] as double,
       max: fields[2] as double,
@@ -25,7 +25,7 @@ class FontSizeAdapter extends TypeAdapter<FontSize> {
   }
 
   @override
-  void write(BinaryWriter writer, FontSize obj) {
+  void write(BinaryWriter writer, QouteFontSize obj) {
     writer
       ..writeByte(4)
       ..writeByte(0)
@@ -44,7 +44,7 @@ class FontSizeAdapter extends TypeAdapter<FontSize> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FontSizeAdapter &&
+      other is QouteFontSizeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -53,14 +53,16 @@ class FontSizeAdapter extends TypeAdapter<FontSize> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-FontSize _$FontSizeFromJson(Map<String, dynamic> json) => FontSize(
+QouteFontSize _$QouteFontSizeFromJson(Map<String, dynamic> json) =>
+    QouteFontSize(
       base: (json['base'] as num).toDouble(),
       min: (json['min'] as num).toDouble(),
       max: (json['max'] as num).toDouble(),
       scale: (json['scale'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$FontSizeToJson(FontSize instance) => <String, dynamic>{
+Map<String, dynamic> _$QouteFontSizeToJson(QouteFontSize instance) =>
+    <String, dynamic>{
       'base': instance.base,
       'min': instance.min,
       'max': instance.max,

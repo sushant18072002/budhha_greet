@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../shared/models/entities/background.dart';
-import '../../../../shared/models/entities/quote.dart';
+import '../../../../shared/models/entities/qoute_collection/quote/quote.dart';
 import '../../../../shared/models/entities/template_collection/template_collection.dart';
 import '../controllers/home_controller.dart';
 import 'package:auto_size_text/auto_size_text.dart';

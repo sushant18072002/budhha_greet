@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'typography.dart';
+part of 'qoute_typography.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class TypographyAdapter extends TypeAdapter<Typography> {
+class QouteTypographyAdapter extends TypeAdapter<QouteTypography> {
   @override
   final int typeId = 12;
 
   @override
-  Typography read(BinaryReader reader) {
+  QouteTypography read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Typography(
+    return QouteTypography(
       fontFamily: fields[0] as String,
-      fontSize: fields[1] as FontSize,
+      fontSize: fields[1] as QouteFontSize,
       fontWeight: fields[2] as String,
       letterSpacing: fields[3] as double,
       lineHeight: fields[4] as double,
@@ -28,7 +28,7 @@ class TypographyAdapter extends TypeAdapter<Typography> {
   }
 
   @override
-  void write(BinaryWriter writer, Typography obj) {
+  void write(BinaryWriter writer, QouteTypography obj) {
     writer
       ..writeByte(7)
       ..writeByte(0)
@@ -53,7 +53,7 @@ class TypographyAdapter extends TypeAdapter<Typography> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TypographyAdapter &&
+      other is QouteTypographyAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -62,9 +62,11 @@ class TypographyAdapter extends TypeAdapter<Typography> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-Typography _$TypographyFromJson(Map<String, dynamic> json) => Typography(
+QouteTypography _$QouteTypographyFromJson(Map<String, dynamic> json) =>
+    QouteTypography(
       fontFamily: json['font_family'] as String,
-      fontSize: FontSize.fromJson(json['font_size'] as Map<String, dynamic>),
+      fontSize:
+          QouteFontSize.fromJson(json['font_size'] as Map<String, dynamic>),
       fontWeight: json['font_weight'] as String,
       letterSpacing: (json['letter_spacing'] as num).toDouble(),
       lineHeight: (json['line_height'] as num).toDouble(),
@@ -72,7 +74,7 @@ Typography _$TypographyFromJson(Map<String, dynamic> json) => Typography(
       textTransform: json['text_transform'] as String?,
     );
 
-Map<String, dynamic> _$TypographyToJson(Typography instance) =>
+Map<String, dynamic> _$QouteTypographyToJson(QouteTypography instance) =>
     <String, dynamic>{
       'font_family': instance.fontFamily,
       'font_size': instance.fontSize,
