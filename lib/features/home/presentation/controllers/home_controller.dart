@@ -18,6 +18,7 @@ class HomeController extends GetxController {
       <Map<String, dynamic>>[].obs;
   final RxBool isLoading = true.obs;
   final RxBool isMorningTemplatesLoading = true.obs;
+  final Rx<Template?> selectedTemplate = Rx<Template?>(null);
   final RxBool isGridView=true.obs;
   final RxString currentLanguage = 'en'.obs;
 
@@ -157,6 +158,7 @@ class HomeController extends GetxController {
        // category: 'morning',
       );
       morningTemplates.value = allTemplates;
+      selectedTemplate.value=allTemplates.first;
       print("loadMorningTemplatesInitialData ${allTemplates.length}");
     } catch (e) {
       print('Error loading home data: $e');

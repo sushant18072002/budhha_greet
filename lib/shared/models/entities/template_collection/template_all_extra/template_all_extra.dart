@@ -42,10 +42,6 @@
 //   @JsonKey(name: 'style_config')
 //   final StyleConfig styleConfig;
 
-//   @HiveField(5)
-//   @JsonKey(name: 'responsive_config')
-//   final ResponsiveConfig responsiveConfig;
-
 //   @HiveField(6)
 //   @JsonKey(name: 'category_ids')
 //   final List<String> categoryIds;
@@ -72,7 +68,7 @@
 //     required this.composition,
 //     required this.layoutConfig,
 //     required this.styleConfig,
-//     required this.responsiveConfig,
+    
 //     required this.categoryIds,
 //     required this.tagIds,
 //     required this.metadata,
@@ -1160,160 +1156,4 @@
 
 //   factory TemplateMetadata.fromJson(Map<String, dynamic> json) => _$TemplateMetadataFromJson(json);
 //   Map<String, dynamic> toJson() => _$TemplateMetadataToJson(this);
-// }
-
-// @HiveType(typeId: 104)
-// @JsonSerializable()
-// class ResponsiveConfig {
-//   @HiveField(0)
-//   @JsonKey(name: 'grid')
-//   final GridConfig gridConfig;
-
-//   ResponsiveConfig({
-//     required this.gridConfig
-//   });
-
-//   factory ResponsiveConfig.fromJson(Map<String, dynamic> json) => _$ResponsiveConfigFromJson(json);
-//   Map<String, dynamic> toJson() => _$ResponsiveConfigToJson(this);
-// }
-
-// @HiveType(typeId: 104)
-// @JsonSerializable()
-// class GridConfig {
-//   @HiveField(0)
-//   @JsonKey(name: 'spacing')
-//   final GridSpacing spacing;
-  
-//   @HiveField(1)
-//   @JsonKey(name: 'columns')
-//   final GridColumns columns;
-
-//   GridConfig({
-//     required this.spacing,
-//     required this.columns,
-//   });
-
-//   factory GridConfig.fromJson(Map<String, dynamic> json) => _$GridConfigFromJson(json);
-//   Map<String, dynamic> toJson() => _$GridConfigToJson(this);
-// }
-
-// @HiveType(typeId: 106)
-// @JsonSerializable()
-// class GridColumns {
-//   @HiveField(0)
-//   @JsonKey(name: 'small')
-//   final int small;
-  
-//   @HiveField(1)
-//   @JsonKey(name: 'medium')
-//   final int medium;
-  
-//   @HiveField(2)
-//   @JsonKey(name: 'large')
-//   final int large;
-  
-//   @HiveField(3)
-//   @JsonKey(name: 'xlarge')
-//   final int xlarge;
-
-//   GridColumns({
-//     required this.small,
-//     required this.medium,
-//     required this.large,
-//     required this.xlarge,
-//   });
-
-//   factory GridColumns.fromJson(Map<String, dynamic> json) => _$GridColumnsFromJson(json);
-//   Map<String, dynamic> toJson() => _$GridColumnsToJson(this);
-// }
-
-// @HiveType(typeId: 105)
-// @JsonSerializable()
-// class GridSpacing {
-//   @HiveField(0)
-//   @JsonKey(name: 'small')
-//   final double small;
-  
-//   @HiveField(1)
-//   @JsonKey(name: 'medium')
-//   final double medium;
-  
-//   @HiveField(2)
-//   @JsonKey(name: 'large')
-//   final double large;
-
-//   GridSpacing({
-//     required this.small,
-//     required this.medium,
-//     required this.large,
-//   });
-
-//   factory GridSpacing.fromJson(Map<String, dynamic> json) => _$GridSpacingFromJson(json);
-//   Map<String, dynamic> toJson() => _$GridSpacingToJson(this);
-// }
-// @HiveType(typeId: 17)
-// @JsonSerializable()
-// class Audit {
-//   @HiveField(0)
-//    @JsonKey(name: 'created_at')
-//   final DateTime createdAt;
-  
-//   @HiveField(1)
-//    @JsonKey(name: 'created_by')
-//   final String createdBy;
-  
-//   @HiveField(2)
-//    @JsonKey(name: 'modified_at')
-//   final DateTime modifiedAt;
-  
-//   @HiveField(3)
-//    @JsonKey(name: 'modified_by')
-//   final String modifiedBy;
-  
-//   @HiveField(4)
-//    @JsonKey(name: 'version')
-//   final int version;
-
-//   Audit({
-//     required this.createdAt,
-//     required this.createdBy,
-//     required this.modifiedAt,
-//     required this.modifiedBy,
-//     required this.version,
-//   });
-
-//   factory Audit.fromJson(Map<String, dynamic> json) => 
-//     _$AuditFromJson(json);
-  
-//   Map<String, dynamic> toJson() => _$AuditToJson(this);
-// }
-
-// @HiveType(typeId: 16)
-// @JsonSerializable()
-// class Metrics {
-//   @HiveField(0)
-//   @JsonKey(name: 'views')
-//   final int views;
-  
-//   @HiveField(1)
-//   @JsonKey(name: 'shares')
-//   final int shares;
-  
-//   @HiveField(2)
-//   @JsonKey(name: 'favorites')
-//   final int favorites;
-  
-//   @HiveField(3)
-//   @JsonKey(name: 'last_used')
-//   final DateTime? lastUsed;
-
-//   Metrics({
-//     required this.views,
-//     required this.shares,
-//     required this.favorites,
-//     this.lastUsed,
-//   });
-
-//   factory Metrics.fromJson(Map<String, dynamic> json) => _$MetricsFromJson(json);
-//   Map<String, dynamic> toJson() => _$MetricsToJson(this);
 // }
