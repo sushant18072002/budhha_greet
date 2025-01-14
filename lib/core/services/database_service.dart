@@ -33,14 +33,8 @@ import '../../shared/models/entities/language.dart';
 import '../../shared/models/entities/quote.dart';
 import '../../shared/models/entities/source.dart';
 import '../../shared/models/entities/tag.dart';
-import '../../shared/models/entities/template.dart';
+import '../../shared/models/entities/template_collection/template_collection.dart';
 import '../../shared/models/entities/translation.dart';
-import '../../shared/models/layout/element_layout.dart';
-import '../../shared/models/layout/layout_config.dart';
-import '../../shared/models/layout/orientation_layout.dart';
-import '../../shared/models/layout/position.dart';
-import '../../shared/models/layout/safe_area.dart';
-import '../../shared/models/layout/size.dart';
 import '../../shared/models/style/font_size.dart';
 import '../../shared/models/style/style.dart';
 import '../../shared/models/style/style_colors.dart';
@@ -110,132 +104,168 @@ class DatabaseService extends GetxService {
   // Register all Hive adapters
   Future<void> _registerAdapters() async {
     try {
-      
-    // Core Config Models - typeId: 0-4
-    Hive.registerAdapter(AppConfigAdapter());
-    Hive.registerAdapter(MetadataAdapter());
-    Hive.registerAdapter(SystemConfigAdapter());
-    Hive.registerAdapter(LanguageConfigAdapter());
-    Hive.registerAdapter(AppSettingsAdapter());
+      // Core Config Models - typeId: 0-4
+      Hive.registerAdapter(AppConfigAdapter());
+      Hive.registerAdapter(MetadataAdapter());
+      Hive.registerAdapter(SystemConfigAdapter());
+      Hive.registerAdapter(LanguageConfigAdapter());
+      Hive.registerAdapter(AppSettingsAdapter());
 
-    // System Settings - typeId: 5-7
-    Hive.registerAdapter(ThemeConfigAdapter());
-    Hive.registerAdapter(EntitiesAdapter());
-    Hive.registerAdapter(LanguageAdapter());
+      // System Settings - typeId: 5-7
+      Hive.registerAdapter(ThemeConfigAdapter());
+      Hive.registerAdapter(EntitiesAdapter());
+      Hive.registerAdapter(LanguageAdapter());
 
-    // Core Entity Models - typeId: 8-10
-    Hive.registerAdapter(QuoteAdapter());
-    Hive.registerAdapter(BackgroundAdapter());
-    Hive.registerAdapter(TranslationAdapter());
+      // Core Entity Models - typeId: 8-10
+      Hive.registerAdapter(QuoteAdapter());
+      Hive.registerAdapter(BackgroundAdapter());
+      Hive.registerAdapter(TranslationAdapter());
 
-    // Style & Typography - typeId: 11-14 
-    Hive.registerAdapter(StyleAdapter());
-    Hive.registerAdapter(TypographyAdapter());
-    Hive.registerAdapter(FontSizeAdapter());
-    Hive.registerAdapter(StyleColorsAdapter());
+      // Style & Typography - typeId: 11-14
+      Hive.registerAdapter(StyleAdapter());
+      Hive.registerAdapter(TypographyAdapter());
+      Hive.registerAdapter(FontSizeAdapter());
+      Hive.registerAdapter(StyleColorsAdapter());
 
-    // Quote Related - typeId: 15-17
-    Hive.registerAdapter(QuoteMetadataAdapter());
-    Hive.registerAdapter(MetricsAdapter());
-    Hive.registerAdapter(AuditAdapter());
+      // Quote Related - typeId: 15-17
+      Hive.registerAdapter(QuoteMetadataAdapter());
+      Hive.registerAdapter(AuditAdapter());
 
-    // Visual Data Models - typeId: 18-25
-    Hive.registerAdapter(VisualDataAdapter());
-    Hive.registerAdapter(ImageDataAdapter());
-    Hive.registerAdapter(ImageVariantAdapter());
-    Hive.registerAdapter(GradientDataAdapter());
-    Hive.registerAdapter(GradientStopAdapter());
-    Hive.registerAdapter(ColorDataAdapter());
-    Hive.registerAdapter(ColorPaletteAdapter());
-    Hive.registerAdapter(VisualEffectsAdapter());
+      // Visual Data Models - typeId: 18-25
+      Hive.registerAdapter(VisualDataAdapter());
+      Hive.registerAdapter(ImageDataAdapter());
+      Hive.registerAdapter(ImageVariantAdapter());
+      Hive.registerAdapter(GradientDataAdapter());
+      Hive.registerAdapter(GradientStopAdapter());
+      Hive.registerAdapter(ColorDataAdapter());
+      Hive.registerAdapter(ColorPaletteAdapter());
+      Hive.registerAdapter(VisualEffectsAdapter());
 
-    // Attribution & Optimization - typeId: 26-28
-    Hive.registerAdapter(AttributionAdapter());
-    Hive.registerAdapter(OptimizationAdapter());
-    Hive.registerAdapter(CacheConfigAdapter());
+      // Attribution & Optimization - typeId: 26-28
+      Hive.registerAdapter(AttributionAdapter());
+      Hive.registerAdapter(OptimizationAdapter());
+      Hive.registerAdapter(CacheConfigAdapter());
 
-    // Template Related - typeId: 29-31
-    Hive.registerAdapter(TemplateAdapter());
-    Hive.registerAdapter(TemplateTranslationAdapter());
-    Hive.registerAdapter(CompositionAdapter());
-
-    // Layout Related - typeId: 32-37
-    Hive.registerAdapter(LayoutConfigAdapter());
-    Hive.registerAdapter(OrientationLayoutAdapter());
-    Hive.registerAdapter(ElementLayoutAdapter());
-    Hive.registerAdapter(PositionAdapter());
-    Hive.registerAdapter(SizeAdapter());
-    Hive.registerAdapter(SafeAreaAdapter());
-
-    // Style Config - typeId: 38-40
-    Hive.registerAdapter(StyleConfigAdapter());
-    Hive.registerAdapter(ElementStyleAdapter());
-    Hive.registerAdapter(TemplateMetadataAdapter());
-
-    // Validation Rules - typeId: 41-46
-    Hive.registerAdapter(ValidationRulesAdapter());
-    Hive.registerAdapter(QuoteValidationAdapter());
-    Hive.registerAdapter(TextValidationAdapter());
-    Hive.registerAdapter(AuthorValidationAdapter());
-    Hive.registerAdapter(TemplateValidationAdapter());
-    Hive.registerAdapter(TypographyValidationAdapter());
-
-    // Analytics Config - typeId: 47-50
-    Hive.registerAdapter(AnalyticsConfigAdapter());
-    Hive.registerAdapter(TrackingConfigAdapter());
-    Hive.registerAdapter(ReportingConfigAdapter());
-    Hive.registerAdapter(PopularItemsAdapter());
-
-    // Connectivity Config - typeId: 51-54
-    Hive.registerAdapter(ConnectivityConfigAdapter());
-    Hive.registerAdapter(RetryConfigAdapter());
-    Hive.registerAdapter(RateLimitConfigAdapter());
-    Hive.registerAdapter(CompressionConfigAdapter());
-     // API Config
-    Hive.registerAdapter(ApiConfigAdapter());
-
-    // Cache Configs - typeId: 55-57
-    Hive.registerAdapter(ImageCacheConfigAdapter());
-    Hive.registerAdapter(DataCacheConfigAdapter());
-    Hive.registerAdapter(SystemCacheConfigAdapter());
-
-    // Category Related - typeId: 58-62
-    Hive.registerAdapter(CategoryCollectionAdapter());
-    Hive.registerAdapter(CategorySchemaAdapter());
-    Hive.registerAdapter(CategoryAdapter());
-    Hive.registerAdapter(CategoryTranslationAdapter());
-    Hive.registerAdapter(CategoryMetadataAdapter());
-
-    // Background Related - typeId: 63-64
-    Hive.registerAdapter(BackgroundCollectionAdapter());
-    Hive.registerAdapter(BackgroundSchemaAdapter());
-
-    // Tag Related - typeId: 65-69
-    Hive.registerAdapter(TagCollectionAdapter());
-    Hive.registerAdapter(TagSchemaAdapter());
-    Hive.registerAdapter(TagAdapter());
-    Hive.registerAdapter(TagTranslationAdapter());
-    Hive.registerAdapter(TagMetadataAdapter());
-
-    // Author Related - typeId: 70-71
-    Hive.registerAdapter(AuthorCollectionAdapter());
-    Hive.registerAdapter(AuthorTranslationAdapter());
-    Hive.registerAdapter(AuthorAdapter());
-
-    // Source Related
-    Hive.registerAdapter(SourceCollectionAdapter()); // 73 
-    Hive.registerAdapter(SourceAdapter());  //74
-    Hive.registerAdapter(SourceTranslationAdapter()); //75
-
-    Hive.registerAdapter(LanguageCollectionAdapter()); //76
-    Hive.registerAdapter(QuoteCollectionAdapter());  //77
-
+      // Template Related - typeId: 29-31
     
-    Hive.registerAdapter(TemplateCollectionAdapter());  //79
 
-    Hive.registerAdapter(BackGroundTranslationAdapter()); //80
-   
-  
+      // Layout Related - typeId: 32-37
+
+      Hive.registerAdapter(FontSizeAdapter());
+     
+
+      // Style Config - typeId: 38-40
+     
+      // Validation Rules - typeId: 41-46
+      Hive.registerAdapter(ValidationRulesAdapter());
+      Hive.registerAdapter(QuoteValidationAdapter());
+      Hive.registerAdapter(TextValidationAdapter());
+      Hive.registerAdapter(AuthorValidationAdapter());
+      Hive.registerAdapter(TemplateValidationAdapter());
+      Hive.registerAdapter(TypographyValidationAdapter());
+
+      // Analytics Config - typeId: 47-50
+      Hive.registerAdapter(AnalyticsConfigAdapter());
+      Hive.registerAdapter(TrackingConfigAdapter());
+      Hive.registerAdapter(ReportingConfigAdapter());
+      Hive.registerAdapter(PopularItemsAdapter());
+
+      // Connectivity Config - typeId: 51-54
+      Hive.registerAdapter(ConnectivityConfigAdapter());
+      Hive.registerAdapter(RetryConfigAdapter());
+      Hive.registerAdapter(RateLimitConfigAdapter());
+      Hive.registerAdapter(CompressionConfigAdapter());
+      // API Config
+      Hive.registerAdapter(ApiConfigAdapter());
+
+      // Cache Configs - typeId: 55-57
+      Hive.registerAdapter(ImageCacheConfigAdapter());
+      Hive.registerAdapter(DataCacheConfigAdapter());
+      Hive.registerAdapter(SystemCacheConfigAdapter());
+
+      // Category Related - typeId: 58-62
+      Hive.registerAdapter(CategoryCollectionAdapter());
+      Hive.registerAdapter(CategorySchemaAdapter());
+      Hive.registerAdapter(CategoryAdapter());
+      Hive.registerAdapter(CategoryTranslationAdapter());
+      Hive.registerAdapter(CategoryMetadataAdapter());
+
+      // Background Related - typeId: 63-64
+      Hive.registerAdapter(BackgroundCollectionAdapter());
+      Hive.registerAdapter(BackgroundSchemaAdapter());
+
+      // Tag Related - typeId: 65-69
+      Hive.registerAdapter(TagCollectionAdapter());
+      Hive.registerAdapter(TagSchemaAdapter());
+      Hive.registerAdapter(TagAdapter());
+      Hive.registerAdapter(TagTranslationAdapter());
+      Hive.registerAdapter(TagMetadataAdapter());
+
+      // Author Related - typeId: 70-71
+      Hive.registerAdapter(AuthorCollectionAdapter());
+      Hive.registerAdapter(AuthorTranslationAdapter());
+      Hive.registerAdapter(AuthorAdapter());
+
+      // Source Related
+      Hive.registerAdapter(SourceCollectionAdapter()); // 73
+      Hive.registerAdapter(SourceAdapter()); //74
+      Hive.registerAdapter(SourceTranslationAdapter()); //75
+
+      Hive.registerAdapter(LanguageCollectionAdapter()); //76
+      Hive.registerAdapter(QuoteCollectionAdapter()); //77
+
+      Hive.registerAdapter(TemplateCollectionAdapter()); //79
+
+      Hive.registerAdapter(BackGroundTranslationAdapter()); //80
+
+      // Layout Visual Effects Related - New TypeIds starting from where paste-2.txt left off (80)
+      Hive.registerAdapter(LayoutBlurAdapter()); // 81
+      Hive.registerAdapter(LayoutBlurSigmaAdapter()); // 82
+      Hive.registerAdapter(LayoutBorderRadiusAdapter()); // 83
+      Hive.registerAdapter(LayoutBackgroundAdapter()); // 84
+      Hive.registerAdapter(LayoutOpacityConfigAdapter()); // 85
+      Hive.registerAdapter(LayoutVisualEffectsAdapter()); // 86
+      Hive.registerAdapter(LayoutBreakpointsAdapter()); // 87
+
+// Common Style Related
+      Hive.registerAdapter(CommonStyleAdapter()); // 88
+      Hive.registerAdapter(CommonGradientOverlayAdapter()); // 89
+      Hive.registerAdapter(CommonGradientStopAdapter()); // 90
+      Hive.registerAdapter(CommonAnimationsAdapter()); // 91
+      Hive.registerAdapter(CommonHoverAnimationAdapter()); // 92
+
+// Element Typography & Style Related
+      Hive.registerAdapter(ElementTypographyAdapter()); // 93
+      Hive.registerAdapter(ElementFontSizeAdapter()); // 94
+      Hive.registerAdapter(ElementStyleColorsAdapter()); // 95
+      Hive.registerAdapter(ElementShadowAdapter()); // 96
+
+// Action Buttons Related
+      Hive.registerAdapter(ActionButtonsAdapter()); // 97
+
+// Layout Adjustments Related
+      Hive.registerAdapter(LayoutAdjustmentsAdapter()); // 98
+      Hive.registerAdapter(LayoutSpacingAdapter()); // 99
+      Hive.registerAdapter(LayoutAlignmentAdapter()); // 100
+      Hive.registerAdapter(LayoutConstraintsAdapter()); // 101
+      Hive.registerAdapter(MaxWidthAdapter()); // 102
+      Hive.registerAdapter(MinHeightAdapter()); // 103
+
+// Responsive Config Related
+      Hive.registerAdapter(ResponsiveConfigAdapter()); // 104
+      Hive.registerAdapter(GridSpacingAdapter()); // 105
+      Hive.registerAdapter(GridColumnsAdapter()); // 106
+      Hive.registerAdapter(ResponsiveBreakpointAdapter()); // 107
+      Hive.registerAdapter(ResponsiveBehaviorAdapter()); // 108
+      Hive.registerAdapter(
+          BreakpointsAdapter()); // 309 (as specified in the code)
+
+// Action Related
+      Hive.registerAdapter(ActionBackgroundAdapter()); // 202
+      Hive.registerAdapter(ActionBlurAdapter()); // 203
+      Hive.registerAdapter(ActionSigmaAdapter()); // 204
+      Hive.registerAdapter(ActionShadowAdapter()); // 205
+      Hive.registerAdapter(ActionOffsetAdapter()); // 206
     } catch (e) {
       print('Error registering adapters: $e');
       rethrow;
@@ -257,8 +287,8 @@ class DatabaseService extends GetxService {
   // Load initial data from JSON
   Future<void> _loadInitialData() async {
     AppConfig? currentConfig = configBox.get('current');
-     //if (currentConfig == null || !currentConfig.isInitialized) {
-    if(true){
+    //if (currentConfig == null || !currentConfig.isInitialized) {
+    if (true) {
       try {
         final String jsonContent =
             await rootBundle.loadString('assets/data/app_data.json');
@@ -315,105 +345,102 @@ class DatabaseService extends GetxService {
 
   // Store all entities
   Future<void> _storeEntities(Map<String, dynamic> entities) async {
-
     await Future.wait([
-    _storeEntityCollection<Quote, QuoteCollection>(
-      data: entities['quotes'],
-      box: quotesBox,
-      fromJson: Quote.fromJson,
-      getId: (item) => item.uuid,
-      collectionFromJson: QuoteCollection.fromJson,
-    ),
-    _storeEntityCollection<Background, BackgroundCollection>(
-      data: entities['backgrounds'],
-      box: backgroundsBox,
-      fromJson: Background.fromJson,
-      getId: (item) => item.uuid,
-      collectionFromJson: BackgroundCollection.fromJson,
-    ),
-    _storeEntityCollection<Category, CategoryCollection>(
-      data: entities['categories'],
-      box: categoriesBox,
-      fromJson: Category.fromJson,
-      getId: (item) => item.id,
-      collectionFromJson: CategoryCollection.fromJson,
-    ),
-    _storeEntityCollection<Template, TemplateCollection>(
-      data: entities['templates'],
-      box: templatesBox,
-      fromJson: Template.fromJson,
-      getId: (item) => item.uuid,
-      collectionFromJson: TemplateCollection.fromJson,
-    ),
-    _storeEntityCollection<Author, AuthorCollection>(
-      data: entities['authors'],
-      box: authorsBox,
-      fromJson: Author.fromJson,
-      getId: (item) => item.uuid,
-      collectionFromJson: AuthorCollection.fromJson,
-    ),
-    _storeEntityCollection<Source, SourceCollection>(
-      data: entities['sources'],
-      box: sourcesBox,
-      fromJson: Source.fromJson,
-      getId: (item) => item.uuid,
-      collectionFromJson:  SourceCollection.fromJson,
-    ),
-    _storeEntityCollection<Tag, TagCollection>(
-      data: entities['tags'],
-      box: tagsBox,
-      fromJson: Tag.fromJson,
-      getId: (item) => item.id,
-      collectionFromJson: TagCollection.fromJson,
-    ),
-    
-  ]);
-}
+      _storeEntityCollection<Quote, QuoteCollection>(
+        data: entities['quotes'],
+        box: quotesBox,
+        fromJson: Quote.fromJson,
+        getId: (item) => item.uuid,
+        collectionFromJson: QuoteCollection.fromJson,
+      ),
+      _storeEntityCollection<Background, BackgroundCollection>(
+        data: entities['backgrounds'],
+        box: backgroundsBox,
+        fromJson: Background.fromJson,
+        getId: (item) => item.uuid,
+        collectionFromJson: BackgroundCollection.fromJson,
+      ),
+      _storeEntityCollection<Category, CategoryCollection>(
+        data: entities['categories'],
+        box: categoriesBox,
+        fromJson: Category.fromJson,
+        getId: (item) => item.id,
+        collectionFromJson: CategoryCollection.fromJson,
+      ),
+      _storeEntityCollection<Template, TemplateCollection>(
+        data: entities['templates'],
+        box: templatesBox,
+        fromJson: Template.fromJson,
+        getId: (item) => item.uuid,
+        collectionFromJson: TemplateCollection.fromJson,
+      ),
+      _storeEntityCollection<Author, AuthorCollection>(
+        data: entities['authors'],
+        box: authorsBox,
+        fromJson: Author.fromJson,
+        getId: (item) => item.uuid,
+        collectionFromJson: AuthorCollection.fromJson,
+      ),
+      _storeEntityCollection<Source, SourceCollection>(
+        data: entities['sources'],
+        box: sourcesBox,
+        fromJson: Source.fromJson,
+        getId: (item) => item.uuid,
+        collectionFromJson: SourceCollection.fromJson,
+      ),
+      _storeEntityCollection<Tag, TagCollection>(
+        data: entities['tags'],
+        box: tagsBox,
+        fromJson: Tag.fromJson,
+        getId: (item) => item.id,
+        collectionFromJson: TagCollection.fromJson,
+      ),
+    ]);
+  }
 
-Future<void> _storeEntityCollection<T, C>({
-  required dynamic data,
-  required Box<T> box,
-  required T Function(Map<String, dynamic>) fromJson,
-  required String Function(T) getId,
-  C Function(Map<String, dynamic>)? collectionFromJson,
-}) async {
-  try {
-    if (data == null) return;
+  Future<void> _storeEntityCollection<T, C>({
+    required dynamic data,
+    required Box<T> box,
+    required T Function(Map<String, dynamic>) fromJson,
+    required String Function(T) getId,
+    C Function(Map<String, dynamic>)? collectionFromJson,
+  }) async {
+    try {
+      if (data == null) return;
 
-    if (data is Map<String, dynamic> && data.containsKey('data')) {
-      // Use the collectionFromJson method to parse data
-      final collection = collectionFromJson?.call(data);
-      if (collection is C && (collection as dynamic).data is List) {
-        for (final item in (collection as dynamic).data) {
-          if (item is T) {
-            await box.put(getId(item), item);
+      if (data is Map<String, dynamic> && data.containsKey('data')) {
+        // Use the collectionFromJson method to parse data
+        final collection = collectionFromJson?.call(data);
+        if (collection is C && (collection as dynamic).data is List) {
+          for (final item in (collection as dynamic).data) {
+            if (item is T) {
+              await box.put(getId(item), item);
+            }
           }
         }
+        return;
       }
-      return;
-    }
 
-    if (data is List) {
-      for (final item in data) {
-        if (item is Map<String, dynamic>) {
-          final entity = fromJson(item);
-          await box.put(getId(entity), entity);
+      if (data is List) {
+        for (final item in data) {
+          if (item is Map<String, dynamic>) {
+            final entity = fromJson(item);
+            await box.put(getId(entity), entity);
+          }
         }
+        return;
       }
-      return;
-    }
 
-    if (data is Map<String, dynamic>) {
-      final entity = fromJson(data);
-      await box.put(getId(entity), entity);
+      if (data is Map<String, dynamic>) {
+        final entity = fromJson(data);
+        await box.put(getId(entity), entity);
+      }
+    } catch (e, stackTrace) {
+      print('Error storing ${T.toString()} collection: $e');
+      print('Stack trace: $stackTrace');
+      rethrow;
     }
-  } catch (e, stackTrace) {
-    print('Error storing ${T.toString()} collection: $e');
-    print('Stack trace: $stackTrace');
-    rethrow;
   }
-}
-
 
   // Special handling for author collection
   Future<void> _storeAuthorCollection(dynamic authorsData) async {
@@ -574,7 +601,7 @@ Future<void> _storeEntityCollection<T, C>({
     ]);
   }
 
-   Future<void> _safeCloseBoxes() async {
+  Future<void> _safeCloseBoxes() async {
     try {
       await Future.wait([
         if (configBox.isOpen == true) configBox.close(),

@@ -1,8 +1,11 @@
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'animations/animations.dart';
-import 'gradient_overlay/gradient_overlay.dart';
+import 'common_animations/common_animations.dart';
+import 'common_gradient_overlay/common_gradient_overlay.dart';
+
+export 'common_animations/common_animations.dart';
+export 'common_gradient_overlay/common_gradient_overlay.dart';
 
 part 'common_style.g.dart';
 
@@ -11,11 +14,11 @@ part 'common_style.g.dart';
 class CommonStyle {
   @HiveField(0)
   @JsonKey(name: 'gradient_overlay')
-  final GradientOverlay gradientOverlay;
+  final CommonGradientOverlay gradientOverlay;
   
   @HiveField(1)
   @JsonKey(name: 'animations')
-  final Animations animations;
+  final CommonAnimations animations;
 
   CommonStyle({
     required this.gradientOverlay,

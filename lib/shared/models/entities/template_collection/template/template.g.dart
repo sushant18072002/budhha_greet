@@ -19,7 +19,7 @@ class TemplateAdapter extends TypeAdapter<Template> {
     return Template(
       uuid: fields[0] as String,
       translations: (fields[1] as Map).cast<String, TemplateTranslation>(),
-      composition: fields[2] as Composition,
+      composition: fields[2] as TemplateComposition,
       layoutConfig: fields[3] as LayoutConfig,
       styleConfig: fields[4] as StyleConfig,
       responsiveConfig: fields[5] as ResponsiveConfig,
@@ -80,8 +80,8 @@ Template _$TemplateFromJson(Map<String, dynamic> json) => Template(
         (k, e) => MapEntry(
             k, TemplateTranslation.fromJson(e as Map<String, dynamic>)),
       ),
-      composition:
-          Composition.fromJson(json['composition'] as Map<String, dynamic>),
+      composition: TemplateComposition.fromJson(
+          json['composition'] as Map<String, dynamic>),
       layoutConfig:
           LayoutConfig.fromJson(json['layout_config'] as Map<String, dynamic>),
       styleConfig:

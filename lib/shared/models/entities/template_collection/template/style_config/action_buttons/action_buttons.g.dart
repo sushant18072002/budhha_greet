@@ -18,9 +18,9 @@ class ActionButtonsAdapter extends TypeAdapter<ActionButtons> {
     };
     return ActionButtons(
       size: fields[0] as double,
-      background: fields[1] as Background,
-      blur: fields[2] as Blur,
-      shadow: fields[3] as Shadow,
+      background: fields[1] as ActionBackground,
+      blur: fields[2] as ActionBlur,
+      shadow: fields[3] as ActionShadow,
     );
   }
 
@@ -57,9 +57,9 @@ ActionButtons _$ActionButtonsFromJson(Map<String, dynamic> json) =>
     ActionButtons(
       size: (json['size'] as num).toDouble(),
       background:
-          Background.fromJson(json['background'] as Map<String, dynamic>),
-      blur: Blur.fromJson(json['blur'] as Map<String, dynamic>),
-      shadow: Shadow.fromJson(json['shadow'] as Map<String, dynamic>),
+          ActionBackground.fromJson(json['background'] as Map<String, dynamic>),
+      blur: ActionBlur.fromJson(json['blur'] as Map<String, dynamic>),
+      shadow: ActionShadow.fromJson(json['shadow'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ActionButtonsToJson(ActionButtons instance) =>

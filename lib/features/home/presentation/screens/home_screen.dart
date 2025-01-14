@@ -1,7 +1,7 @@
 import 'package:buddha_greet/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../shared/models/entities/template.dart';
+import '../../../../shared/models/entities/template_collection/template_collection.dart';
 import '../controllers/home_controller.dart';
 import '../../../../shared/theme/app_colors.dart';
 import '../../../../shared/theme/app_text_styles.dart';

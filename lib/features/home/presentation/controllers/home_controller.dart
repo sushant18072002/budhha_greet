@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../../../../core/services/database_service.dart';
 import '../../../../shared/models/entities/background.dart';
 import '../../../../shared/models/entities/quote.dart';
-import '../../../../shared/models/entities/template.dart';
+import '../../../../shared/models/entities/template_collection/template_collection.dart';
 
 
 class HomeController extends GetxController {

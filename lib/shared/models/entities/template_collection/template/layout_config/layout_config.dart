@@ -4,6 +4,9 @@ import 'package:json_annotation/json_annotation.dart';
 import 'Layout_breakpoints/layout_breakpoints.dart';
 import 'orientation_layout/orientation_layout.dart';
 
+export 'Layout_breakpoints/layout_breakpoints.dart';
+export 'orientation_layout/orientation_layout.dart';
+
 part 'layout_config.g.dart';
 
 @HiveType(typeId: 32)

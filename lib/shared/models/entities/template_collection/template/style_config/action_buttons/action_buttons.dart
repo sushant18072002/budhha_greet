@@ -1,9 +1,13 @@
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'background/background.dart';
-import 'blur/blur.dart';
-import 'shadow/shadow.dart';
+import 'action_background/action_background.dart';
+import 'action_blur/action_blur.dart';
+import 'action_shadow/action_shadow.dart';
+
+export 'action_background/action_background.dart';
+export 'action_blur/action_blur.dart';
+export 'action_shadow/action_shadow.dart';
 
 part 'action_buttons.g.dart';
 
@@ -16,15 +20,15 @@ class ActionButtons {
   
   @HiveField(1)
   @JsonKey(name: 'background')
-  final Background background;
+  final ActionBackground background;
   
   @HiveField(2)
   @JsonKey(name: 'blur')
-  final Blur blur;
+  final ActionBlur blur;
   
   @HiveField(3)
   @JsonKey(name: 'shadow')
-  final Shadow shadow;
+  final ActionShadow shadow;
 
   ActionButtons({
     required this.size,

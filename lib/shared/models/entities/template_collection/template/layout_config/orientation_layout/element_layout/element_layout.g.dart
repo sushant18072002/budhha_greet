@@ -17,11 +17,11 @@ class ElementLayoutAdapter extends TypeAdapter<ElementLayout> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ElementLayout(
-      position: fields[0] as Position,
-      size: fields[1] as Size,
+      layoutPosition: fields[0] as LayoutPosition,
+      size: fields[1] as LayoutSize,
       padding: fields[2] as double,
-      safeArea: fields[3] as SafeArea?,
-      visualEffects: fields[4] as VisualEffects,
+      safeArea: fields[3] as LayoutSafeArea?,
+      visualEffects: fields[4] as LayoutVisualEffects,
     );
   }
 
@@ -30,7 +30,7 @@ class ElementLayoutAdapter extends TypeAdapter<ElementLayout> {
     writer
       ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.position)
+      ..write(obj.layoutPosition)
       ..writeByte(1)
       ..write(obj.size)
       ..writeByte(2)
@@ -58,19 +58,20 @@ class ElementLayoutAdapter extends TypeAdapter<ElementLayout> {
 
 ElementLayout _$ElementLayoutFromJson(Map<String, dynamic> json) =>
     ElementLayout(
-      position: Position.fromJson(json['position'] as Map<String, dynamic>),
-      size: Size.fromJson(json['size'] as Map<String, dynamic>),
+      layoutPosition:
+          LayoutPosition.fromJson(json['position'] as Map<String, dynamic>),
+      size: LayoutSize.fromJson(json['size'] as Map<String, dynamic>),
       padding: (json['padding'] as num).toDouble(),
       safeArea: json['safe_area'] == null
           ? null
-          : SafeArea.fromJson(json['safe_area'] as Map<String, dynamic>),
-      visualEffects: VisualEffects.fromJson(
+          : LayoutSafeArea.fromJson(json['safe_area'] as Map<String, dynamic>),
+      visualEffects: LayoutVisualEffects.fromJson(
           json['visual_effects'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ElementLayoutToJson(ElementLayout instance) =>
     <String, dynamic>{
-      'position': instance.position,
+      'position': instance.layoutPosition,
       'size': instance.size,
       'padding': instance.padding,
       'safe_area': instance.safeArea,

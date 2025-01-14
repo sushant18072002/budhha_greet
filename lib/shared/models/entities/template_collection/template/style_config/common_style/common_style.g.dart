@@ -17,8 +17,8 @@ class CommonStyleAdapter extends TypeAdapter<CommonStyle> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CommonStyle(
-      gradientOverlay: fields[0] as GradientOverlay,
-      animations: fields[1] as Animations,
+      gradientOverlay: fields[0] as CommonGradientOverlay,
+      animations: fields[1] as CommonAnimations,
     );
   }
 
@@ -48,10 +48,10 @@ class CommonStyleAdapter extends TypeAdapter<CommonStyle> {
 // **************************************************************************
 
 CommonStyle _$CommonStyleFromJson(Map<String, dynamic> json) => CommonStyle(
-      gradientOverlay: GradientOverlay.fromJson(
+      gradientOverlay: CommonGradientOverlay.fromJson(
           json['gradient_overlay'] as Map<String, dynamic>),
       animations:
-          Animations.fromJson(json['animations'] as Map<String, dynamic>),
+          CommonAnimations.fromJson(json['animations'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$CommonStyleToJson(CommonStyle instance) =>

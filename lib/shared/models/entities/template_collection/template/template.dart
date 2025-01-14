@@ -2,13 +2,22 @@ import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../../../analytics/audit.dart';
-import 'composition/composition.dart';
 import 'layout_config/layout_config.dart';
 import 'metrics/metrics.dart';
 import 'responsive_config/responsive_config.dart';
 import 'style_config/style_config.dart';
+import 'template_composition/template_composition.dart';
 import 'template_metadata/template_metadata.dart';
 import 'template_translation/template_translation.dart';
+
+export '../../../analytics/audit.dart';
+export 'layout_config/layout_config.dart';
+export 'metrics/metrics.dart';
+export 'responsive_config/responsive_config.dart';
+export 'style_config/style_config.dart';
+export 'template_composition/template_composition.dart';
+export 'template_metadata/template_metadata.dart';
+export 'template_translation/template_translation.dart';
 
 part 'template.g.dart';
 
@@ -25,7 +34,7 @@ class Template {
 
   @HiveField(2)
   @JsonKey(name: 'composition')
-  final Composition composition;
+  final TemplateComposition composition;
 
   @HiveField(3)
   @JsonKey(name: 'layout_config')

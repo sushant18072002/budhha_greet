@@ -4,6 +4,9 @@ import 'package:json_annotation/json_annotation.dart';
 import 'grid_columns/grid_columns.dart';
 import 'grid_spacing/grid_spacing.dart';
 
+export 'grid_columns/grid_columns.dart';
+export 'grid_spacing/grid_spacing.dart';
+
 part 'grid_config.g.dart';
 
 @HiveType(typeId: 104)

@@ -3,6 +3,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'responsive_breakpoint/responsive_breakpoint.dart';
 
+export 'responsive_breakpoint/responsive_breakpoint.dart';
+
 part 'break_points.g.dart';
 
 

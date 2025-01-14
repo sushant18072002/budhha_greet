@@ -17,8 +17,8 @@ class ElementStyleAdapter extends TypeAdapter<ElementStyle> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ElementStyle(
-      typography: fields[0] as Typography,
-      colors: fields[1] as StyleColors,
+      typography: fields[0] as ElementTypography,
+      colors: fields[1] as ElementStyleColors,
     );
   }
 
@@ -48,9 +48,10 @@ class ElementStyleAdapter extends TypeAdapter<ElementStyle> {
 // **************************************************************************
 
 ElementStyle _$ElementStyleFromJson(Map<String, dynamic> json) => ElementStyle(
-      typography:
-          Typography.fromJson(json['typography'] as Map<String, dynamic>),
-      colors: StyleColors.fromJson(json['colors'] as Map<String, dynamic>),
+      typography: ElementTypography.fromJson(
+          json['typography'] as Map<String, dynamic>),
+      colors:
+          ElementStyleColors.fromJson(json['colors'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ElementStyleToJson(ElementStyle instance) =>

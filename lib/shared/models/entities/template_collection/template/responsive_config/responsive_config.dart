@@ -3,6 +3,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'grid_config/grid_config.dart';
 
+export 'grid_config/grid_config.dart';
+
 part 'responsive_config.g.dart';
 
 @HiveType(typeId: 104)

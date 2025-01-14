@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'template/template.dart';
+export 'template/template.dart';
 
 part 'template_collection.g.dart';
 

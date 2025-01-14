@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'break_points/break_points.dart';
-import 'break_points/responsive_breakpoint/responsive_breakpoint.dart';
+export 'break_points/break_points.dart';
 
 part 'responsive_behavior.g.dart';
 

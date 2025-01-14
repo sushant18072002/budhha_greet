@@ -5,6 +5,10 @@ import 'element_layout/element_layout.dart';
 import 'layout_adjustments/layout_adjustments.dart';
 import 'responsive_behavior/responsive_behavior.dart';
 
+export 'element_layout/element_layout.dart';
+export 'layout_adjustments/layout_adjustments.dart';
+export 'responsive_behavior/responsive_behavior.dart';
+
 part 'orientation_layout.g.dart';
 
 @HiveType(typeId: 33)

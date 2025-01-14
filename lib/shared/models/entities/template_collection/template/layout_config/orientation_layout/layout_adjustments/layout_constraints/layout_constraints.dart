@@ -4,6 +4,9 @@ import 'package:json_annotation/json_annotation.dart';
 import 'max_width/max_width.dart';
 import 'min_height/min_height.dart';
 
+export 'max_width/max_width.dart';
+export 'min_height/min_height.dart';
+
 part 'layout_constraints.g.dart';
 
 @HiveType(typeId: 101)

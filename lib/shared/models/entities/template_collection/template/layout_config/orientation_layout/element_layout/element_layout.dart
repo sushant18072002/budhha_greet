@@ -1,10 +1,11 @@
+import 'package:buddha_greet/shared/models/entities/template_collection/template/template.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'position/position.dart';
-import 'safe_area/safe_area.dart';
-import 'size/size.dart';
-import 'visual_effects/visual_effects.dart';
+export 'layout_position/layout_position.dart';
+export 'layout_safe_area/layout_safe_area.dart';
+export 'layout_size/layout_size.dart';
+export 'layout_visual_effects/layout_visual_effects.dart';
 
 part 'element_layout.g.dart';
 
@@ -13,11 +14,11 @@ part 'element_layout.g.dart';
 class ElementLayout {
   @HiveField(0)
   @JsonKey(name: 'position')
-  final Position position;
+  final LayoutPosition layoutPosition;
   
   @HiveField(1)
   @JsonKey(name: 'size')
-  final Size size;
+  final LayoutSize size;
   
   @HiveField(2)
   @JsonKey(name: 'padding')
@@ -25,14 +26,14 @@ class ElementLayout {
   
   @HiveField(3)
   @JsonKey(name: 'safe_area')
-  final SafeArea? safeArea;
+  final LayoutSafeArea? safeArea;
   
   @HiveField(4)
   @JsonKey(name: 'visual_effects')
-  final VisualEffects visualEffects;
+  final LayoutVisualEffects visualEffects;
 
   ElementLayout({
-    required this.position,
+    required this.layoutPosition,
     required this.size,
     required this.padding,
     this.safeArea,
