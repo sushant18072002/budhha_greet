@@ -14,11 +14,11 @@ part 'common_style.g.dart';
 class CommonStyle {
   @HiveField(0)
   @JsonKey(name: 'gradient_overlay')
-  final CommonGradientOverlay gradientOverlay;
+  final CommonGradientOverlay? gradientOverlay;
   
   @HiveField(1)
   @JsonKey(name: 'animations')
-  final CommonAnimations animations;
+  final CommonAnimations? animations;
 
   CommonStyle({
     required this.gradientOverlay,

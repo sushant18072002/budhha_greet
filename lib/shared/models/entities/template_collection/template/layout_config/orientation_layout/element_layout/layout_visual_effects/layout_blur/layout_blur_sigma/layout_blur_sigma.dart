@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'layout_sigma_value/layout_sigma_value.dart';
+export 'layout_sigma_value/layout_sigma_value.dart';
 
 part 'layout_blur_sigma.g.dart';
 

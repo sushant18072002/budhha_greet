@@ -447,8 +447,8 @@
           }
         },
         {
-          "uuid": "bg006",
-          "id": "bg006",
+          "uuid": "bg00",
+          "id": "bg00",
           "type": "gradient",
           "translations": {
             "en": {
@@ -522,8 +522,8 @@
           }
         },
         {
-          "uuid": "bg007",
-          "id": "bg007",
+          "uuid": "bg00",
+          "id": "bg00",
           "type": "color",
           "translations": {
             "en": {
@@ -582,6 +582,313 @@
             "created_by": "user",
             "modified_at": "2024-01-05T00:00:00Z",
             "modified_by": "user",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "bg003",
+          "id": "bg003",
+          "type": "image",
+          "translations": {
+            "en": {
+              "title": "Misty Forest Dawn",
+              "description": "Enchanting forest path with morning mist and sunbeams",
+              "semantic_label": "Misty forest path with morning sunlight streaming through trees"
+            },
+            "hi": {
+              "title": "धुंधला वन प्रभात",
+              "description": "सुबह की धुंध और सूर्य की किरणों के साथ मनमोहक वन पथ",
+              "semantic_label": "पेड़ों के बीच से आती सुबह की धूप के साथ धुंधला वन पथ"
+            }
+          },
+          "visual_data": {
+            "image": {
+              "original": "assets/images/backgrounds/temple_sunrise2.jpeg",
+              "thumbnail": "assets/images/backgrounds/temple_sunrise2.jpeg",
+              "placeholder": "assets/images/backgrounds/temple_sunrise2.jpeg",
+              "variants": [
+                {
+                  "width": 640,
+                  "height": 1136,
+                  "path": "assets/images/backgrounds/temple_sunrise2.jpeg"
+                },
+                {
+                  "width": 750,
+                  "height": 1334,
+                  "path": "assets/images/backgrounds/temple_sunrise2.jpeg"
+                },
+                {
+                  "width": 1080,
+                  "height": 1920,
+                  "path": "assets/images/backgrounds/temple_sunrise2.jpeg"
+                }
+              ]
+            },
+            "gradient": null,
+            "color": null
+          },
+          "visual_effects": {
+            "opacity": 1.0,
+            "blur": 0.5,
+            "blend_mode": "soft-light"
+          },
+          "category_ids": [
+            "forest",
+            "nature"
+          ],
+          "tag_ids": [
+            "morning",
+            "mist"
+          ],
+          "attribution": {
+            "photographer": "@forestphotographer",
+            "license": "CC BY 4.0",
+            "url": "https://example.com/forest-license"
+          },
+          "optimization": {
+            "formats": [
+              "jpeg",
+              "webp",
+              "avif"
+            ],
+            "quality": 90,
+            "placeholder": "blur"
+          },
+          "cache_config": {
+            "ttl_seconds": 86400,
+            "priority": "high",
+            "preload": true
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "bg004",
+          "id": "bg004",
+          "type": "gradient",
+          "translations": {
+            "en": {
+              "title": "Ocean Twilight",
+              "description": "A serene gradient representing the colors of ocean at twilight",
+              "semantic_label": "Deep blue to purple ocean twilight gradient"
+            },
+            "hi": {
+              "title": "सागर संध्या",
+              "description": "संध्या समय में सागर के रंगों को दर्शाता शांत ग्रेडिएंट",
+              "semantic_label": "गहरे नीले से बैंगनी सागर संध्या ग्रेडिएंट"
+            }
+          },
+          "visual_data": {
+            "image": null,
+            "gradient": {
+              "colors": [
+                "0xFF1E3F66",
+                "0xFF6B4984"
+              ],
+              "type": "linear",
+              "angle": 135,
+              "stops": [
+                {
+                  "position": 0.0,
+                  "color": "0xFF1E3F66"
+                },
+                {
+                  "position": 0.5,
+                  "color": "0xFF2A4A7F"
+                },
+                {
+                  "position": 1.0,
+                  "color": "0xFF6B4984"
+                }
+              ]
+            },
+            "color": null
+          },
+          "visual_effects": {
+            "opacity": 0.85,
+            "blur": 0,
+            "blend_mode": "normal"
+          },
+          "category_ids": [
+            "abstract",
+            "cool"
+          ],
+          "tag_ids": [
+            "evening",
+            "ocean"
+          ],
+          "attribution": {
+            "license": "CC0",
+            "url": "https://example.com/gradient-license"
+          },
+          "optimization": {
+            "formats": [
+              "svg"
+            ],
+            "quality": 100,
+            "placeholder": "color"
+          },
+          "cache_config": {
+            "ttl_seconds": 86400,
+            "priority": "medium",
+            "preload": false
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "user",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "user",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "bg005",
+          "id": "bg005",
+          "type": "color",
+          "translations": {
+            "en": {
+              "title": "Deep Mindful Purple",
+              "description": "A calming deep purple color for mindfulness and meditation",
+              "semantic_label": "Deep purple color"
+            },
+            "hi": {
+              "title": "गहरा ध्यानपूर्ण बैंगनी",
+              "description": "माइंडफुलनेस और ध्यान के लिए शांत गहरा बैंगनी रंग",
+              "semantic_label": "गहरा बैंगनी रंग"
+            }
+          },
+          "visual_data": {
+            "image": null,
+            "gradient": null,
+            "color": {
+              "color": "0xFF663399",
+              "palette": {
+                "light": "0xFF8B4513",
+                "dark": "0xFF663399"
+              }
+            }
+          },
+          "visual_effects": {
+            "opacity": 1.0,
+            "blur": 0,
+            "blend_mode": "normal"
+          },
+          "category_ids": [
+            "solid",
+            "cool"
+          ],
+          "tag_ids": [
+            "meditation",
+            "calm"
+          ],
+          "attribution": {
+            "license": "CC0",
+            "url": "https://example.com/color-license"
+          },
+          "optimization": {
+            "formats": [
+              "hex"
+            ],
+            "quality": 100,
+            "placeholder": "color"
+          },
+          "cache_config": {
+            "ttl_seconds": 86400,
+            "priority": "low",
+            "preload": false
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "user",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "user",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "bg006",
+          "id": "bg06",
+          "type": "image",
+          "translations": {
+            "en": {
+              "title": "Mountain Peak Sunset",
+              "description": "Majestic mountain peak captured during golden hour sunset",
+              "semantic_label": "Snow-capped mountain peak during sunset with orange sky"
+            },
+            "hi": {
+              "title": "पर्वत शिखर सूर्यास्त",
+              "description": "स्वर्णिम घंटे के सूर्यास्त के दौरान कैद की गई भव्य पर्वत चोटी",
+              "semantic_label": "नारंगी आसमान के साथ सूर्यास्त के दौरान बर्फ से ढकी पर्वत चोटी"
+            }
+          },
+          "visual_data": {
+            "image": {
+              "original": "assets/images/backgrounds/temple_sunrise3.jpeg",
+              "thumbnail": "assets/images/backgrounds/temple_sunrise3.jpeg",
+              "placeholder": "assets/images/backgrounds/temple_sunrise3.jpeg",
+              "variants": [
+                {
+                  "width": 640,
+                  "height": 1136,
+                  "path": "assets/images/backgrounds/temple_sunrise2.jpeg"
+                },
+                {
+                  "width": 750,
+                  "height": 1334,
+                  "path": "assets/images/backgrounds/mountain_sunset3.jpeg"
+                },
+                {
+                  "width": 1080,
+                  "height": 1920,
+                  "path": "assets/images/backgrounds/temple_sunrise3.jpeg"
+                }
+              ]
+            },
+            "gradient": null,
+            "color": null
+          },
+          "visual_effects": {
+            "opacity": 1.0,
+            "blur": 0,
+            "blend_mode": "normal"
+          },
+          "category_ids": [
+            "mountains",
+            "nature"
+          ],
+          "tag_ids": [
+            "sunset",
+            "peaks"
+          ],
+          "attribution": {
+            "photographer": "@mountainphotographer",
+            "license": "CC BY 4.0",
+            "url": "https://example.com/mountain-license"
+          },
+          "optimization": {
+            "formats": [
+              "jpeg",
+              "webp",
+              "avif"
+            ],
+            "quality": 85,
+            "placeholder": "blur"
+          },
+          "cache_config": {
+            "ttl_seconds": 86400,
+            "priority": "high",
+            "preload": true
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
             "version": 1
           }
         }
@@ -988,6 +1295,302 @@
             "created_by": "system",
             "modified_at": "2024-01-02T00:00:00Z",
             "modified_by": "system",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "550e8400-e29b-41d4-a716-446655440003",
+          "translations": {
+            "en": {
+              "title": "Evening Serenity",
+              "description": "Perfect template for sharing evening blessings",
+              "greeting": "Good Evening! May your night be filled with tranquility and peace.",
+              "semantic_label": "Zen garden at sunset with purple sky"
+            },
+            "hi": {
+              "title": "सायं आशीर्वाद",
+              "description": "शाम का आशीर्वाद साझा करने के लिए उत्तम टेम्पलेट",
+              "greeting": "शुभ संध्या! आपकी रात शांति से भरी हो।",
+              "semantic_label": "बैंगनी आसमान के साथ सूर्यास्त में ज़ेन गार्डन"
+            }
+          },
+          "composition": {
+            "background_id": "bg002",
+            "quote_id": "550e8400-e29b-41d4-a716-446655440001",
+            "layout": "vertical",
+            "aspect_ratio": "9:16"
+          },
+          "layout_config": {
+            "responsive": true,
+            "breakpoints": {
+              "small": 600,
+              "medium": 900,
+              "large": 1200
+            },
+            "portrait": {
+              "title": {
+                "position": {
+                  "x": 50,
+                  "y": 25
+                },
+                "size": {
+                  "width": 90,
+                  "height": 18
+                }
+              }
+            }
+          },
+          "style_config": {
+            "common": {
+              "gradient_overlay": {
+                "enabled": true,
+                "stops": [
+                  {
+                    "color": "0x00000000",
+                    "position": 0.3
+                  },
+                  {
+                    "color": "0xB3000000",
+                    "position": 0.9
+                  }
+                ],
+                "angle": 200
+              }
+            }
+          },
+          "category_ids": [
+            "gardens",
+            "evening"
+          ],
+          "tag_ids": [
+            "tag_time_003",
+            "tag_time_004"
+          ],
+          "metadata": {
+            "is_premium": false,
+            "status": "active",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "550e8400-e29b-41d4-a716-446655440004",
+          "translations": {
+            "en": {
+              "title": "Ocean Meditation",
+              "description": "Peaceful template for ocean-themed meditation",
+              "greeting": "Let the waves of peace wash over you and bring clarity to your mind.",
+              "semantic_label": "Calm ocean waves at dawn"
+            },
+            "hi": {
+              "title": "सागर ध्यान",
+              "description": "सागर-थीम वाले ध्यान के लिए शांतिपूर्ण टेम्पलेट",
+              "greeting": "शांति की लहरें आपके मन को स्पष्टता प्रदान करें।",
+              "semantic_label": "भोर में शांत सागर की लहरें"
+            }
+          },
+          "composition": {
+            "background_id": "bg003",
+            "quote_id": "550e8400-e29b-41d4-a716-446655440002",
+            "layout": "horizontal",
+            "aspect_ratio": "16:9"
+          },
+          "layout_config": {
+            "responsive": true,
+            "breakpoints": {
+              "small": 600,
+              "medium": 900,
+              "large": 1200
+            },
+            "portrait": {
+              "title": {
+                "position": {
+                  "x": 50,
+                  "y": 30
+                },
+                "size": {
+                  "width": 85,
+                  "height": 20
+                }
+              }
+            }
+          },
+          "style_config": {
+            "common": {
+              "gradient_overlay": {
+                "enabled": true,
+                "stops": [
+                  {
+                    "color": "0x00000000",
+                    "position": 0.5
+                  },
+                  {
+                    "color": "0xB3000000",
+                    "position": 1.0
+                  }
+                ],
+                "angle": 160
+              }
+            }
+          },
+          "category_ids": [
+            "ocean",
+            "meditation"
+          ],
+          "tag_ids": [
+            "tag_theme_001",
+            "tag_mood_001"
+          ],
+          "metadata": {
+            "is_premium": true,
+            "status": "active",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "550e8400-e29b-41d4-a716-446655440005",
+          "translations": {
+            "en": {
+              "title": "Mountain Wisdom",
+              "description": "Template for sharing mountain-inspired wisdom",
+              "greeting": "Rise above like the mountains, stay grounded like the earth.",
+              "semantic_label": "Misty mountain peaks at sunrise"
+            },
+            "hi": {
+              "title": "पर्वत ज्ञान",
+              "description": "पर्वत से प्रेरित ज्ञान साझा करने के लिए टेम्पलेट",
+              "greeting": "पर्वतों की तरह ऊपर उठें, धरती की तरह स्थिर रहें।",
+              "semantic_label": "सूर्योदय में धुंधले पर्वत शिखर"
+            }
+          },
+          "composition": {
+            "background_id": "bg004",
+            "quote_id": "550e8400-e29b-41d4-a716-446655440003",
+            "layout": "vertical",
+            "aspect_ratio": "4:5"
+          },
+          "layout_config": {
+            "responsive": true,
+            "breakpoints": {
+              "small": 600,
+              "medium": 900,
+              "large": 1200
+            },
+            "portrait": {
+              "title": {
+                "position": {
+                  "x": 50,
+                  "y": 15
+                },
+                "size": {
+                  "width": 80,
+                  "height": 25
+                }
+              }
+            }
+          },
+          "style_config": {
+            "common": {
+              "gradient_overlay": {
+                "enabled": true,
+                "stops": [
+                  {
+                    "color": "0x00000000",
+                    "position": 0.2
+                  },
+                  {
+                    "color": "0xB3000000",
+                    "position": 0.8
+                  }
+                ],
+                "angle": 150
+              }
+            }
+          },
+          "category_ids": [
+            "mountains",
+            "wisdom"
+          ],
+          "tag_ids": [
+            "tag_theme_002",
+            "tag_mood_002"
+          ],
+          "metadata": {
+            "is_premium": false,
+            "status": "active",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "550e8400-e29b-41d4-a716-446655440006",
+          "translations": {
+            "en": {
+              "title": "Forest Mindfulness",
+              "description": "Template for forest-themed mindfulness quotes",
+              "greeting": "Find peace in the silence of the forest, wisdom in its patience.",
+              "semantic_label": "Sunlit forest path with morning mist"
+            },
+            "hi": {
+              "title": "वन मनन",
+              "description": "वन-थीम वाले मनन के लिए टेम्पलेट",
+              "greeting": "वन की शांति में शांति पाएं, उसके धैर्य में ज्ञान।",
+              "semantic_label": "सुबह की धुंध के साथ सूर्य की रोशनी वाला वन पथ"
+            }
+          },
+          "composition": {
+            "background_id": "bg005",
+            "quote_id": "550e8400-e29b-41d4-a716-446655440004",
+            "layout": "vertical",
+            "aspect_ratio": "9:16"
+          },
+          "layout_config": {
+            "responsive": true,
+            "breakpoints": {
+              "small": 600,
+              "medium": 900,
+              "large": 1200
+            },
+            "portrait": {
+              "title": {
+                "position": {
+                  "x": 50,
+                  "y": 22
+                },
+                "size": {
+                  "width": 88,
+                  "height": 22
+                }
+              }
+            }
+          },
+          "style_config": {
+            "common": {
+              "gradient_overlay": {
+                "enabled": true,
+                "stops": [
+                  {
+                    "color": "0x00000000",
+                    "position": 0.4
+                  },
+                  {
+                    "color": "0xB3000000",
+                    "position": 0.95
+                  }
+                ],
+                "angle": 170
+              }
+            }
+          },
+          "category_ids": [
+            "forest",
+            "mindfulness"
+          ],
+          "tag_ids": [
+            "tag_theme_003",
+            "tag_mood_003"
+          ],
+          "metadata": {
+            "is_premium": true,
+            "status": "active",
             "version": 1
           }
         }

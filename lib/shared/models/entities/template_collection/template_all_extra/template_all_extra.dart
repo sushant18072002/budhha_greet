@@ -153,15 +153,15 @@
   
 //   @HiveField(1)
 //   @JsonKey(name: 'breakpoints')
-//   final LayoutBreakpoints breakpoints;
+//   final LayoutBreakpoints? breakpoints;
   
 //   @HiveField(2)
 //   @JsonKey(name: 'portrait')
-//   final OrientationLayout portrait;
+//   final OrientationLayout? portrait;
   
 //   @HiveField(3)
 //   @JsonKey(name: 'landscape')
-//   final OrientationLayout landscape;
+//   final OrientationLayout? landscape;
 
 //   LayoutConfig({
 //     required this.responsive,
@@ -204,11 +204,11 @@
 // class OrientationLayout {
 //   @HiveField(0)
 //   @JsonKey(name: 'title')
-//   final ElementLayout title;
+//   final ElementLayout? title;
   
 //   @HiveField(1)
 //   @JsonKey(name: 'quote')
-//   final ElementLayout quote;
+//   final ElementLayout? quote;
   
 //   @HiveField(2)
 //   @JsonKey(name: 'layout_adjustments')
@@ -294,7 +294,7 @@
 // class LayoutVisualEffects {
 //   @HiveField(0)
 //   @JsonKey(name: 'blur')
-//   final LayoutBlur blur;
+//   final LayoutBlur? blur;
   
 //   @HiveField(1)
 //   @JsonKey(name: 'border_radius')
@@ -480,7 +480,7 @@
   
 //   @HiveField(4)
 //   @JsonKey(name: 'visual_effects')
-//   final LayoutVisualEffects visualEffects;
+//   final LayoutVisualEffects? visualEffects;
 
 //   ElementLayout({
 //     required this.layoutPosition,
@@ -702,19 +702,19 @@
 // class StyleConfig {
 //   @HiveField(0)
 //   @JsonKey(name: 'common')
-//   final CommonStyle common;
+//   final CommonStyle? common;
   
 //   @HiveField(1)
 //   @JsonKey(name: 'title')
-//   final ElementStyle title;
+//   final ElementStyle? title;
   
 //   @HiveField(2)
 //   @JsonKey(name: 'quote')
-//   final ElementStyle quote;
+//   final ElementStyle? quote;
   
 //   @HiveField(3)
 //   @JsonKey(name: 'action_buttons')
-//   final ActionButtons actionButtons;
+//   final ActionButtons? actionButtons;
 
 //   StyleConfig({
 //     required this.common,

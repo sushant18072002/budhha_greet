@@ -1,11 +1,11 @@
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'visual_effects.g.dart';
+part 'background_visual_effects.g.dart';
 
 @HiveType(typeId: 25)
 @JsonSerializable()
-class VisualEffects {
+class BackgroundVisualEffects {
   @HiveField(0)
    @JsonKey(name: 'opacity')
   final double opacity;
@@ -18,14 +18,14 @@ class VisualEffects {
    @JsonKey(name: 'blend_mode')
   final String blendMode;
 
-  VisualEffects({
+  BackgroundVisualEffects({
     required this.opacity,
     required this.blur,
     required this.blendMode,
   });
 
-  factory VisualEffects.fromJson(Map<String, dynamic> json) => 
-    _$VisualEffectsFromJson(json);
+  factory BackgroundVisualEffects.fromJson(Map<String, dynamic> json) => 
+    _$BackgroundVisualEffectsFromJson(json);
   
-  Map<String, dynamic> toJson() => _$VisualEffectsToJson(this);
+  Map<String, dynamic> toJson() => _$BackgroundVisualEffectsToJson(this);
 }

@@ -16,7 +16,7 @@ part 'layout_visual_effects.g.dart';
 class LayoutVisualEffects {
   @HiveField(0)
   @JsonKey(name: 'blur')
-  final LayoutBlur blur;
+  final LayoutBlur? blur;
   
   @HiveField(1)
   @JsonKey(name: 'border_radius')

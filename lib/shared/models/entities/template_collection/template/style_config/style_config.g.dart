@@ -17,10 +17,10 @@ class StyleConfigAdapter extends TypeAdapter<StyleConfig> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return StyleConfig(
-      common: fields[0] as CommonStyle,
-      title: fields[1] as ElementStyle,
-      quote: fields[2] as ElementStyle,
-      actionButtons: fields[3] as ActionButtons,
+      common: fields[0] as CommonStyle?,
+      title: fields[1] as ElementStyle?,
+      quote: fields[2] as ElementStyle?,
+      actionButtons: fields[3] as ActionButtons?,
     );
   }
 
@@ -54,11 +54,19 @@ class StyleConfigAdapter extends TypeAdapter<StyleConfig> {
 // **************************************************************************
 
 StyleConfig _$StyleConfigFromJson(Map<String, dynamic> json) => StyleConfig(
-      common: CommonStyle.fromJson(json['common'] as Map<String, dynamic>),
-      title: ElementStyle.fromJson(json['title'] as Map<String, dynamic>),
-      quote: ElementStyle.fromJson(json['quote'] as Map<String, dynamic>),
-      actionButtons: ActionButtons.fromJson(
-          json['action_buttons'] as Map<String, dynamic>),
+      common: json['common'] == null
+          ? null
+          : CommonStyle.fromJson(json['common'] as Map<String, dynamic>),
+      title: json['title'] == null
+          ? null
+          : ElementStyle.fromJson(json['title'] as Map<String, dynamic>),
+      quote: json['quote'] == null
+          ? null
+          : ElementStyle.fromJson(json['quote'] as Map<String, dynamic>),
+      actionButtons: json['action_buttons'] == null
+          ? null
+          : ActionButtons.fromJson(
+              json['action_buttons'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$StyleConfigToJson(StyleConfig instance) =>

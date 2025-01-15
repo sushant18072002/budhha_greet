@@ -1,38 +1,36 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'visual_effects.dart';
+part of 'background_color_palette.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class VisualEffectsAdapter extends TypeAdapter<VisualEffects> {
+class BackgroundColorPaletteAdapter
+    extends TypeAdapter<BackgroundColorPalette> {
   @override
-  final int typeId = 25;
+  final int typeId = 24;
 
   @override
-  VisualEffects read(BinaryReader reader) {
+  BackgroundColorPalette read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return VisualEffects(
-      opacity: fields[0] as double,
-      blur: fields[1] as double,
-      blendMode: fields[2] as String,
+    return BackgroundColorPalette(
+      light: fields[0] as String,
+      dark: fields[1] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, VisualEffects obj) {
+  void write(BinaryWriter writer, BackgroundColorPalette obj) {
     writer
-      ..writeByte(3)
-      ..writeByte(0)
-      ..write(obj.opacity)
-      ..writeByte(1)
-      ..write(obj.blur)
       ..writeByte(2)
-      ..write(obj.blendMode);
+      ..writeByte(0)
+      ..write(obj.light)
+      ..writeByte(1)
+      ..write(obj.dark);
   }
 
   @override
@@ -41,7 +39,7 @@ class VisualEffectsAdapter extends TypeAdapter<VisualEffects> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is VisualEffectsAdapter &&
+      other is BackgroundColorPaletteAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -50,16 +48,16 @@ class VisualEffectsAdapter extends TypeAdapter<VisualEffects> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-VisualEffects _$VisualEffectsFromJson(Map<String, dynamic> json) =>
-    VisualEffects(
-      opacity: (json['opacity'] as num).toDouble(),
-      blur: (json['blur'] as num).toDouble(),
-      blendMode: json['blend_mode'] as String,
+BackgroundColorPalette _$BackgroundColorPaletteFromJson(
+        Map<String, dynamic> json) =>
+    BackgroundColorPalette(
+      light: json['light'] as String,
+      dark: json['dark'] as String,
     );
 
-Map<String, dynamic> _$VisualEffectsToJson(VisualEffects instance) =>
+Map<String, dynamic> _$BackgroundColorPaletteToJson(
+        BackgroundColorPalette instance) =>
     <String, dynamic>{
-      'opacity': instance.opacity,
-      'blur': instance.blur,
-      'blend_mode': instance.blendMode,
+      'light': instance.light,
+      'dark': instance.dark,
     };

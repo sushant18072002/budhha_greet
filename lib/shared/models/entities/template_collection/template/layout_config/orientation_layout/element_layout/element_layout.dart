@@ -22,7 +22,7 @@ class ElementLayout {
   
   @HiveField(2)
   @JsonKey(name: 'padding')
-  final double padding;
+  final double? padding;
   
   @HiveField(3)
   @JsonKey(name: 'safe_area')
@@ -30,7 +30,7 @@ class ElementLayout {
   
   @HiveField(4)
   @JsonKey(name: 'visual_effects')
-  final LayoutVisualEffects visualEffects;
+  final LayoutVisualEffects? visualEffects;
 
   ElementLayout({
     required this.layoutPosition,

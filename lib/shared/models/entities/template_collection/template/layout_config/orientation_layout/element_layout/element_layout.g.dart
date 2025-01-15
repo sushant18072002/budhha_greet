@@ -19,9 +19,9 @@ class ElementLayoutAdapter extends TypeAdapter<ElementLayout> {
     return ElementLayout(
       layoutPosition: fields[0] as LayoutPosition,
       size: fields[1] as LayoutSize,
-      padding: fields[2] as double,
+      padding: fields[2] as double?,
       safeArea: fields[3] as LayoutSafeArea?,
-      visualEffects: fields[4] as LayoutVisualEffects,
+      visualEffects: fields[4] as LayoutVisualEffects?,
     );
   }
 
@@ -61,12 +61,14 @@ ElementLayout _$ElementLayoutFromJson(Map<String, dynamic> json) =>
       layoutPosition:
           LayoutPosition.fromJson(json['position'] as Map<String, dynamic>),
       size: LayoutSize.fromJson(json['size'] as Map<String, dynamic>),
-      padding: (json['padding'] as num).toDouble(),
+      padding: (json['padding'] as num?)?.toDouble(),
       safeArea: json['safe_area'] == null
           ? null
           : LayoutSafeArea.fromJson(json['safe_area'] as Map<String, dynamic>),
-      visualEffects: LayoutVisualEffects.fromJson(
-          json['visual_effects'] as Map<String, dynamic>),
+      visualEffects: json['visual_effects'] == null
+          ? null
+          : LayoutVisualEffects.fromJson(
+              json['visual_effects'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ElementLayoutToJson(ElementLayout instance) =>

@@ -3,8 +3,7 @@ import 'package:buddha_greet/shared/models/entities/category.dart';
 import 'package:buddha_greet/shared/models/entities/tag.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import 'background.dart';
+import 'background_collection/background_collection.dart';
 import 'language.dart';
 import 'qoute_collection/qoute_collection.dart';
 import 'source.dart';

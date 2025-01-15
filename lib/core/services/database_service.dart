@@ -25,7 +25,7 @@ import '../../shared/models/app_config/system_cache_config.dart';
 import '../../shared/models/app_config/system_config.dart';
 import '../../shared/models/app_config/theme_config.dart';
 import '../../shared/models/entities/author.dart';
-import '../../shared/models/entities/background.dart';
+import '../../shared/models/entities/background_collection/background_collection.dart';
 import '../../shared/models/entities/category.dart';
 import '../../shared/models/entities/entities.dart';
 import '../../shared/models/entities/language.dart';
@@ -33,8 +33,8 @@ import '../../shared/models/entities/qoute_collection/qoute_collection.dart';
 import '../../shared/models/entities/source.dart';
 import '../../shared/models/entities/tag.dart';
 import '../../shared/models/entities/template_collection/template_collection.dart';
-import '../../shared/models/style/visual_data.dart';
-import '../../shared/models/style/visual_effects.dart';
+import '../../shared/models/entities/background_collection/background/background_style/background_visual_data/background_visual_data.dart';
+import '../../shared/models/entities/background_collection/background/background_style/background_visual_effects.dart';
 import '../../shared/models/validation/author_validation.dart';
 import '../../shared/models/validation/quote_validation.dart';
 import '../../shared/models/validation/template_validation.dart';
@@ -127,18 +127,17 @@ class DatabaseService extends GetxService {
       Hive.registerAdapter(AuditAdapter());  //17
 
       // Visual Data Models - typeId: 18-25
-      Hive.registerAdapter(VisualDataAdapter()); //18
-      Hive.registerAdapter(ImageDataAdapter());  //19
-      Hive.registerAdapter(ImageVariantAdapter()); //20
-      Hive.registerAdapter(GradientDataAdapter()); //21
-      Hive.registerAdapter(GradientStopAdapter()); //22
-      Hive.registerAdapter(ColorDataAdapter());  //23
-      Hive.registerAdapter(ColorPaletteAdapter()); //24
-      Hive.registerAdapter(VisualEffectsAdapter()); //25
+      Hive.registerAdapter(BackgroundVisualDataAdapter()); //18
+      Hive.registerAdapter(BackgroundImageDataAdapter());  //19
+      Hive.registerAdapter(BackgroundImageVariantAdapter()); //20
+      Hive.registerAdapter(BackgroundGradientDataAdapter()); //21
+      Hive.registerAdapter(BackgroundGradientStopAdapter()); //22
+      Hive.registerAdapter(BackgroundColorDataAdapter());  //23
+      Hive.registerAdapter(BackgroundColorPaletteAdapter()); //24
+      Hive.registerAdapter(BackgroundVisualEffectsAdapter()); //25
 
       // Attribution & Optimization - typeId: 26-28
-      Hive.registerAdapter(AttributionAdapter());  //26
-      Hive.registerAdapter(OptimizationAdapter()); //27
+      Hive.registerAdapter(BackgroundOptimizationAdapter()); //27
       Hive.registerAdapter(CacheConfigAdapter()); //28
       
 

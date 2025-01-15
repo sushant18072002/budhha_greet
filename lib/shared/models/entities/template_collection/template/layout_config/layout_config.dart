@@ -18,15 +18,15 @@ class LayoutConfig {
   
   @HiveField(1)
   @JsonKey(name: 'breakpoints')
-  final LayoutBreakpoints breakpoints;
+  final LayoutBreakpoints? breakpoints;
   
   @HiveField(2)
   @JsonKey(name: 'portrait')
-  final OrientationLayout portrait;
+  final OrientationLayout? portrait;
   
   @HiveField(3)
   @JsonKey(name: 'landscape')
-  final OrientationLayout landscape;
+  final OrientationLayout? landscape;
 
   LayoutConfig({
     required this.responsive,

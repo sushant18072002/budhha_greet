@@ -2,8 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../shared/models/entities/background.dart';
+import '../../../../shared/models/entities/background_collection/background_collection.dart';
 import '../../../../shared/models/entities/qoute_collection/quote/quote.dart';
 import '../../../../shared/models/entities/template_collection/template_collection.dart';
 import '../controllers/home_controller.dart';
@@ -46,7 +45,8 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
           Expanded(
             child: Obx(() {
               final template = controller.selectedTemplate.value;
-              final translation = template?.translations[controller.currentLanguage.value];
+              final translation =
+                  template?.translations[controller.currentLanguage.value];
               return Text(
                 translation?.title ?? 'Templates',
                 style: Get.textTheme.headlineSmall?.copyWith(
@@ -96,10 +96,12 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
       return _buildLoadingState();
     }
 
+    final template = controller.selectedTemplate.value;
+    final transitionDuration =
+        template?.styleConfig.common?.animations?.transitionDuration ?? 300;
+
     return AnimatedSwitcher(
-      duration: Duration(
-        milliseconds: controller.selectedTemplate.value?.styleConfig.common.animations.transitionDuration ?? 300,
-      ),
+      duration: Duration(milliseconds: transitionDuration),
       child: controller.isGridView.value
           ? _buildIntelligentGrid(constraints)
           : _buildIntelligentList(constraints),
@@ -110,7 +112,7 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
     final template = controller.selectedTemplate.value;
     final layoutConfig = template?.layoutConfig;
     final breakpoints = layoutConfig?.breakpoints;
-    final spacing = _calculateDynamicSpacing(constraints.maxWidth,breakpoints);
+    final spacing = _calculateDynamicSpacing(constraints.maxWidth, breakpoints);
     final itemHeight = constraints.maxWidth * 0.8;
 
     return ListView.builder(
@@ -147,26 +149,27 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
     final template = controller.selectedTemplate.value;
     final layoutConfig = template?.layoutConfig;
     final breakpoints = layoutConfig?.breakpoints;
-    
+
     final spacing = _calculateDynamicSpacing(
       constraints.maxWidth,
       breakpoints,
     );
-    
+
     final columns = _calculateOptimalColumns(
       constraints.maxWidth,
       breakpoints,
     );
-    
+
     final itemWidth = _calculateItemWidth(
       constraints.maxWidth,
       columns,
       spacing,
     );
-    
+
     final aspectRatio = template?.composition.aspectRatio ?? "16:9";
     final aspectRatioParts = aspectRatio.split(":");
-    final aspectRatioValue = double.parse(aspectRatioParts[0]) / double.parse(aspectRatioParts[1]);
+    final aspectRatioValue =
+        double.parse(aspectRatioParts[0]) / double.parse(aspectRatioParts[1]);
     final itemHeight = itemWidth / aspectRatioValue;
 
     return Padding(
@@ -200,8 +203,12 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
   }) {
     final styleConfig = template.styleConfig;
     final commonStyle = styleConfig.common;
-    final animations = commonStyle.animations;
-    
+    final animations = commonStyle?.animations;
+    final transitionDuration = animations?.transitionDuration ?? 300;
+    final typography = styleConfig.quote?.typography;
+    final fontSize = typography?.fontSize;
+    final borderRadius = fontSize?.base.clamp(8.0, 16.0) ?? 8.0;
+
     return Hero(
       tag: 'template_${template.uuid}',
       child: Material(
@@ -209,17 +216,15 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
         child: InkWell(
           onTap: () => controller.onTemplateSelected(template),
           child: AnimatedContainer(
-            duration: Duration(milliseconds: animations.transitionDuration),
+            duration: Duration(milliseconds: transitionDuration),
             height: constraints.maxHeight,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(
-                styleConfig.quote.typography.fontSize.base.clamp(8.0, 16.0),
-              ),
+              borderRadius: BorderRadius.circular(borderRadius),
               child: Stack(
                 fit: StackFit.expand,
                 children: [
                   _buildBackgroundWithEffects(template),
-                  if (commonStyle.gradientOverlay.enabled)
+                  if (commonStyle?.gradientOverlay?.enabled ?? false)
                     _buildGradientOverlay(template, isGridView),
                   _buildTemplateContent(
                     template,
@@ -237,8 +242,8 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
   }
 
   Widget _buildBackgroundWithEffects(Template template) {
-    final visualEffects = template.layoutConfig.portrait.quote.visualEffects;
-    final blur = visualEffects.blur;
+    //final visualEffects = template.layoutConfig.portrait.quote.visualEffects;
+    //final blur = visualEffects.blur;
 
     return FutureBuilder<Background?>(
       future: controller.getBackgroundById(template.composition.backgroundId),
@@ -259,21 +264,21 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
           ),
         );
 
-        if (blur.enabled) {
-          imageWidget = ImageFiltered(
-            imageFilter: ImageFilter.blur(
-              sigmaX: blur.sigma.x.base.clamp(
-                blur.sigma.x.min,
-                blur.sigma.x.max,
-              ),
-              sigmaY: blur.sigma.y.base.clamp(
-                blur.sigma.y.min,
-                blur.sigma.y.max,
-              ),
-            ),
-            child: imageWidget,
-          );
-        }
+        // if (blur.enabled) {
+        //   imageWidget = ImageFiltered(
+        //     imageFilter: ImageFilter.blur(
+        //       sigmaX: blur.sigma.x.base.clamp(
+        //         blur.sigma.x.min,
+        //         blur.sigma.x.max,
+        //       ),
+        //       sigmaY: blur.sigma.y.base.clamp(
+        //         blur.sigma.y.min,
+        //         blur.sigma.y.max,
+        //       ),
+        //     ),
+        //     child: imageWidget,
+        //   );
+        // }
 
         return imageWidget;
       },
@@ -281,44 +286,50 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
   }
 
   Widget _buildGradientOverlay(Template template, bool isGridView) {
-  final gradientOverlay = template.styleConfig.common.gradientOverlay;
+    final gradientOverlay = template.styleConfig.common?.gradientOverlay;
+    if (gradientOverlay == null) return const SizedBox.shrink();
 
-  return Container(
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: gradientOverlay.stops.map((stop) {
-          final colorString = stop.color.startsWith('0x')
-              ? stop.color
-              : '0xFF${stop.color.substring(1)}';
-          return Color(int.parse(colorString));
-        }).toList(),
-        stops: gradientOverlay.stops.map((stop) => stop.position).toList(),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: gradientOverlay.stops.map((stop) {
+            return _parseColorSafely(stop.color);
+          }).toList(),
+          stops: gradientOverlay.stops.map((stop) => stop.position).toList(),
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _buildTemplateContent(
     Template template,
     bool isGridView,
     BoxConstraints constraints,
   ) {
-    final translation = template.translations[controller.currentLanguage.value];
+    final currentLanguage = controller.currentLanguage.value;
+    final translation = template.translations[currentLanguage];
     if (translation == null) return const SizedBox.shrink();
 
     final titleStyle = template.styleConfig.title;
     final quoteStyle = template.styleConfig.quote;
-    
+
+    if (titleStyle == null || quoteStyle == null) {
+      return const SizedBox.shrink();
+    }
+
     final titleFontSize = _calculateDynamicFontSize(
       translation.title,
       constraints.maxWidth,
-      titleStyle.typography.fontSize.base,
-      titleStyle.typography.fontSize.min,
-      titleStyle.typography.fontSize.max,
+      titleStyle.typography?.fontSize?.base ?? 16.0,
+      titleStyle.typography?.fontSize?.min ?? 12.0,
+      titleStyle.typography?.fontSize?.max ?? 24.0,
     );
+
+    final spacing = template.layoutConfig.portrait?.layoutAdjustments?.spacing
+            .betweenElements ??
+        8.0;
 
     return Padding(
       padding: EdgeInsets.all(isGridView ? 12 : 16),
@@ -331,15 +342,15 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
             fit: FlexFit.tight,
             child: Center(
               child: _buildAdaptiveTitle(
-                translation.title,
-                titleStyle,
-                constraints,
-                titleFontSize,
-                constraints.maxHeight * 0.4,
+                title: translation.title,
+                template: template,
+                constraints: constraints,
+                fontSize: titleFontSize,
+                maxHeight: constraints.maxHeight * 0.4,
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: spacing),
           Flexible(
             flex: 6,
             fit: FlexFit.tight,
@@ -357,9 +368,10 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
   }
 
   // Helper methods for calculating dynamic values
-  double _calculateDynamicSpacing(double width, LayoutBreakpoints? breakpoints) {
+  double _calculateDynamicSpacing(
+      double width, LayoutBreakpoints? breakpoints) {
     if (breakpoints == null) return 12;
-    
+
     if (width <= breakpoints.small) return 12;
     if (width <= breakpoints.medium) return 16;
     return 20;
@@ -367,7 +379,7 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
 
   int _calculateOptimalColumns(double width, LayoutBreakpoints? breakpoints) {
     if (breakpoints == null) return 2;
-    
+
     if (width <= breakpoints.small) return 2;
     if (width <= breakpoints.medium) return 3;
     if (width <= breakpoints.large) return 4;
@@ -396,63 +408,268 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
     return (baseSize / reduction).clamp(minSize, maxSize);
   }
 
+  Widget _buildAdaptiveTitle({
+    required String title,
+    required Template template,
+    required BoxConstraints constraints,
+    required double fontSize,
+    required double maxHeight,
+  }) {
+    // Default style configurations
+    final defaultTypography = ElementTypography(
+      fontFamily: 'Roboto',
+      fontSize: ElementFontSize(
+        base: 16.0,
+        min: 12.0,
+        max: 24.0,
+        scale: 1.0,
+      ),
+      fontWeight: 'normal',
+      letterSpacing: 0.0,
+      lineHeight: 1.2,
+      textAlign: 'center',
+      textTransform: 'none',
+    );
 
-  Widget _buildAdaptiveTitle(String title,ElementStyle elementStyle,BoxConstraints constraints , double fontSize, double maxHeight) {
+    final defaultColors = ElementStyleColors(
+      text: '#FFFFFF',
+      shadow: ElementShadow(
+        color: '#000000',
+        offset: ShadowOffset(x: 0, y: 1),
+        blurRadius: 2.0,
+        opacity: 0.5,
+      ),
+    );
+
+    final defaultElementStyle = ElementStyle(
+      typography: defaultTypography,
+      colors: defaultColors,
+    );
+
+    // Extract and verify style configurations
+    final titleStyle = template.styleConfig.title ?? defaultElementStyle;
+    final typography = titleStyle.typography ?? defaultTypography;
+    final colors = titleStyle.colors ?? defaultColors;
+
+    // Layout configuration defaults
+    final defaultLayoutSafeArea = LayoutSafeArea(
+      top: 0,
+      bottom: 0,
+    );
+
+    final defaultVisualEffects = LayoutVisualEffects(
+      blur: LayoutBlur(
+        enabled: false,
+        sigma: LayoutBlurSigma(
+          x: LayoutSigmaValue(base: 0, min: 0, max: 0),
+          y: LayoutSigmaValue(base: 0, min: 0, max: 0),
+        ),
+        quality: 'none',
+      ),
+      borderRadius: LayoutBorderRadius(
+        base: 8,
+        min: 4,
+        max: 16,
+        scaleFactor: 1,
+      ),
+      background: LayoutBackground(
+        opacity: LayoutOpacityConfig(
+          base: 0.5,
+          min: 0.0,
+          max: 1.0,
+        ),
+        color: '#000000',
+      ),
+    );
+
+    final defaultElementLayout = ElementLayout(
+      layoutPosition: LayoutPosition(x: 0, y: 0),
+      size: LayoutSize(width: 0, height: 0),
+      padding: 8.0,
+      safeArea: defaultLayoutSafeArea,
+      visualEffects: defaultVisualEffects,
+    );
+
+    // Extract and verify layout configurations
+    final layoutConfig =
+        template.layoutConfig.portrait?.title ?? defaultElementLayout;
+    final visualEffects = layoutConfig.visualEffects ?? defaultVisualEffects;
+    final blur = visualEffects.blur;
+    final borderRadius = visualEffects.borderRadius;
+    final background = visualEffects.background;
+
+    // Calculate dynamic border radius
+    final dynamicBorderRadius = (borderRadius.base.clamp(
+          borderRadius.min,
+          borderRadius.max,
+        ) *
+        borderRadius.scaleFactor);
+
+    // Create shadow if defined
+    final shadows = <Shadow>[];
+    if (colors.shadow != null) {
+      shadows.add(Shadow(
+        color: _parseColorSafely(colors.shadow.color)
+            .withOpacity(colors.shadow.opacity),
+        offset: Offset(
+          colors.shadow.offset.x,
+          colors.shadow.offset.y,
+        ),
+        blurRadius: colors.shadow.blurRadius,
+      ));
+    }
+
+    // Create text style with verified values
+    final textStyle = TextStyle(
+      fontFamily: typography.fontFamily,
+      fontSize: fontSize.clamp(
+        typography.fontSize.min,
+        typography.fontSize.max,
+      ),
+      fontWeight: _parseFontWeight(typography.fontWeight),
+      letterSpacing: typography.letterSpacing,
+      color: _parseColorSafely(colors.text),
+      height: typography.lineHeight,
+      shadows: shadows,
+    );
+
+    // Text measurement and line calculation
     final textSpan = TextSpan(
-          text: title,
-          style: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        );
-        final textPainter = TextPainter(
-          text: textSpan,
-          textDirection: TextDirection.ltr,
-          maxLines: 3,
-        );
-        textPainter.layout(maxWidth: constraints.maxWidth);
-        final lineHeight =
-            textPainter.height / textPainter.computeLineMetrics().length;
-        final maxLines = (maxHeight / lineHeight).floor();
+      text: title,
+      style: textStyle,
+    );
+
+    final textPainter = TextPainter(
+      text: textSpan,
+      textDirection: TextDirection.ltr,
+      maxLines: 3,
+    );
+    textPainter.layout(maxWidth: constraints.maxWidth);
+
+    final lineMetrics = textPainter.computeLineMetrics();
+    final lineHeight = lineMetrics.isNotEmpty
+        ? textPainter.height / lineMetrics.length
+        : (typography.lineHeight * fontSize);
+    final maxLines = (maxHeight / lineHeight).floor().clamp(1, 3);
+
+    // Build the widget
     return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(dynamicBorderRadius),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+        filter: blur?.enabled == true
+            ? ImageFilter.blur(
+                sigmaX: blur?.sigma.x.base.clamp(
+                      blur?.sigma.x.min ?? 0,
+                      blur?.sigma.x.max ?? 0,
+                    ) ??
+                    0,
+                sigmaY: blur?.sigma.y.base.clamp(
+                      blur?.sigma.y.min ?? 0,
+                      blur?.sigma.y.max ?? 0,
+                    ) ??
+                    0,
+              )
+            : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
         child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 8,
+          padding: EdgeInsets.symmetric(
+            horizontal: layoutConfig.padding??0.0,
+            vertical:((layoutConfig.padding??0.0) *(0.67)),
           ),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(8),
+            color: _parseColorSafely(background.color).withOpacity(
+              background.opacity.base.clamp(
+                background.opacity.min,
+                background.opacity.max,
+              ),
+            ),
+            borderRadius: BorderRadius.circular(dynamicBorderRadius),
           ),
           child: AutoSizeText(
             title,
-            style: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-              letterSpacing: 0.3,
-              shadows: [
-                Shadow(
-                  color: Colors.black.withOpacity(0.5),
-                  offset: const Offset(0, 1),
-                  blurRadius: 2,
-                ),
-              ],
-            ),
+            style: textStyle,
             maxLines: maxLines,
             overflow: TextOverflow.ellipsis,
+            textAlign: _parseTextAlign(typography.textAlign),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildAdaptiveQuote(Template template,ElementStyle elementStyle, bool isGridView,
-      BoxConstraints constraints, double maxHeight) {
+  Color _parseColorSafely(String? colorString) {
+    if (colorString == null) return Colors.black;
+
+    try {
+      final formattedColor = colorString.startsWith('0x')
+          ? colorString.substring(2)
+          : (colorString.startsWith('#')
+              ? colorString.substring(1)
+              : colorString);
+
+      final normalizedColor =
+          formattedColor.length == 6 ? 'FF$formattedColor' : formattedColor;
+
+      return Color(int.parse(normalizedColor, radix: 16));
+    } catch (e) {
+      return Colors.black; // Return a default color on error
+    }
+  }
+
+// Helper function to parse font weight
+  FontWeight _parseFontWeight(String weight) {
+    final Map<String, FontWeight> weights = {
+      'normal': FontWeight.normal,
+      'bold': FontWeight.bold,
+      'w100': FontWeight.w100,
+      'w200': FontWeight.w200,
+      'w300': FontWeight.w300,
+      'w400': FontWeight.w400,
+      'w500': FontWeight.w500,
+      'w600': FontWeight.w600,
+      'w700': FontWeight.w700,
+      'w800': FontWeight.w800,
+      'w900': FontWeight.w900,
+    };
+    return weights[weight.toLowerCase()] ?? FontWeight.normal;
+  }
+
+// Helper function to parse text alignment
+  TextAlign _parseTextAlign(String align) {
+    final Map<String, TextAlign> alignments = {
+      'left': TextAlign.left,
+      'right': TextAlign.right,
+      'center': TextAlign.center,
+      'justify': TextAlign.justify,
+      'start': TextAlign.start,
+      'end': TextAlign.end,
+    };
+    return alignments[align.toLowerCase()] ?? TextAlign.center;
+  }
+
+  Color parseColor(String colorString) {
+    try {
+      // Normalize the input to ensure it's in the correct format
+      final formattedColor = colorString.startsWith('0x')
+          ? colorString.substring(2) // Remove '0x' prefix
+          : (colorString.startsWith('#')
+              ? colorString.substring(1)
+              : colorString);
+
+      // Ensure the string is exactly 8 characters long for ARGB
+      final normalizedColor = formattedColor.length == 6
+          ? 'FF$formattedColor' // Add alpha channel if missing
+          : formattedColor;
+
+      // Parse and return a Color object
+      return Color(int.parse(normalizedColor, radix: 16));
+    } catch (e) {
+      // Log or throw a meaningful error
+      throw FormatException('Invalid color format: $colorString');
+    }
+  }
+
+  Widget _buildAdaptiveQuote(Template template, ElementStyle elementStyle,
+      bool isGridView, BoxConstraints constraints, double maxHeight) {
     return FutureBuilder<Quote?>(
       future: controller.getQuoteById(template.composition.quoteId),
       builder: (context, snapshot) {
@@ -463,12 +680,11 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
         if (quoteText == null) return const SizedBox.shrink();
 
         final quoteFontSize = _calculateDynamicFontSize(
-          quoteText,
-          constraints.maxWidth * 0.85,
-          isGridView ? 16 : 18,
-          elementStyle.typography.fontSize.min,
-           elementStyle.typography.fontSize.max
-        );
+            quoteText,
+            constraints.maxWidth * 0.85,
+            isGridView ? 16 : 18,
+            elementStyle.typography.fontSize.min,
+            elementStyle.typography.fontSize.max);
         final textSpan = TextSpan(
           text: quoteText,
           style: TextStyle(

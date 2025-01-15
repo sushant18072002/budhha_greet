@@ -1,30 +1,30 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'visual_data.dart';
+part of 'background_visual_data.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class VisualDataAdapter extends TypeAdapter<VisualData> {
+class BackgroundVisualDataAdapter extends TypeAdapter<BackgroundVisualData> {
   @override
   final int typeId = 18;
 
   @override
-  VisualData read(BinaryReader reader) {
+  BackgroundVisualData read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return VisualData(
-      image: fields[0] as ImageData?,
-      gradient: fields[1] as GradientData?,
-      color: fields[2] as ColorData?,
+    return BackgroundVisualData(
+      image: fields[0] as BackgroundImageData?,
+      gradient: fields[1] as BackgroundGradientData?,
+      color: fields[2] as BackgroundColorData?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, VisualData obj) {
+  void write(BinaryWriter writer, BackgroundVisualData obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -41,7 +41,7 @@ class VisualDataAdapter extends TypeAdapter<VisualData> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is VisualDataAdapter &&
+      other is BackgroundVisualDataAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -50,19 +50,23 @@ class VisualDataAdapter extends TypeAdapter<VisualData> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-VisualData _$VisualDataFromJson(Map<String, dynamic> json) => VisualData(
+BackgroundVisualData _$BackgroundVisualDataFromJson(
+        Map<String, dynamic> json) =>
+    BackgroundVisualData(
       image: json['image'] == null
           ? null
-          : ImageData.fromJson(json['image'] as Map<String, dynamic>),
+          : BackgroundImageData.fromJson(json['image'] as Map<String, dynamic>),
       gradient: json['gradient'] == null
           ? null
-          : GradientData.fromJson(json['gradient'] as Map<String, dynamic>),
+          : BackgroundGradientData.fromJson(
+              json['gradient'] as Map<String, dynamic>),
       color: json['color'] == null
           ? null
-          : ColorData.fromJson(json['color'] as Map<String, dynamic>),
+          : BackgroundColorData.fromJson(json['color'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$VisualDataToJson(VisualData instance) =>
+Map<String, dynamic> _$BackgroundVisualDataToJson(
+        BackgroundVisualData instance) =>
     <String, dynamic>{
       'image': instance.image,
       'gradient': instance.gradient,

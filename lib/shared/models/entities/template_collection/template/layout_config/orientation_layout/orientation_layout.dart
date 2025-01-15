@@ -16,11 +16,11 @@ part 'orientation_layout.g.dart';
 class OrientationLayout {
   @HiveField(0)
   @JsonKey(name: 'title')
-  final ElementLayout title;
+  final ElementLayout? title;
   
   @HiveField(1)
   @JsonKey(name: 'quote')
-  final ElementLayout quote;
+  final ElementLayout? quote;
   
   @HiveField(2)
   @JsonKey(name: 'layout_adjustments')

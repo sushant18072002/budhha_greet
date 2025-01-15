@@ -17,7 +17,7 @@ class LayoutVisualEffectsAdapter extends TypeAdapter<LayoutVisualEffects> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return LayoutVisualEffects(
-      blur: fields[0] as LayoutBlur,
+      blur: fields[0] as LayoutBlur?,
       borderRadius: fields[1] as LayoutBorderRadius,
       background: fields[2] as LayoutBackground,
     );
@@ -52,7 +52,9 @@ class LayoutVisualEffectsAdapter extends TypeAdapter<LayoutVisualEffects> {
 
 LayoutVisualEffects _$LayoutVisualEffectsFromJson(Map<String, dynamic> json) =>
     LayoutVisualEffects(
-      blur: LayoutBlur.fromJson(json['blur'] as Map<String, dynamic>),
+      blur: json['blur'] == null
+          ? null
+          : LayoutBlur.fromJson(json['blur'] as Map<String, dynamic>),
       borderRadius: LayoutBorderRadius.fromJson(
           json['border_radius'] as Map<String, dynamic>),
       background:

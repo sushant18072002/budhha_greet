@@ -16,19 +16,19 @@ part 'style_config.g.dart';
 class StyleConfig {
   @HiveField(0)
   @JsonKey(name: 'common')
-  final CommonStyle common;
+  final CommonStyle? common;
   
   @HiveField(1)
   @JsonKey(name: 'title')
-  final ElementStyle title;
+  final ElementStyle? title;
   
   @HiveField(2)
   @JsonKey(name: 'quote')
-  final ElementStyle quote;
+  final ElementStyle? quote;
   
   @HiveField(3)
   @JsonKey(name: 'action_buttons')
-  final ActionButtons actionButtons;
+  final ActionButtons? actionButtons;
 
   StyleConfig({
     required this.common,

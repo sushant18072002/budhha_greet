@@ -18,9 +18,9 @@ class LayoutConfigAdapter extends TypeAdapter<LayoutConfig> {
     };
     return LayoutConfig(
       responsive: fields[0] as bool,
-      breakpoints: fields[1] as LayoutBreakpoints,
-      portrait: fields[2] as OrientationLayout,
-      landscape: fields[3] as OrientationLayout,
+      breakpoints: fields[1] as LayoutBreakpoints?,
+      portrait: fields[2] as OrientationLayout?,
+      landscape: fields[3] as OrientationLayout?,
     );
   }
 
@@ -55,12 +55,18 @@ class LayoutConfigAdapter extends TypeAdapter<LayoutConfig> {
 
 LayoutConfig _$LayoutConfigFromJson(Map<String, dynamic> json) => LayoutConfig(
       responsive: json['responsive'] as bool,
-      breakpoints: LayoutBreakpoints.fromJson(
-          json['breakpoints'] as Map<String, dynamic>),
-      portrait:
-          OrientationLayout.fromJson(json['portrait'] as Map<String, dynamic>),
-      landscape:
-          OrientationLayout.fromJson(json['landscape'] as Map<String, dynamic>),
+      breakpoints: json['breakpoints'] == null
+          ? null
+          : LayoutBreakpoints.fromJson(
+              json['breakpoints'] as Map<String, dynamic>),
+      portrait: json['portrait'] == null
+          ? null
+          : OrientationLayout.fromJson(
+              json['portrait'] as Map<String, dynamic>),
+      landscape: json['landscape'] == null
+          ? null
+          : OrientationLayout.fromJson(
+              json['landscape'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$LayoutConfigToJson(LayoutConfig instance) =>

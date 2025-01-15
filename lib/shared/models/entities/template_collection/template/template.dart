@@ -46,7 +46,7 @@ class Template {
 
   @HiveField(5)
   @JsonKey(name: 'responsive_config')
-  final ResponsiveConfig responsiveConfig;
+  final ResponsiveConfig? responsiveConfig;
 
   @HiveField(6)
   @JsonKey(name: 'category_ids')
@@ -62,11 +62,11 @@ class Template {
 
   @HiveField(9)
   @JsonKey(name: 'metrics')
-  final TemplateMetrics metrics;
+  final TemplateMetrics? metrics;
 
   @HiveField(10)
   @JsonKey(name: 'audit')
-  final Audit audit;
+  final Audit? audit;
 
   Template({
     required this.uuid,

@@ -22,12 +22,12 @@ class TemplateAdapter extends TypeAdapter<Template> {
       composition: fields[2] as TemplateComposition,
       layoutConfig: fields[3] as LayoutConfig,
       styleConfig: fields[4] as StyleConfig,
-      responsiveConfig: fields[5] as ResponsiveConfig,
+      responsiveConfig: fields[5] as ResponsiveConfig?,
       categoryIds: (fields[6] as List).cast<String>(),
       tagIds: (fields[7] as List).cast<String>(),
       metadata: fields[8] as TemplateMetadata,
-      metrics: fields[9] as TemplateMetrics,
-      audit: fields[10] as Audit,
+      metrics: fields[9] as TemplateMetrics?,
+      audit: fields[10] as Audit?,
     );
   }
 
@@ -86,8 +86,10 @@ Template _$TemplateFromJson(Map<String, dynamic> json) => Template(
           LayoutConfig.fromJson(json['layout_config'] as Map<String, dynamic>),
       styleConfig:
           StyleConfig.fromJson(json['style_config'] as Map<String, dynamic>),
-      responsiveConfig: ResponsiveConfig.fromJson(
-          json['responsive_config'] as Map<String, dynamic>),
+      responsiveConfig: json['responsive_config'] == null
+          ? null
+          : ResponsiveConfig.fromJson(
+              json['responsive_config'] as Map<String, dynamic>),
       categoryIds: (json['category_ids'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
@@ -95,9 +97,12 @@ Template _$TemplateFromJson(Map<String, dynamic> json) => Template(
           (json['tag_ids'] as List<dynamic>).map((e) => e as String).toList(),
       metadata:
           TemplateMetadata.fromJson(json['metadata'] as Map<String, dynamic>),
-      metrics:
-          TemplateMetrics.fromJson(json['metrics'] as Map<String, dynamic>),
-      audit: Audit.fromJson(json['audit'] as Map<String, dynamic>),
+      metrics: json['metrics'] == null
+          ? null
+          : TemplateMetrics.fromJson(json['metrics'] as Map<String, dynamic>),
+      audit: json['audit'] == null
+          ? null
+          : Audit.fromJson(json['audit'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$TemplateToJson(Template instance) => <String, dynamic>{
