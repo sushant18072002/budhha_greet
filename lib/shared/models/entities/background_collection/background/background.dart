@@ -1,3 +1,4 @@
+import 'package:buddha_greet/shared/models/entities/background_collection/background/background_style/background_visual_effects.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -24,10 +25,6 @@ class Background {
   @JsonKey(name: 'uuid')
   final String uuid;
 
-  @HiveField(1)
-  @JsonKey(name: 'id')
-  final String id;
-
   @HiveField(2)
   @JsonKey(name: 'type')
   final String type;
@@ -42,7 +39,7 @@ class Background {
 
   @HiveField(5)
   @JsonKey(name: 'visual_effects')
-  final BackgroundVisualData visualEffects;
+  final BackgroundVisualEffects visualEffects;
 
   @HiveField(6)
   @JsonKey(name: 'category_ids')
@@ -70,7 +67,6 @@ class Background {
 
   Background({
     required this.uuid,
-    required this.id,
     required this.type,
     required this.translations,
     required this.visualData,

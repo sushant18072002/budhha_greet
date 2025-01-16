@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -224,8 +225,8 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
                 fit: StackFit.expand,
                 children: [
                   _buildBackgroundWithEffects(template),
-                  if (commonStyle?.gradientOverlay?.enabled ?? false)
-                    _buildGradientOverlay(template, isGridView),
+                  // if (commonStyle?.gradientOverlay?.enabled ?? false)
+                  //   _buildGradientOverlay(template, isGridView),
                   _buildTemplateContent(
                     template,
                     isGridView,
@@ -242,9 +243,6 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
   }
 
   Widget _buildBackgroundWithEffects(Template template) {
-    //final visualEffects = template.layoutConfig.portrait.quote.visualEffects;
-    //final blur = visualEffects.blur;
-
     return FutureBuilder<Background?>(
       future: controller.getBackgroundById(template.composition.backgroundId),
       builder: (context, snapshot) {
@@ -255,52 +253,166 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
           );
         }
 
-        Widget imageWidget = Image.asset(
-          snapshot.data!.visualData.image?.original ?? '',
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => Container(
-            color: Colors.grey[300],
-            child: const Icon(Icons.broken_image, color: Colors.white70),
-          ),
-        );
+        final background = snapshot.data!;
 
-        // if (blur.enabled) {
-        //   imageWidget = ImageFiltered(
-        //     imageFilter: ImageFilter.blur(
-        //       sigmaX: blur.sigma.x.base.clamp(
-        //         blur.sigma.x.min,
-        //         blur.sigma.x.max,
-        //       ),
-        //       sigmaY: blur.sigma.y.base.clamp(
-        //         blur.sigma.y.min,
-        //         blur.sigma.y.max,
-        //       ),
-        //     ),
-        //     child: imageWidget,
-        //   );
-        // }
-
-        return imageWidget;
+        // Handle based on background type
+        switch (background.type) {
+          case 'image':
+            return _buildImageBackground(background, template);
+          case 'gradient':
+            return _buildGradientBackground(background);
+          case 'color':
+            return _buildColorBackground(background);
+          default:
+            return _buildFallbackBackground();
+        }
       },
     );
   }
 
-  Widget _buildGradientOverlay(Template template, bool isGridView) {
-    final gradientOverlay = template.styleConfig.common?.gradientOverlay;
-    if (gradientOverlay == null) return const SizedBox.shrink();
+  Widget _buildImageBackground(Background background, Template template) {
+    final imageData = background.visualData.image;
+    if (imageData == null) return _buildFallbackBackground();
+
+    // Choose best variant based on screen size
+    final variant = _chooseBestVariant(imageData.variants);
+    final imagePath = variant?.path ?? imageData.original;
+
+    Widget imageWidget = Image.asset(
+      imagePath,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) => _buildFallbackBackground(),
+      // Use placeholder for better loading experience
+      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded) return child;
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 500),
+          child: frame != null
+              ? child
+              : Image.asset(imageData.placeholder, fit: BoxFit.cover),
+        );
+      },
+    );
+
+    // Apply visual effects if configured
+    final effects = background.visualEffects;
+    if (effects != null) {
+      // Apply opacity
+      if (effects.opacity != 1.0) {
+        imageWidget = Opacity(
+          opacity: effects.opacity.clamp(0.0, 1.0),
+          child: imageWidget,
+        );
+      }
+
+      // Apply blur
+      if (effects.blur > 0) {
+        imageWidget = ImageFiltered(
+          imageFilter: ImageFilter.blur(
+            sigmaX: effects.blur.clamp(0.0, 20.0),
+            sigmaY: effects.blur.clamp(0.0, 20.0),
+          ),
+          child: imageWidget,
+        );
+      }
+
+      // Apply blend mode if not normal
+      if (effects.blendMode != 'normal') {
+        imageWidget = ColorFiltered(
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.5),
+            _parseBlendMode(effects.blendMode),
+          ),
+          child: imageWidget,
+        );
+      }
+    }
+    return SizedBox.expand(child: imageWidget);
+  }
+
+  Widget _buildGradientBackground(Background background) {
+    final gradientData = background.visualData.gradient;
+    if (gradientData == null) return _buildFallbackBackground();
 
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
+          colors: gradientData.colors
+              .map((color) => LayoutHelpers.parseColorSafely(color))
+              .toList(),
+          stops: gradientData.stops
+              .map((stop) => stop.position.clamp(0.0, 1.0))
+              .toList(),
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: gradientOverlay.stops.map((stop) {
-            return _parseColorSafely(stop.color);
-          }).toList(),
-          stops: gradientOverlay.stops.map((stop) => stop.position).toList(),
+          transform: GradientRotation(gradientData.angle * pi / 180),
         ),
       ),
     );
+  }
+
+  Widget _buildColorBackground(Background background) {
+    final colorData = background.visualData.color;
+    if (colorData == null) return _buildFallbackBackground();
+
+    return Container(
+      color: LayoutHelpers.parseColorSafely(colorData.color),
+    );
+  }
+
+  Widget _buildFallbackBackground() {
+    return Container(
+      color: Colors.grey[300],
+      child: const Icon(Icons.image_not_supported, color: Colors.white70),
+    );
+  }
+
+  BackgroundImageVariant? _chooseBestVariant(
+      List<BackgroundImageVariant> variants) {
+    if (variants.isEmpty) return null;
+
+    // Get device pixel ratio and screen size
+    final pixelRatio = WidgetsBinding.instance.window.devicePixelRatio;
+    final screenSize = WidgetsBinding.instance.window.physicalSize;
+    final targetWidth = screenSize.width * pixelRatio;
+
+    // Find the smallest variant that's still larger than our target
+    final sortedVariants = List<BackgroundImageVariant>.from(variants)
+      ..sort((a, b) => a.width.compareTo(b.width));
+
+    for (final variant in sortedVariants) {
+      if (variant.width >= targetWidth) return variant;
+    }
+
+    // If no variant is large enough, use the largest available
+    return sortedVariants.last;
+  }
+
+  // Color _parseColorSafely(String colorString) {
+  //   try {
+  //     if (colorString.startsWith('0x')) {
+  //       return Color(int.parse(colorString));
+  //     } else if (colorString.startsWith('#')) {
+  //       return Color(int.parse('0xFF${colorString.substring(1)}'));
+  //     }
+  //     return Colors.grey;
+  //   } catch (e) {
+  //     return Colors.grey;
+  //   }
+  // }
+
+  BlendMode _parseBlendMode(String blendMode) {
+    switch (blendMode.toLowerCase()) {
+      case 'multiply':
+        return BlendMode.multiply;
+      case 'screen':
+        return BlendMode.screen;
+      case 'overlay':
+        return BlendMode.overlay;
+      // Add other blend modes as needed
+      default:
+        return BlendMode.srcOver;
+    }
   }
 
   Widget _buildTemplateContent(
@@ -310,22 +422,9 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
   ) {
     final currentLanguage = controller.currentLanguage.value;
     final translation = template.translations[currentLanguage];
+    print(
+        "_buildTemplateContent translation ${translation} template.translations ${template.translations.entries.toList()} ");
     if (translation == null) return const SizedBox.shrink();
-
-    final titleStyle = template.styleConfig.title;
-    final quoteStyle = template.styleConfig.quote;
-
-    if (titleStyle == null || quoteStyle == null) {
-      return const SizedBox.shrink();
-    }
-
-    final titleFontSize = _calculateDynamicFontSize(
-      translation.title,
-      constraints.maxWidth,
-      titleStyle.typography?.fontSize?.base ?? 16.0,
-      titleStyle.typography?.fontSize?.min ?? 12.0,
-      titleStyle.typography?.fontSize?.max ?? 24.0,
-    );
 
     final spacing = template.layoutConfig.portrait?.layoutAdjustments?.spacing
             .betweenElements ??
@@ -341,14 +440,20 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
             flex: 4,
             fit: FlexFit.tight,
             child: Center(
-              child: _buildAdaptiveTitle(
-                title: translation.title,
-                template: template,
-                constraints: constraints,
-                fontSize: titleFontSize,
-                maxHeight: constraints.maxHeight * 0.4,
-              ),
-            ),
+                child: AdaptiveTitleWidget(
+              title: translation.title,
+              template: template,
+              isGridView: isGridView,
+              maxHeight: constraints.maxHeight * 0.4,
+            )
+                // _buildAdaptiveTitle(
+                //   title: translation.title,
+                //   template: template,
+                //   isGridView: isGridView,
+                //   constraints: constraints,
+                //   maxHeight: constraints.maxHeight * 0.4,
+                // ),
+                ),
           ),
           SizedBox(height: spacing),
           Flexible(
@@ -356,7 +461,6 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
             fit: FlexFit.tight,
             child: _buildAdaptiveQuote(
               template,
-              quoteStyle,
               isGridView,
               constraints,
               constraints.maxHeight * 0.6,
@@ -408,268 +512,8 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
     return (baseSize / reduction).clamp(minSize, maxSize);
   }
 
-  Widget _buildAdaptiveTitle({
-    required String title,
-    required Template template,
-    required BoxConstraints constraints,
-    required double fontSize,
-    required double maxHeight,
-  }) {
-    // Default style configurations
-    final defaultTypography = ElementTypography(
-      fontFamily: 'Roboto',
-      fontSize: ElementFontSize(
-        base: 16.0,
-        min: 12.0,
-        max: 24.0,
-        scale: 1.0,
-      ),
-      fontWeight: 'normal',
-      letterSpacing: 0.0,
-      lineHeight: 1.2,
-      textAlign: 'center',
-      textTransform: 'none',
-    );
-
-    final defaultColors = ElementStyleColors(
-      text: '#FFFFFF',
-      shadow: ElementShadow(
-        color: '#000000',
-        offset: ShadowOffset(x: 0, y: 1),
-        blurRadius: 2.0,
-        opacity: 0.5,
-      ),
-    );
-
-    final defaultElementStyle = ElementStyle(
-      typography: defaultTypography,
-      colors: defaultColors,
-    );
-
-    // Extract and verify style configurations
-    final titleStyle = template.styleConfig.title ?? defaultElementStyle;
-    final typography = titleStyle.typography ?? defaultTypography;
-    final colors = titleStyle.colors ?? defaultColors;
-
-    // Layout configuration defaults
-    final defaultLayoutSafeArea = LayoutSafeArea(
-      top: 0,
-      bottom: 0,
-    );
-
-    final defaultVisualEffects = LayoutVisualEffects(
-      blur: LayoutBlur(
-        enabled: false,
-        sigma: LayoutBlurSigma(
-          x: LayoutSigmaValue(base: 0, min: 0, max: 0),
-          y: LayoutSigmaValue(base: 0, min: 0, max: 0),
-        ),
-        quality: 'none',
-      ),
-      borderRadius: LayoutBorderRadius(
-        base: 8,
-        min: 4,
-        max: 16,
-        scaleFactor: 1,
-      ),
-      background: LayoutBackground(
-        opacity: LayoutOpacityConfig(
-          base: 0.5,
-          min: 0.0,
-          max: 1.0,
-        ),
-        color: '#000000',
-      ),
-    );
-
-    final defaultElementLayout = ElementLayout(
-      layoutPosition: LayoutPosition(x: 0, y: 0),
-      size: LayoutSize(width: 0, height: 0),
-      padding: 8.0,
-      safeArea: defaultLayoutSafeArea,
-      visualEffects: defaultVisualEffects,
-    );
-
-    // Extract and verify layout configurations
-    final layoutConfig =
-        template.layoutConfig.portrait?.title ?? defaultElementLayout;
-    final visualEffects = layoutConfig.visualEffects ?? defaultVisualEffects;
-    final blur = visualEffects.blur;
-    final borderRadius = visualEffects.borderRadius;
-    final background = visualEffects.background;
-
-    // Calculate dynamic border radius
-    final dynamicBorderRadius = (borderRadius.base.clamp(
-          borderRadius.min,
-          borderRadius.max,
-        ) *
-        borderRadius.scaleFactor);
-
-    // Create shadow if defined
-    final shadows = <Shadow>[];
-    if (colors.shadow != null) {
-      shadows.add(Shadow(
-        color: _parseColorSafely(colors.shadow.color)
-            .withOpacity(colors.shadow.opacity),
-        offset: Offset(
-          colors.shadow.offset.x,
-          colors.shadow.offset.y,
-        ),
-        blurRadius: colors.shadow.blurRadius,
-      ));
-    }
-
-    // Create text style with verified values
-    final textStyle = TextStyle(
-      fontFamily: typography.fontFamily,
-      fontSize: fontSize.clamp(
-        typography.fontSize.min,
-        typography.fontSize.max,
-      ),
-      fontWeight: _parseFontWeight(typography.fontWeight),
-      letterSpacing: typography.letterSpacing,
-      color: _parseColorSafely(colors.text),
-      height: typography.lineHeight,
-      shadows: shadows,
-    );
-
-    // Text measurement and line calculation
-    final textSpan = TextSpan(
-      text: title,
-      style: textStyle,
-    );
-
-    final textPainter = TextPainter(
-      text: textSpan,
-      textDirection: TextDirection.ltr,
-      maxLines: 3,
-    );
-    textPainter.layout(maxWidth: constraints.maxWidth);
-
-    final lineMetrics = textPainter.computeLineMetrics();
-    final lineHeight = lineMetrics.isNotEmpty
-        ? textPainter.height / lineMetrics.length
-        : (typography.lineHeight * fontSize);
-    final maxLines = (maxHeight / lineHeight).floor().clamp(1, 3);
-
-    // Build the widget
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(dynamicBorderRadius),
-      child: BackdropFilter(
-        filter: blur?.enabled == true
-            ? ImageFilter.blur(
-                sigmaX: blur?.sigma.x.base.clamp(
-                      blur?.sigma.x.min ?? 0,
-                      blur?.sigma.x.max ?? 0,
-                    ) ??
-                    0,
-                sigmaY: blur?.sigma.y.base.clamp(
-                      blur?.sigma.y.min ?? 0,
-                      blur?.sigma.y.max ?? 0,
-                    ) ??
-                    0,
-              )
-            : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: layoutConfig.padding??0.0,
-            vertical:((layoutConfig.padding??0.0) *(0.67)),
-          ),
-          decoration: BoxDecoration(
-            color: _parseColorSafely(background.color).withOpacity(
-              background.opacity.base.clamp(
-                background.opacity.min,
-                background.opacity.max,
-              ),
-            ),
-            borderRadius: BorderRadius.circular(dynamicBorderRadius),
-          ),
-          child: AutoSizeText(
-            title,
-            style: textStyle,
-            maxLines: maxLines,
-            overflow: TextOverflow.ellipsis,
-            textAlign: _parseTextAlign(typography.textAlign),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Color _parseColorSafely(String? colorString) {
-    if (colorString == null) return Colors.black;
-
-    try {
-      final formattedColor = colorString.startsWith('0x')
-          ? colorString.substring(2)
-          : (colorString.startsWith('#')
-              ? colorString.substring(1)
-              : colorString);
-
-      final normalizedColor =
-          formattedColor.length == 6 ? 'FF$formattedColor' : formattedColor;
-
-      return Color(int.parse(normalizedColor, radix: 16));
-    } catch (e) {
-      return Colors.black; // Return a default color on error
-    }
-  }
-
-// Helper function to parse font weight
-  FontWeight _parseFontWeight(String weight) {
-    final Map<String, FontWeight> weights = {
-      'normal': FontWeight.normal,
-      'bold': FontWeight.bold,
-      'w100': FontWeight.w100,
-      'w200': FontWeight.w200,
-      'w300': FontWeight.w300,
-      'w400': FontWeight.w400,
-      'w500': FontWeight.w500,
-      'w600': FontWeight.w600,
-      'w700': FontWeight.w700,
-      'w800': FontWeight.w800,
-      'w900': FontWeight.w900,
-    };
-    return weights[weight.toLowerCase()] ?? FontWeight.normal;
-  }
-
-// Helper function to parse text alignment
-  TextAlign _parseTextAlign(String align) {
-    final Map<String, TextAlign> alignments = {
-      'left': TextAlign.left,
-      'right': TextAlign.right,
-      'center': TextAlign.center,
-      'justify': TextAlign.justify,
-      'start': TextAlign.start,
-      'end': TextAlign.end,
-    };
-    return alignments[align.toLowerCase()] ?? TextAlign.center;
-  }
-
-  Color parseColor(String colorString) {
-    try {
-      // Normalize the input to ensure it's in the correct format
-      final formattedColor = colorString.startsWith('0x')
-          ? colorString.substring(2) // Remove '0x' prefix
-          : (colorString.startsWith('#')
-              ? colorString.substring(1)
-              : colorString);
-
-      // Ensure the string is exactly 8 characters long for ARGB
-      final normalizedColor = formattedColor.length == 6
-          ? 'FF$formattedColor' // Add alpha channel if missing
-          : formattedColor;
-
-      // Parse and return a Color object
-      return Color(int.parse(normalizedColor, radix: 16));
-    } catch (e) {
-      // Log or throw a meaningful error
-      throw FormatException('Invalid color format: $colorString');
-    }
-  }
-
-  Widget _buildAdaptiveQuote(Template template, ElementStyle elementStyle,
-      bool isGridView, BoxConstraints constraints, double maxHeight) {
+  Widget _buildAdaptiveQuote(Template template, bool isGridView,
+      BoxConstraints constraints, double maxHeight) {
     return FutureBuilder<Quote?>(
       future: controller.getQuoteById(template.composition.quoteId),
       builder: (context, snapshot) {
@@ -678,6 +522,10 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
         final quoteText =
             snapshot.data?.translations[controller.currentLanguage.value]?.text;
         if (quoteText == null) return const SizedBox.shrink();
+
+        final elementStyle = template.styleConfig.title.orDefault;
+        final typography = elementStyle.typography.orDefault;
+        final colors = elementStyle.colors.orDefault;
 
         final quoteFontSize = _calculateDynamicFontSize(
             quoteText,
@@ -792,6 +640,351 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
                 ],
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DefaultStyles {
+  static ElementStyle get defaultElementStyle => ElementStyle(
+        typography: defaultTypography,
+        colors: defaultColors,
+      );
+
+  static ElementTypography get defaultTypography => ElementTypography(
+        fontFamily: 'Roboto',
+        fontSize: defaultFontSize,
+        fontWeight: 'normal',
+        letterSpacing: 0.0,
+        lineHeight: 1.2,
+        textAlign: 'center',
+        textTransform: 'none',
+      );
+
+  static ElementFontSize get defaultFontSize => ElementFontSize(
+        base: 16.0,
+        min: 12.0,
+        max: 24.0,
+        scale: 1.0,
+      );
+
+  static ElementStyleColors get defaultColors => ElementStyleColors(
+        text: '#FFFFFF',
+        shadow: defaultShadow,
+      );
+
+  static ElementShadow get defaultShadow => ElementShadow(
+        color: '#000000',
+        offset: defaultShadowOffset,
+        blurRadius: 2.0,
+        opacity: 0.5,
+      );
+
+  static ShadowOffset get defaultShadowOffset => ShadowOffset(
+        x: 0,
+        y: 1,
+      );
+}
+
+// Extension method for nullable ElementStyle
+extension ElementStyleExtension on ElementStyle? {
+  ElementStyle get orDefault => this ?? DefaultStyles.defaultElementStyle;
+}
+
+extension ElementDefaultTypographyExtension on ElementTypography? {
+  ElementTypography get orDefault =>
+      this ?? DefaultStyles.defaultElementStyle.typography;
+}
+
+extension ElementDefaultElementStyleColorsExtension on ElementStyleColors? {
+  ElementStyleColors get orDefault =>
+      this ?? DefaultStyles.defaultElementStyle.colors;
+}
+
+class DefaultLayoutConfigs {
+  static LayoutSafeArea get defaultSafeArea => LayoutSafeArea(
+        top: 0,
+        bottom: 0,
+      );
+
+  static LayoutBlurSigma get defaultBlurSigma => LayoutBlurSigma(
+        x: LayoutSigmaValue(base: 0, min: 0, max: 0),
+        y: LayoutSigmaValue(base: 0, min: 0, max: 0),
+      );
+
+  static LayoutBlur get defaultBlur => LayoutBlur(
+        enabled: false,
+        sigma: defaultBlurSigma,
+        quality: 'none',
+      );
+
+  static LayoutBorderRadius get defaultBorderRadius => LayoutBorderRadius(
+        base: 8,
+        min: 4,
+        max: 16,
+        scaleFactor: 1,
+      );
+
+  static LayoutOpacityConfig get defaultOpacity => LayoutOpacityConfig(
+        base: 0.5,
+        min: 0.0,
+        max: 1.0,
+      );
+
+  static LayoutBackground get defaultBackground => LayoutBackground(
+        opacity: defaultOpacity,
+        color: '#000000',
+      );
+
+  static LayoutVisualEffects get defaultVisualEffects => LayoutVisualEffects(
+        blur: defaultBlur,
+        borderRadius: defaultBorderRadius,
+        background: defaultBackground,
+      );
+
+  static ElementLayout get defaultElementLayout => ElementLayout(
+        layoutPosition: LayoutPosition(x: 0, y: 0),
+        size: LayoutSize(width: 0, height: 0),
+        padding: 8.0,
+        safeArea: defaultSafeArea,
+        visualEffects: defaultVisualEffects,
+      );
+}
+
+// Extension methods for layout components
+extension LayoutSafeAreaExtension on LayoutSafeArea? {
+  LayoutSafeArea get orDefault => this ?? DefaultLayoutConfigs.defaultSafeArea;
+}
+
+extension LayoutBlurExtension on LayoutBlur? {
+  LayoutBlur get orDefault => this ?? DefaultLayoutConfigs.defaultBlur;
+}
+
+extension LayoutBorderRadiusExtension on LayoutBorderRadius? {
+  LayoutBorderRadius get orDefault =>
+      this ?? DefaultLayoutConfigs.defaultBorderRadius;
+}
+
+extension LayoutBackgroundExtension on LayoutBackground? {
+  LayoutBackground get orDefault =>
+      this ?? DefaultLayoutConfigs.defaultBackground;
+}
+
+extension LayoutVisualEffectsExtension on LayoutVisualEffects? {
+  LayoutVisualEffects get orDefault =>
+      this ?? DefaultLayoutConfigs.defaultVisualEffects;
+}
+
+extension ElementLayoutExtension on ElementLayout? {
+  ElementLayout get orDefault =>
+      this ?? DefaultLayoutConfigs.defaultElementLayout;
+}
+
+// Helper methods
+class LayoutHelpers {
+  static Color parseColorSafely(String? colorString) {
+    if (colorString == null) return Colors.black;
+
+    try {
+      final formattedColor = colorString.startsWith('0x')
+          ? colorString.substring(2)
+          : (colorString.startsWith('#')
+              ? colorString.substring(1)
+              : colorString);
+
+      final normalizedColor =
+          formattedColor.length == 6 ? 'FF$formattedColor' : formattedColor;
+
+      return Color(int.parse(normalizedColor, radix: 16));
+    } catch (e) {
+      return Colors.black;
+    }
+  }
+
+  static FontWeight parseFontWeight(String weight) {
+    const weights = {
+      'normal': FontWeight.normal,
+      'bold': FontWeight.bold,
+      'w100': FontWeight.w100,
+      'w200': FontWeight.w200,
+      'w300': FontWeight.w300,
+      'w400': FontWeight.w400,
+      'w500': FontWeight.w500,
+      'w600': FontWeight.w600,
+      'w700': FontWeight.w700,
+      'w800': FontWeight.w800,
+      'w900': FontWeight.w900,
+    };
+    return weights[weight.toLowerCase()] ?? FontWeight.normal;
+  }
+
+  static TextAlign parseTextAlign(String align) {
+    const alignments = {
+      'left': TextAlign.left,
+      'right': TextAlign.right,
+      'center': TextAlign.center,
+      'justify': TextAlign.justify,
+      'start': TextAlign.start,
+      'end': TextAlign.end,
+    };
+    return alignments[align.toLowerCase()] ?? TextAlign.center;
+  }
+
+  static double calculateDynamicFontSize(
+    String text,
+    double maxWidth,
+    double baseSize,
+    double minSize,
+    double maxSize,
+  ) {
+    final approxCharWidth = baseSize * 0.6;
+    final maxChars = maxWidth / approxCharWidth;
+
+    if (text.length <= maxChars) {
+      return baseSize.clamp(minSize, maxSize);
+    }
+
+    final reduction = (text.length / maxChars) * 0.5;
+    return (baseSize / reduction).clamp(minSize, maxSize);
+  }
+}
+
+class AdaptiveTitleWidget extends StatelessWidget {
+  final String title;
+  final Template template;
+  final bool isGridView;
+  final double maxHeight;
+
+  const AdaptiveTitleWidget({
+    Key? key,
+    required this.title,
+    required this.template,
+    required this.isGridView,
+    required this.maxHeight,
+  }) : super(key: key);
+
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) => _buildAdaptiveTitle(
+        constraints: constraints,
+      ),
+    );
+  }
+
+  Widget _buildAdaptiveTitle({
+    required BoxConstraints constraints,
+  }) {
+    final titleStyle = template.styleConfig.title.orDefault;
+    final typography = titleStyle.typography.orDefault;
+    final colors = titleStyle.colors.orDefault;
+
+    final fontSize = LayoutHelpers.calculateDynamicFontSize(
+      title,
+      constraints.maxWidth * 0.85,
+      isGridView ? 16 : 18,
+      titleStyle.typography.fontSize.min,
+      titleStyle.typography.fontSize.max,
+    );
+
+    // Get layout configuration with defaults
+    final layoutConfig = (template.layoutConfig.portrait?.title).orDefault;
+    final visualEffects = layoutConfig.visualEffects.orDefault;
+    final blur = visualEffects.blur.orDefault;
+    final borderRadius = visualEffects.borderRadius.orDefault;
+    final background = visualEffects.background.orDefault;
+
+    // Calculate dynamic border radius
+    final dynamicBorderRadius =
+        (borderRadius.base.clamp(borderRadius.min, borderRadius.max) *
+            borderRadius.scaleFactor);
+
+    // Create shadows
+    final shadows = <Shadow>[];
+    if (colors.shadow != null) {
+      shadows.add(Shadow(
+        color: LayoutHelpers.parseColorSafely(colors.shadow.color)
+            .withOpacity(colors.shadow.opacity),
+        offset: Offset(
+          colors.shadow.offset.x,
+          colors.shadow.offset.y,
+        ),
+        blurRadius: colors.shadow.blurRadius,
+      ));
+    }
+
+    // Create text style
+    final textStyle = TextStyle(
+      fontFamily: typography.fontFamily,
+      fontSize: fontSize.clamp(
+        typography.fontSize.min,
+        typography.fontSize.max,
+      ),
+      fontWeight: LayoutHelpers.parseFontWeight(typography.fontWeight),
+      letterSpacing: typography.letterSpacing,
+      color: LayoutHelpers.parseColorSafely(colors.text),
+      height: typography.lineHeight,
+      shadows: shadows,
+    );
+
+    // Text measurement and line calculation
+    final textSpan = TextSpan(
+      text: title,
+      style: textStyle,
+    );
+
+    final textPainter = TextPainter(
+      text: textSpan,
+      textDirection: TextDirection.ltr,
+      maxLines: 3,
+    );
+    textPainter.layout(maxWidth: constraints.maxWidth);
+
+    final lineMetrics = textPainter.computeLineMetrics();
+    final lineHeight = lineMetrics.isNotEmpty
+        ? textPainter.height / lineMetrics.length
+        : (typography.lineHeight * fontSize);
+    final maxLines = (maxHeight / lineHeight).floor().clamp(1, 3);
+
+    // Build the widget
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(dynamicBorderRadius),
+      child: BackdropFilter(
+        filter: blur.enabled
+            ? ImageFilter.blur(
+                sigmaX: blur.sigma.x.base.clamp(
+                  blur.sigma.x.min,
+                  blur.sigma.x.max,
+                ),
+                sigmaY: blur.sigma.y.base.clamp(
+                  blur.sigma.y.min,
+                  blur.sigma.y.max,
+                ),
+              )
+            : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: layoutConfig.padding ?? 0.0,
+            vertical: ((layoutConfig.padding ?? 0.0) * 0.67),
+          ),
+          decoration: BoxDecoration(
+            color: LayoutHelpers.parseColorSafely(background.color).withOpacity(
+              background.opacity.base.clamp(
+                background.opacity.min,
+                background.opacity.max,
+              ),
+            ),
+            borderRadius: BorderRadius.circular(dynamicBorderRadius),
+          ),
+          child: AutoSizeText(
+            title,
+            style: textStyle,
+            maxLines: maxLines,
+            overflow: TextOverflow.ellipsis,
+            textAlign: LayoutHelpers.parseTextAlign(typography.textAlign),
+            minFontSize: titleStyle.typography.fontSize.min,
+            maxFontSize: titleStyle.typography.fontSize.max,
           ),
         ),
       ),

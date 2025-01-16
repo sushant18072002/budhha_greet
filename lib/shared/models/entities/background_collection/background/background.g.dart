@@ -18,11 +18,10 @@ class BackgroundAdapter extends TypeAdapter<Background> {
     };
     return Background(
       uuid: fields[0] as String,
-      id: fields[1] as String,
       type: fields[2] as String,
       translations: (fields[3] as Map).cast<String, BackGroundTranslation>(),
       visualData: fields[4] as BackgroundVisualData,
-      visualEffects: fields[5] as BackgroundVisualData,
+      visualEffects: fields[5] as BackgroundVisualEffects,
       categoryIds: (fields[6] as List).cast<String>(),
       tagIds: (fields[7] as List).cast<String>(),
       attribution: fields[8] as BackgroundAttribution,
@@ -35,11 +34,9 @@ class BackgroundAdapter extends TypeAdapter<Background> {
   @override
   void write(BinaryWriter writer, Background obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.uuid)
-      ..writeByte(1)
-      ..write(obj.id)
       ..writeByte(2)
       ..write(obj.type)
       ..writeByte(3)
@@ -79,7 +76,6 @@ class BackgroundAdapter extends TypeAdapter<Background> {
 
 Background _$BackgroundFromJson(Map<String, dynamic> json) => Background(
       uuid: json['uuid'] as String,
-      id: json['id'] as String,
       type: json['type'] as String,
       translations: (json['translations'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(
@@ -87,7 +83,7 @@ Background _$BackgroundFromJson(Map<String, dynamic> json) => Background(
       ),
       visualData: BackgroundVisualData.fromJson(
           json['visual_data'] as Map<String, dynamic>),
-      visualEffects: BackgroundVisualData.fromJson(
+      visualEffects: BackgroundVisualEffects.fromJson(
           json['visual_effects'] as Map<String, dynamic>),
       categoryIds: (json['category_ids'] as List<dynamic>)
           .map((e) => e as String)
@@ -106,7 +102,6 @@ Background _$BackgroundFromJson(Map<String, dynamic> json) => Background(
 Map<String, dynamic> _$BackgroundToJson(Background instance) =>
     <String, dynamic>{
       'uuid': instance.uuid,
-      'id': instance.id,
       'type': instance.type,
       'translations': instance.translations,
       'visual_data': instance.visualData,

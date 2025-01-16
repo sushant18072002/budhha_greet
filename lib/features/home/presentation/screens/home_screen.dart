@@ -20,6 +20,7 @@ class HomeScreen extends GetView<HomeController> {
         child: RefreshIndicator(
           onRefresh: controller.refreshData,
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(

@@ -3,7 +3,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'background_attribution.g.dart';
 
-
 @HiveType(typeId: 26)
 @JsonSerializable()
 class BackgroundAttribution {
@@ -21,7 +20,7 @@ class BackgroundAttribution {
 
   BackgroundAttribution({
     this.photographer,
-    
+
     required this.license,
     required this.url,
   });

@@ -137,6 +137,7 @@ class DatabaseService extends GetxService {
       Hive.registerAdapter(BackgroundVisualEffectsAdapter()); //25
 
       // Attribution & Optimization - typeId: 26-28
+      Hive.registerAdapter(BackgroundAttributionAdapter()); //26
       Hive.registerAdapter(BackgroundOptimizationAdapter()); //27
       Hive.registerAdapter(CacheConfigAdapter()); //28
       

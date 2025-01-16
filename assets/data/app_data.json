@@ -251,6 +251,46 @@
             "modified_by": "system",
             "version": 1
           }
+        },
+        {
+          "uuid": "auth002",
+          "translations": {
+            "en": {
+              "name": "Nelson Mandela",
+              "info": "South African anti-apartheid revolutionary and political leader"
+            },
+            "hi": {
+              "name": "नेल्सन मंडेला",
+              "info": "दक्षिण अफ्रीकी रंगभेद विरोधी क्रांतिकारी और राजनीतिक नेता"
+            }
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "auth003",
+          "translations": {
+            "en": {
+              "name": "Albert Camus",
+              "info": "French philosopher and author"
+            },
+            "hi": {
+              "name": "अल्बेर कामू",
+              "info": "फ्रांसीसी दार्शनिक और लेखक"
+            }
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
         }
       ]
     },
@@ -272,6 +312,46 @@
             "created_at": "2024-01-08T08:00:00Z",
             "created_by": "system",
             "modified_at": "2024-01-08T08:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "src002",
+          "translations": {
+            "en": {
+              "title": "Long Walk to Freedom"
+            },
+            "hi": {
+              "title": "लॉन्ग वॉक टू फ्रीडम"
+            }
+          },
+          "reference": "Chapter 115",
+          "type": "autobiography",
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "src003",
+          "translations": {
+            "en": {
+              "title": "Return to Tipasa"
+            },
+            "hi": {
+              "title": "टिपासा की वापसी"
+            }
+          },
+          "reference": "Essays",
+          "type": "philosophical_essay",
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
             "modified_by": "system",
             "version": 1
           }
@@ -341,6 +421,627 @@
             "modified_by": "system",
             "version": 1
           }
+        },
+        {
+          "uuid": "550e8400-e29b-41d4-a716-446655440001",
+          "translations": {
+            "en": {
+              "text": "The greatest glory in living lies not in never falling, but in rising every time we fall.",
+              "semantic_label": "Quote about resilience and perseverance"
+            },
+            "hi": {
+              "text": "जीवन की सबसे बड़ी महिमा कभी न गिरने में नहीं, बल्कि हर बार गिरने के बाद उठने में है।",
+              "semantic_label": "लचीलापन और दृढ़ता के बारे में उद्धरण"
+            }
+          },
+          "author_id": "auth002",
+          "source_id": "src002",
+          "category_ids": [
+            "motivation",
+            "wisdom",
+            "life"
+          ],
+          "tag_ids": [
+            "tag_mood_002",
+            "inspiration"
+          ],
+          "style": {
+            "typography": {
+              "font_family": "Playfair Display",
+              "font_size": {
+                "base": 24,
+                "min": 16,
+                "max": 32,
+                "scale": 0.05
+              },
+              "font_weight": "500",
+              "letter_spacing": 0.5,
+              "line_height": 1.5,
+              "text_align": "center"
+            },
+            "colors": {
+              "text": "0xFFFFFFFF",
+              "shadow": "0x80000000"
+            }
+          },
+          "metadata": {
+            "original_language": "en",
+            "moderation_status": "approved",
+            "moderation_date": "2024-01-15T00:00:00Z",
+            "moderation_by": "system"
+          },
+          "metrics": {
+            "views": 0,
+            "shares": 0,
+            "favorites": 0,
+            "last_interaction": null
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "550e8400-e29b-41d4-a716-446655440002",
+          "translations": {
+            "en": {
+              "text": "In the midst of winter, I found there was, within me, an invincible summer.",
+              "semantic_label": "Quote about inner strength and hope"
+            },
+            "hi": {
+              "text": "सर्दी के बीच में, मैंने पाया कि मेरे भीतर एक अजेय गर्मी है।",
+              "semantic_label": "आंतरिक शक्ति और आशा के बारे में उद्धरण"
+            }
+          },
+          "author_id": "auth003",
+          "source_id": "src003",
+          "category_ids": [
+            "inspiration",
+            "nature",
+            "hope"
+          ],
+          "tag_ids": [
+            "tag_mood_002",
+            "tag_time_001"
+          ],
+          "style": {
+            "typography": {
+              "font_family": "Playfair Display",
+              "font_size": {
+                "base": 24,
+                "min": 16,
+                "max": 32,
+                "scale": 0.05
+              },
+              "font_weight": "500",
+              "letter_spacing": 0.5,
+              "line_height": 1.5,
+              "text_align": "center"
+            },
+            "colors": {
+              "text": "0xFFFFFFFF",
+              "shadow": "0x80000000"
+            }
+          },
+          "metadata": {
+            "original_language": "fr",
+            "moderation_status": "approved",
+            "moderation_date": "2024-01-15T00:00:00Z",
+            "moderation_by": "system"
+          },
+          "metrics": {
+            "views": 0,
+            "shares": 0,
+            "favorites": 0,
+            "last_interaction": null
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "550e8400-e29b-41d4-a716-446655440003",
+          "translations": {
+            "en": {
+              "text": "The journey of a thousand miles begins with a single step.",
+              "semantic_label": "Quote about beginnings and perseverance"
+            },
+            "hi": {
+              "text": "हजार मील की यात्रा एक कदम से शुरू होती है।",
+              "semantic_label": "शुरुआत और दृढ़ता के बारे में उद्धरण"
+            }
+          },
+          "author_id": "auth004",
+          "source_id": "src004",
+          "category_ids": [
+            "wisdom",
+            "journey",
+            "motivation"
+          ],
+          "tag_ids": [
+            "tag_mood_002",
+            "inspiration"
+          ],
+          "style": {
+            "typography": {
+              "font_family": "Playfair Display",
+              "font_size": {
+                "base": 24,
+                "min": 16,
+                "max": 32,
+                "scale": 0.05
+              },
+              "font_weight": "500",
+              "letter_spacing": 0.5,
+              "line_height": 1.5,
+              "text_align": "center"
+            },
+            "colors": {
+              "text": "0xFFFFFFFF",
+              "shadow": "0x80000000"
+            }
+          },
+          "metadata": {
+            "original_language": "zh",
+            "moderation_status": "approved",
+            "moderation_date": "2024-01-15T00:00:00Z",
+            "moderation_by": "system"
+          },
+          "metrics": {
+            "views": 0,
+            "shares": 0,
+            "favorites": 0,
+            "last_interaction": null
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "550e8400-e29b-41d4-a716-446655440004",
+          "translations": {
+            "en": {
+              "text": "What lies behind us and what lies before us are tiny matters compared to what lies within us.",
+              "semantic_label": "Quote about inner potential and self-discovery"
+            },
+            "hi": {
+              "text": "जो हमारे पीछे है और जो हमारे सामने है वह छोटी बातें हैं उसकी तुलना में जो हमारे भीतर है।",
+              "semantic_label": "आंतरिक क्षमता और आत्म-खोज के बारे में उद्धरण"
+            }
+          },
+          "author_id": "auth005",
+          "source_id": "src005",
+          "category_ids": [
+            "wisdom",
+            "self-discovery",
+            "inspiration"
+          ],
+          "tag_ids": [
+            "tag_mood_002",
+            "inspiration"
+          ],
+          "style": {
+            "typography": {
+              "font_family": "Playfair Display",
+              "font_size": {
+                "base": 24,
+                "min": 16,
+                "max": 32,
+                "scale": 0.05
+              },
+              "font_weight": "500",
+              "letter_spacing": 0.5,
+              "line_height": 1.5,
+              "text_align": "center"
+            },
+            "colors": {
+              "text": "0xFFFFFFFF",
+              "shadow": "0x80000000"
+            }
+          },
+          "metadata": {
+            "original_language": "en",
+            "moderation_status": "approved",
+            "moderation_date": "2024-01-15T00:00:00Z",
+            "moderation_by": "system"
+          },
+          "metrics": {
+            "views": 0,
+            "shares": 0,
+            "favorites": 0,
+            "last_interaction": null
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "550e8400-e29b-41d4-a716-446655440005",
+          "translations": {
+            "en": {
+              "text": "The only way to do great work is to love what you do.",
+              "semantic_label": "Quote about passion and work ethic"
+            },
+            "hi": {
+              "text": "महान काम करने का एकमात्र तरीका है जो आप करते हैं उससे प्यार करना।",
+              "semantic_label": "जुनून और काम नैतिकता के बारे में उद्धरण"
+            }
+          },
+          "author_id": "auth006",
+          "source_id": "src006",
+          "category_ids": [
+            "work",
+            "passion",
+            "success"
+          ],
+          "tag_ids": [
+            "tag_mood_002",
+            "inspiration"
+          ],
+          "style": {
+            "typography": {
+              "font_family": "Playfair Display",
+              "font_size": {
+                "base": 24,
+                "min": 16,
+                "max": 32,
+                "scale": 0.05
+              },
+              "font_weight": "500",
+              "letter_spacing": 0.5,
+              "line_height": 1.5,
+              "text_align": "center"
+            },
+            "colors": {
+              "text": "0xFFFFFFFF",
+              "shadow": "0x80000000"
+            }
+          },
+          "metadata": {
+            "original_language": "en",
+            "moderation_status": "approved",
+            "moderation_date": "2024-01-15T00:00:00Z",
+            "moderation_by": "system"
+          },
+          "metrics": {
+            "views": 0,
+            "shares": 0,
+            "favorites": 0,
+            "last_interaction": null
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "550e8400-e29b-41d4-a716-446655440006",
+          "translations": {
+            "en": {
+              "text": "Yesterday I was clever, so I wanted to change the world. Today I am wise, so I am changing myself.",
+              "semantic_label": "Quote about personal growth and wisdom"
+            },
+            "hi": {
+              "text": "कल मैं चतुर था, इसलिए मैं दुनिया को बदलना चाहता था। आज मैं बुद्धिमान हूं, इसलिए मैं खुद को बदल रहा हूं।",
+              "semantic_label": "व्यक्तिगत विकास और ज्ञान के बारे में उद्धरण"
+            }
+          },
+          "author_id": "auth007",
+          "source_id": "src007",
+          "category_ids": [
+            "wisdom",
+            "growth",
+            "change"
+          ],
+          "tag_ids": [
+            "tag_mood_002",
+            "inspiration"
+          ],
+          "style": {
+            "typography": {
+              "font_family": "Playfair Display",
+              "font_size": {
+                "base": 24,
+                "min": 16,
+                "max": 32,
+                "scale": 0.05
+              },
+              "font_weight": "500",
+              "letter_spacing": 0.5,
+              "line_height": 1.5,
+              "text_align": "center"
+            },
+            "colors": {
+              "text": "0xFFFFFFFF",
+              "shadow": "0x80000000"
+            }
+          },
+          "metadata": {
+            "original_language": "fa",
+            "moderation_status": "approved",
+            "moderation_date": "2024-01-15T00:00:00Z",
+            "moderation_by": "system"
+          },
+          "metrics": {
+            "views": 0,
+            "shares": 0,
+            "favorites": 0,
+            "last_interaction": null
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "550e8400-e29b-41d4-a716-446655440007",
+          "translations": {
+            "en": {
+              "text": "The only true wisdom is in knowing you know nothing.",
+              "semantic_label": "Quote about humility and wisdom"
+            },
+            "hi": {
+              "text": "एकमात्र सच्चा ज्ञान यह जानना है कि आप कुछ नहीं जानते।",
+              "semantic_label": "विनम्रता और ज्ञान के बारे में उद्धरण"
+            }
+          },
+          "author_id": "auth008",
+          "source_id": "src008",
+          "category_ids": [
+            "wisdom",
+            "philosophy",
+            "knowledge"
+          ],
+          "tag_ids": [
+            "tag_mood_002",
+            "inspiration"
+          ],
+          "style": {
+            "typography": {
+              "font_family": "Playfair Display",
+              "font_size": {
+                "base": 24,
+                "min": 16,
+                "max": 32,
+                "scale": 0.05
+              },
+              "font_weight": "500",
+              "letter_spacing": 0.5,
+              "line_height": 1.5,
+              "line_height": 1.5,
+              "text_align": "center"
+            },
+            "colors": {
+              "text": "0xFFFFFFFF",
+              "shadow": "0x80000000"
+            }
+          },
+          "metadata": {
+            "original_language": "fa",
+            "moderation_status": "approved",
+            "moderation_date": "2024-01-15T00:00:00Z",
+            "moderation_by": "system"
+          },
+          "metrics": {
+            "views": 0,
+            "shares": 0,
+            "favorites": 0,
+            "last_interaction": null
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "550e8400-e29b-41d4-a716-446655440008",
+          "translations": {
+            "en": {
+              "text": "Life is not measured by the number of breaths we take, but by the moments that take our breath away.",
+              "semantic_label": "Quote about living life fully"
+            },
+            "hi": {
+              "text": "जीवन हमारी सांसों की संख्या से नहीं, बल्कि उन पलों से मापा जाता है जो हमारी सांसें रोक देते हैं।",
+              "semantic_label": "पूर्ण रूप से जीवन जीने के बारे में उद्धरण"
+            }
+          },
+          "author_id": "auth009",
+          "source_id": "src009",
+          "category_ids": [
+            "life",
+            "inspiration",
+            "wisdom"
+          ],
+          "tag_ids": [
+            "tag_mood_002",
+            "tag_inspiration_001"
+          ],
+          "style": {
+            "typography": {
+              "font_family": "Playfair Display",
+              "font_size": {
+                "base": 24,
+                "min": 16,
+                "max": 32,
+                "scale": 0.05
+              },
+              "font_weight": "500",
+              "letter_spacing": 0.5,
+              "line_height": 1.5,
+              "text_align": "center"
+            },
+            "colors": {
+              "text": "0xFFFFFFFF",
+              "shadow": "0x80000000"
+            }
+          },
+          "metadata": {
+            "original_language": "en",
+            "moderation_status": "approved",
+            "moderation_date": "2024-01-15T00:00:00Z",
+            "moderation_by": "system"
+          },
+          "metrics": {
+            "views": 0,
+            "shares": 0,
+            "favorites": 0,
+            "last_interaction": null
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "550e8400-e29b-41d4-a716-446655440009",
+          "translations": {
+            "en": {
+              "text": "Be the change you wish to see in the world.",
+              "semantic_label": "Quote about personal responsibility and social change"
+            },
+            "hi": {
+              "text": "वह परिवर्तन बनिए जो आप दुनिया में देखना चाहते हैं।",
+              "semantic_label": "व्यक्तिगत जिम्मेदारी और सामाजिक परिवर्तन के बारे में उद्धरण"
+            }
+          },
+          "author_id": "auth010",
+          "source_id": "src010",
+          "category_ids": [
+            "wisdom",
+            "change",
+            "inspiration"
+          ],
+          "tag_ids": [
+            "tag_mood_002",
+            "tag_inspiration_001"
+          ],
+          "style": {
+            "typography": {
+              "font_family": "Playfair Display",
+              "font_size": {
+                "base": 24,
+                "min": 16,
+                "max": 32,
+                "scale": 0.05
+              },
+              "font_weight": "500",
+              "letter_spacing": 0.5,
+              "line_height": 1.5,
+              "text_align": "center"
+            },
+            "colors": {
+              "text": "0xFFFFFFFF",
+              "shadow": "0x80000000"
+            }
+          },
+          "metadata": {
+            "original_language": "en",
+            "moderation_status": "approved",
+            "moderation_date": "2024-01-15T00:00:00Z",
+            "moderation_by": "system"
+          },
+          "metrics": {
+            "views": 0,
+            "shares": 0,
+            "favorites": 0,
+            "last_interaction": null
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
+        },
+        {
+          "uuid": "550e8400-e29b-41d4-a716-446655440010",
+          "translations": {
+            "en": {
+              "text": "The future depends on what we do in the present.",
+              "semantic_label": "Quote about present actions and future consequences"
+            },
+            "hi": {
+              "text": "भविष्य इस बात पर निर्भर करता है कि हम वर्तमान में क्या करते हैं।",
+              "semantic_label": "वर्तमान कार्यों और भविष्य के परिणामों के बारे में उद्धरण"
+            }
+          },
+          "author_id": "auth011",
+          "source_id": "src011",
+          "category_ids": [
+            "wisdom",
+            "time",
+            "action"
+          ],
+          "tag_ids": [
+            "tag_mood_002",
+            "tag_inspiration_001"
+          ],
+          "style": {
+            "typography": {
+              "font_family": "Playfair Display",
+              "font_size": {
+                "base": 24,
+                "min": 16,
+                "max": 32,
+                "scale": 0.05
+              },
+              "font_weight": "500",
+              "letter_spacing": 0.5,
+              "line_height": 1.5,
+              "text_align": "center"
+            },
+            "colors": {
+              "text": "0xFFFFFFFF",
+              "shadow": "0x80000000"
+            }
+          },
+          "metadata": {
+            "original_language": "en",
+            "moderation_status": "approved",
+            "moderation_date": "2024-01-15T00:00:00Z",
+            "moderation_by": "system"
+          },
+          "metrics": {
+            "views": 0,
+            "shares": 0,
+            "favorites": 0,
+            "last_interaction": null
+          },
+          "audit": {
+            "created_at": "2024-01-15T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-15T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
         }
       ]
     },
@@ -366,7 +1067,6 @@
       "data": [
         {
           "uuid": "bg001",
-          "id": "bg001",
           "type": "image",
           "translations": {
             "en": {
@@ -384,22 +1084,22 @@
             "image": {
               "original": "assets/images/backgrounds/temple_sunrise1.jpeg",
               "thumbnail": "assets/images/backgrounds/temple_sunrise1.jpeg",
-              "placeholder": "assets/images/placeholders/temple_sunrise1_tiny.jpeg",
+              "placeholder": "assets/images/backgrounds/temple_sunrise1.jpeg",
               "variants": [
                 {
                   "width": 640,
                   "height": 1136,
-                  "path": "assets/images/backgrounds/temple_sunrise1_sm.jpeg"
+                  "path": "assets/images/backgrounds/temple_sunrise1.jpeg"
                 },
                 {
                   "width": 750,
                   "height": 1334,
-                  "path": "assets/images/backgrounds/temple_sunrise1_md.jpeg"
+                  "path": "assets/images/backgrounds/temple_sunrise1.jpeg"
                 },
                 {
                   "width": 1080,
                   "height": 1920,
-                  "path": "assets/images/backgrounds/temple_sunrise1_lg.jpeg"
+                  "path": "assets/images/backgrounds/temple_sunrise1.jpeg"
                 }
               ]
             },
@@ -447,8 +1147,7 @@
           }
         },
         {
-          "uuid": "bg00",
-          "id": "bg00",
+          "uuid": "bg002",
           "type": "gradient",
           "translations": {
             "en": {
@@ -522,8 +1221,7 @@
           }
         },
         {
-          "uuid": "bg00",
-          "id": "bg00",
+          "uuid": "bg003",
           "type": "color",
           "translations": {
             "en": {
@@ -586,8 +1284,7 @@
           }
         },
         {
-          "uuid": "bg003",
-          "id": "bg003",
+          "uuid": "bg004",
           "type": "image",
           "translations": {
             "en": {
@@ -668,8 +1365,7 @@
           }
         },
         {
-          "uuid": "bg004",
-          "id": "bg004",
+          "uuid": "bg005",
           "type": "gradient",
           "translations": {
             "en": {
@@ -748,7 +1444,7 @@
         },
         {
           "uuid": "bg005",
-          "id": "bg005",
+        
           "type": "color",
           "translations": {
             "en": {
@@ -812,7 +1508,6 @@
         },
         {
           "uuid": "bg006",
-          "id": "bg06",
           "type": "image",
           "translations": {
             "en": {
@@ -835,7 +1530,7 @@
                 {
                   "width": 640,
                   "height": 1136,
-                  "path": "assets/images/backgrounds/temple_sunrise2.jpeg"
+                  "path": "assets/images/backgrounds/temple_sunrise3.jpeg"
                 },
                 {
                   "width": 750,
@@ -897,7 +1592,7 @@
     "templates": {
       "data": [
         {
-          "uuid": "550e8400-e29b-41d4-a716-446655440002",
+          "uuid": "550e8400-e29b-41d4-a716-446655440000",
           "translations": {
             "en": {
               "title": "Morning Blessing",
