@@ -1680,7 +1680,7 @@
                 "padding": 16,
                 "visual_effects": {
                   "blur": {
-                    "enabled": true,
+                    "enabled": false,
                     "sigma": {
                       "x": {
                         "base": 2,

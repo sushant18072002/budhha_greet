@@ -27,6 +27,124 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
     );
   }
 
+  Widget _buildAdaptiveContent(BoxConstraints constraints) {
+    if (controller.isLoading.value) {
+      return _buildLoadingState();
+    }
+
+    final template = controller.selectedTemplate.value;
+    final transitionDuration = 
+        template?.styleConfig.common?.animations?.transitionDuration ?? 300;
+
+    // Wrap the content in a SliverToBoxAdapter for better scroll performance
+    return SizedBox(
+      height: _calculateContentHeight(constraints),
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: transitionDuration),
+        child: controller.isGridView.value
+            ? _buildIntelligentGrid(constraints)
+            : _buildIntelligentList(constraints),
+      ),
+    );
+  }
+
+  double _calculateContentHeight(BoxConstraints constraints) {
+    final itemCount = controller.morningTemplates.length;
+    final template = controller.selectedTemplate.value;
+    final spacing = _calculateDynamicSpacing(constraints.maxWidth, template?.layoutConfig.breakpoints);
+    
+    if (controller.isGridView.value) {
+      final columns = _calculateOptimalColumns(constraints.maxWidth, template?.layoutConfig.breakpoints);
+      final rows = (itemCount / columns).ceil();
+      final aspectRatio = template?.composition.aspectRatio ?? "16:9";
+      final aspectRatioParts = aspectRatio.split(":");
+      final aspectRatioValue = double.parse(aspectRatioParts[0]) / double.parse(aspectRatioParts[1]);
+      final itemWidth = _calculateItemWidth(constraints.maxWidth, columns, spacing);
+      final itemHeight = itemWidth / aspectRatioValue;
+      
+      return (rows * (itemHeight + spacing)) + spacing;
+    } else {
+      final itemHeight = constraints.maxWidth * 0.8;
+      return (itemCount * (itemHeight + spacing)) + spacing;
+    }
+  }
+
+  Widget _buildIntelligentGrid(BoxConstraints constraints) {
+    // Use CustomScrollView with SliverGrid for better performance
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      shrinkWrap: true,
+      slivers: [
+        SliverPadding(
+          padding: EdgeInsets.all(_calculateDynamicSpacing(
+            constraints.maxWidth,
+            controller.selectedTemplate.value?.layoutConfig.breakpoints,
+          )),
+          sliver: SliverGrid(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: _calculateOptimalColumns(
+                constraints.maxWidth,
+                controller.selectedTemplate.value?.layoutConfig.breakpoints,
+              ),
+              mainAxisSpacing: _calculateDynamicSpacing(
+                constraints.maxWidth,
+                controller.selectedTemplate.value?.layoutConfig.breakpoints,
+              ),
+              crossAxisSpacing: _calculateDynamicSpacing(
+                constraints.maxWidth,
+                controller.selectedTemplate.value?.layoutConfig.breakpoints,
+              ),
+              childAspectRatio: _calculateAspectRatio(
+                controller.selectedTemplate.value?.composition.aspectRatio ?? "16:9"
+              ),
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => _buildTemplateCard(
+                template: controller.morningTemplates[index],
+                constraints: BoxConstraints(
+                  maxWidth: _calculateItemWidth(
+                    constraints.maxWidth,
+                    _calculateOptimalColumns(
+                      constraints.maxWidth,
+                      controller.selectedTemplate.value?.layoutConfig.breakpoints,
+                    ),
+                    _calculateDynamicSpacing(
+                      constraints.maxWidth,
+                      controller.selectedTemplate.value?.layoutConfig.breakpoints,
+                    ),
+                  ),
+                  maxHeight: double.infinity,
+                ),
+                isGridView: true,
+              ),
+              childCount: controller.morningTemplates.length,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+   double _calculateAspectRatio(String aspectRatio) {
+    final parts = aspectRatio.split(":");
+    return double.parse(parts[0]) / double.parse(parts[1]);
+  }
+
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return LayoutBuilder(
+  //     builder: (context, constraints) {
+  //       return Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           _buildHeader(),
+  //           Obx(() => _buildAdaptiveContent(constraints)),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -92,22 +210,22 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
     });
   }
 
-  Widget _buildAdaptiveContent(BoxConstraints constraints) {
-    if (controller.isLoading.value) {
-      return _buildLoadingState();
-    }
+  // Widget _buildAdaptiveContent(BoxConstraints constraints) {
+  //   if (controller.isLoading.value) {
+  //     return _buildLoadingState();
+  //   }
 
-    final template = controller.selectedTemplate.value;
-    final transitionDuration =
-        template?.styleConfig.common?.animations?.transitionDuration ?? 300;
+  //   final template = controller.selectedTemplate.value;
+  //   final transitionDuration =
+  //       template?.styleConfig.common?.animations?.transitionDuration ?? 300;
 
-    return AnimatedSwitcher(
-      duration: Duration(milliseconds: transitionDuration),
-      child: controller.isGridView.value
-          ? _buildIntelligentGrid(constraints)
-          : _buildIntelligentList(constraints),
-    );
-  }
+  //   return AnimatedSwitcher(
+  //     duration: Duration(milliseconds: transitionDuration),
+  //     child: controller.isGridView.value
+  //         ? _buildIntelligentGrid(constraints)
+  //         : _buildIntelligentList(constraints),
+  //   );
+  // }
 
   Widget _buildIntelligentList(BoxConstraints constraints) {
     final template = controller.selectedTemplate.value;
@@ -146,56 +264,56 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
     );
   }
 
-  Widget _buildIntelligentGrid(BoxConstraints constraints) {
-    final template = controller.selectedTemplate.value;
-    final layoutConfig = template?.layoutConfig;
-    final breakpoints = layoutConfig?.breakpoints;
+  // Widget _buildIntelligentGrid(BoxConstraints constraints) {
+  //   final template = controller.selectedTemplate.value;
+  //   final layoutConfig = template?.layoutConfig;
+  //   final breakpoints = layoutConfig?.breakpoints;
 
-    final spacing = _calculateDynamicSpacing(
-      constraints.maxWidth,
-      breakpoints,
-    );
+  //   final spacing = _calculateDynamicSpacing(
+  //     constraints.maxWidth,
+  //     breakpoints,
+  //   );
 
-    final columns = _calculateOptimalColumns(
-      constraints.maxWidth,
-      breakpoints,
-    );
+  //   final columns = _calculateOptimalColumns(
+  //     constraints.maxWidth,
+  //     breakpoints,
+  //   );
 
-    final itemWidth = _calculateItemWidth(
-      constraints.maxWidth,
-      columns,
-      spacing,
-    );
+  //   final itemWidth = _calculateItemWidth(
+  //     constraints.maxWidth,
+  //     columns,
+  //     spacing,
+  //   );
 
-    final aspectRatio = template?.composition.aspectRatio ?? "16:9";
-    final aspectRatioParts = aspectRatio.split(":");
-    final aspectRatioValue =
-        double.parse(aspectRatioParts[0]) / double.parse(aspectRatioParts[1]);
-    final itemHeight = itemWidth / aspectRatioValue;
+  //   final aspectRatio = template?.composition.aspectRatio ?? "16:9";
+  //   final aspectRatioParts = aspectRatio.split(":");
+  //   final aspectRatioValue =
+  //       double.parse(aspectRatioParts[0]) / double.parse(aspectRatioParts[1]);
+  //   final itemHeight = itemWidth / aspectRatioValue;
 
-    return Padding(
-      padding: EdgeInsets.all(spacing),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: columns,
-          mainAxisSpacing: spacing,
-          crossAxisSpacing: spacing,
-          childAspectRatio: aspectRatioValue,
-        ),
-        itemCount: controller.morningTemplates.length,
-        itemBuilder: (context, index) => _buildTemplateCard(
-          template: controller.morningTemplates[index],
-          constraints: BoxConstraints(
-            maxWidth: itemWidth,
-            maxHeight: itemHeight,
-          ),
-          isGridView: true,
-        ),
-      ),
-    );
-  }
+  //   return Padding(
+  //     padding: EdgeInsets.all(spacing),
+  //     child: GridView.builder(
+  //       shrinkWrap: true,
+  //       physics: const NeverScrollableScrollPhysics(),
+  //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //         crossAxisCount: columns,
+  //         mainAxisSpacing: spacing,
+  //         crossAxisSpacing: spacing,
+  //         childAspectRatio: aspectRatioValue,
+  //       ),
+  //       itemCount: controller.morningTemplates.length,
+  //       itemBuilder: (context, index) => _buildTemplateCard(
+  //         template: controller.morningTemplates[index],
+  //         constraints: BoxConstraints(
+  //           maxWidth: itemWidth,
+  //           maxHeight: itemHeight,
+  //         ),
+  //         isGridView: true,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildTemplateCard({
     required Template template,
@@ -224,7 +342,7 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  _buildBackgroundWithEffects(template),
+                  _buildBackgroundWithEffects(template, constraints),
                   // if (commonStyle?.gradientOverlay?.enabled ?? false)
                   //   _buildGradientOverlay(template, isGridView),
                   _buildTemplateContent(
@@ -242,177 +360,30 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
     );
   }
 
-  Widget _buildBackgroundWithEffects(Template template) {
-    return FutureBuilder<Background?>(
-      future: controller.getBackgroundById(template.composition.backgroundId),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const ColoredBox(
-            color: Colors.black12,
-            child: Center(child: CircularProgressIndicator()),
-          );
-        }
+  Widget _buildBackgroundWithEffects(
+      Template template, BoxConstraints constraints) {
+    return SizedBox.expand(
+      child: FutureBuilder<Background?>(
+        future: controller.getBackgroundById(template.composition.backgroundId),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const ColoredBox(
+              color: Colors.black12,
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
 
-        final background = snapshot.data!;
+          final background = snapshot.data!;
+          print(
+              "_buildBackgroundWithEffects template uuid= ${template.uuid} background  uuid= ${background.uuid} , type= ${background.type} ,image= ${background.visualData.image?.original}");
 
-        // Handle based on background type
-        switch (background.type) {
-          case 'image':
-            return _buildImageBackground(background, template);
-          case 'gradient':
-            return _buildGradientBackground(background);
-          case 'color':
-            return _buildColorBackground(background);
-          default:
-            return _buildFallbackBackground();
-        }
-      },
-    );
-  }
-
-  Widget _buildImageBackground(Background background, Template template) {
-    final imageData = background.visualData.image;
-    if (imageData == null) return _buildFallbackBackground();
-
-    // Choose best variant based on screen size
-    final variant = _chooseBestVariant(imageData.variants);
-    final imagePath = variant?.path ?? imageData.original;
-
-    Widget imageWidget = Image.asset(
-      imagePath,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) => _buildFallbackBackground(),
-      // Use placeholder for better loading experience
-      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-        if (wasSynchronouslyLoaded) return child;
-        return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 500),
-          child: frame != null
-              ? child
-              : Image.asset(imageData.placeholder, fit: BoxFit.cover),
-        );
-      },
-    );
-
-    // Apply visual effects if configured
-    final effects = background.visualEffects;
-    if (effects != null) {
-      // Apply opacity
-      if (effects.opacity != 1.0) {
-        imageWidget = Opacity(
-          opacity: effects.opacity.clamp(0.0, 1.0),
-          child: imageWidget,
-        );
-      }
-
-      // Apply blur
-      if (effects.blur > 0) {
-        imageWidget = ImageFiltered(
-          imageFilter: ImageFilter.blur(
-            sigmaX: effects.blur.clamp(0.0, 20.0),
-            sigmaY: effects.blur.clamp(0.0, 20.0),
-          ),
-          child: imageWidget,
-        );
-      }
-
-      // Apply blend mode if not normal
-      if (effects.blendMode != 'normal') {
-        imageWidget = ColorFiltered(
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.5),
-            _parseBlendMode(effects.blendMode),
-          ),
-          child: imageWidget,
-        );
-      }
-    }
-    return SizedBox.expand(child: imageWidget);
-  }
-
-  Widget _buildGradientBackground(Background background) {
-    final gradientData = background.visualData.gradient;
-    if (gradientData == null) return _buildFallbackBackground();
-
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: gradientData.colors
-              .map((color) => LayoutHelpers.parseColorSafely(color))
-              .toList(),
-          stops: gradientData.stops
-              .map((stop) => stop.position.clamp(0.0, 1.0))
-              .toList(),
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          transform: GradientRotation(gradientData.angle * pi / 180),
-        ),
+          return AdaptiveBackgroundWidget(
+              background: background,
+              template: template,
+              constraints: constraints);
+        },
       ),
     );
-  }
-
-  Widget _buildColorBackground(Background background) {
-    final colorData = background.visualData.color;
-    if (colorData == null) return _buildFallbackBackground();
-
-    return Container(
-      color: LayoutHelpers.parseColorSafely(colorData.color),
-    );
-  }
-
-  Widget _buildFallbackBackground() {
-    return Container(
-      color: Colors.grey[300],
-      child: const Icon(Icons.image_not_supported, color: Colors.white70),
-    );
-  }
-
-  BackgroundImageVariant? _chooseBestVariant(
-      List<BackgroundImageVariant> variants) {
-    if (variants.isEmpty) return null;
-
-    // Get device pixel ratio and screen size
-    final pixelRatio = WidgetsBinding.instance.window.devicePixelRatio;
-    final screenSize = WidgetsBinding.instance.window.physicalSize;
-    final targetWidth = screenSize.width * pixelRatio;
-
-    // Find the smallest variant that's still larger than our target
-    final sortedVariants = List<BackgroundImageVariant>.from(variants)
-      ..sort((a, b) => a.width.compareTo(b.width));
-
-    for (final variant in sortedVariants) {
-      if (variant.width >= targetWidth) return variant;
-    }
-
-    // If no variant is large enough, use the largest available
-    return sortedVariants.last;
-  }
-
-  // Color _parseColorSafely(String colorString) {
-  //   try {
-  //     if (colorString.startsWith('0x')) {
-  //       return Color(int.parse(colorString));
-  //     } else if (colorString.startsWith('#')) {
-  //       return Color(int.parse('0xFF${colorString.substring(1)}'));
-  //     }
-  //     return Colors.grey;
-  //   } catch (e) {
-  //     return Colors.grey;
-  //   }
-  // }
-
-  BlendMode _parseBlendMode(String blendMode) {
-    switch (blendMode.toLowerCase()) {
-      case 'multiply':
-        return BlendMode.multiply;
-      case 'screen':
-        return BlendMode.screen;
-      case 'overlay':
-        return BlendMode.overlay;
-      // Add other blend modes as needed
-      default:
-        return BlendMode.srcOver;
-    }
   }
 
   Widget _buildTemplateContent(
@@ -523,65 +494,72 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
             snapshot.data?.translations[controller.currentLanguage.value]?.text;
         if (quoteText == null) return const SizedBox.shrink();
 
-        final elementStyle = template.styleConfig.title.orDefault;
-        final typography = elementStyle.typography.orDefault;
-        final colors = elementStyle.colors.orDefault;
+        return AdaptiveQuoteWidget(
+          quoteText: quoteText,
+          template: template,
+          isGridView: isGridView,
+          maxHeight: maxHeight,
+        );
 
-        final quoteFontSize = _calculateDynamicFontSize(
-            quoteText,
-            constraints.maxWidth * 0.85,
-            isGridView ? 16 : 18,
-            elementStyle.typography.fontSize.min,
-            elementStyle.typography.fontSize.max);
-        final textSpan = TextSpan(
-          text: quoteText,
-          style: TextStyle(
-            fontSize: quoteFontSize,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        );
-        final textPainter = TextPainter(
-          text: textSpan,
-          textDirection: TextDirection.ltr,
-          maxLines: 3,
-        );
-        textPainter.layout(maxWidth: constraints.maxWidth);
-        final lineHeight =
-            textPainter.height / textPainter.computeLineMetrics().length;
-        final maxLines = (maxHeight / lineHeight).floor();
+        // final elementStyle = template.styleConfig.title.orDefault;
+        // final typography = elementStyle.typography.orDefault;
+        // final colors = elementStyle.colors.orDefault;
 
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: AutoSizeText(
-                quoteText,
-                style: TextStyle(
-                  fontSize: quoteFontSize,
-                  color: Colors.white,
-                  height: 1.5,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black.withOpacity(0.5),
-                      offset: const Offset(0, 1),
-                      blurRadius: 2,
-                    ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
-                maxLines: maxLines,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ),
-        );
+        // final quoteFontSize = _calculateDynamicFontSize(
+        //     quoteText,
+        //     constraints.maxWidth * 0.85,
+        //     isGridView ? 16 : 18,
+        //     elementStyle.typography.fontSize.min,
+        //     elementStyle.typography.fontSize.max);
+        // final textSpan = TextSpan(
+        //   text: quoteText,
+        //   style: TextStyle(
+        //     fontSize: quoteFontSize,
+        //     fontWeight: FontWeight.w600,
+        //     color: Colors.white,
+        //   ),
+        // );
+        // final textPainter = TextPainter(
+        //   text: textSpan,
+        //   textDirection: TextDirection.ltr,
+        //   maxLines: 3,
+        // );
+        // textPainter.layout(maxWidth: constraints.maxWidth);
+        // final lineHeight =
+        //     textPainter.height / textPainter.computeLineMetrics().length;
+        // final maxLines = (maxHeight / lineHeight).floor();
+
+        // return ClipRRect(
+        //   borderRadius: BorderRadius.circular(8),
+        //   child: BackdropFilter(
+        //     filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+        //     child: Container(
+        //       padding: const EdgeInsets.all(8),
+        //       decoration: BoxDecoration(
+        //         color: Colors.black.withOpacity(0.2),
+        //         borderRadius: BorderRadius.circular(8),
+        //       ),
+        //       child: AutoSizeText(
+        //         quoteText,
+        //         style: TextStyle(
+        //           fontSize: quoteFontSize,
+        //           color: Colors.white,
+        //           height: 1.5,
+        //           shadows: [
+        //             Shadow(
+        //               color: Colors.black.withOpacity(0.5),
+        //               offset: const Offset(0, 1),
+        //               blurRadius: 2,
+        //             ),
+        //           ],
+        //         ),
+        //         textAlign: TextAlign.center,
+        //         maxLines: maxLines,
+        //         overflow: TextOverflow.ellipsis,
+        //       ),
+        //     ),
+        //   ),
+        // );
       },
     );
   }
@@ -941,11 +919,34 @@ class AdaptiveTitleWidget extends StatelessWidget {
     );
     textPainter.layout(maxWidth: constraints.maxWidth);
 
-    final lineMetrics = textPainter.computeLineMetrics();
-    final lineHeight = lineMetrics.isNotEmpty
-        ? textPainter.height / lineMetrics.length
-        : (typography.lineHeight * fontSize);
-    final maxLines = (maxHeight / lineHeight).floor().clamp(1, 3);
+    double lineHeight;
+    int maxLines;
+    
+    try {
+      final lineMetrics = textPainter.computeLineMetrics();
+      if (lineMetrics.isNotEmpty) {
+        lineHeight = textPainter.height / lineMetrics.length;
+      } else {
+        // Fallback if no line metrics available
+        lineHeight = (typography.lineHeight * fontSize);
+      }
+      
+      // Ensure lineHeight is not zero or infinite
+      if (lineHeight <= 0 || lineHeight.isInfinite || lineHeight.isNaN) {
+        lineHeight = fontSize * 1.2; // Default line height multiplier
+      }
+
+      // Ensure maxHeight is valid
+      if (maxHeight <= 0 || maxHeight.isInfinite || maxHeight.isNaN) {
+        maxLines = 3; // Default to 3 lines if invalid height
+      } else {
+        maxLines = (maxHeight / lineHeight).floor().clamp(1, 3);
+      }
+    } catch (e) {
+      // Fallback values if calculation fails
+      lineHeight = fontSize * 1.2;
+      maxLines = 3;
+    }
 
     // Build the widget
     return ClipRRect(
@@ -989,5 +990,316 @@ class AdaptiveTitleWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class AdaptiveQuoteWidget extends StatelessWidget {
+  final String quoteText;
+  final Template template;
+  final bool isGridView;
+  final double maxHeight;
+
+  const AdaptiveQuoteWidget({
+    Key? key,
+    required this.quoteText,
+    required this.template,
+    required this.isGridView,
+    required this.maxHeight,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) => _buildAdaptiveQuote(
+        constraints: constraints,
+      ),
+    );
+  }
+
+  Widget _buildAdaptiveQuote({
+    required BoxConstraints constraints,
+  }) {
+    final quoteStyle = template.styleConfig.quote.orDefault;
+    final typography = quoteStyle.typography.orDefault;
+    final colors = quoteStyle.colors.orDefault;
+
+    // Calculate dynamic font size
+    final fontSize = LayoutHelpers.calculateDynamicFontSize(
+      quoteText,
+      constraints.maxWidth * 0.85,
+      isGridView ? 14 : 16,
+      typography.fontSize.min,
+      typography.fontSize.max,
+    );
+
+    // Get layout configuration
+    final layoutConfig = (template.layoutConfig.portrait?.quote).orDefault;
+    final visualEffects = layoutConfig.visualEffects.orDefault;
+    final blur = visualEffects.blur.orDefault;
+    final borderRadius = visualEffects.borderRadius.orDefault;
+    final background = visualEffects.background.orDefault;
+
+    // Calculate border radius
+    final dynamicBorderRadius = (borderRadius.base.clamp(
+          borderRadius.min,
+          borderRadius.max,
+        ) *
+        borderRadius.scaleFactor);
+
+    // Create text shadows
+    final shadows = <Shadow>[];
+    if (colors.shadow != null) {
+      shadows.add(Shadow(
+        color: LayoutHelpers.parseColorSafely(colors.shadow.color)
+            .withOpacity(colors.shadow.opacity),
+        offset: Offset(colors.shadow.offset.x, colors.shadow.offset.y),
+        blurRadius: colors.shadow.blurRadius,
+      ));
+    }
+
+    // Create text style
+    final textStyle = TextStyle(
+      fontFamily: typography.fontFamily,
+      fontSize: fontSize,
+      fontWeight: LayoutHelpers.parseFontWeight(typography.fontWeight),
+      letterSpacing: typography.letterSpacing,
+      color: LayoutHelpers.parseColorSafely(colors.text),
+      height: typography.lineHeight,
+      shadows: shadows,
+    );
+
+    // Calculate max lines based on height
+    final textPainter = TextPainter(
+      text: TextSpan(text: quoteText, style: textStyle),
+      textDirection: TextDirection.ltr,
+      maxLines: 5,
+    );
+    textPainter.layout(maxWidth: constraints.maxWidth);
+
+    // final lineMetrics = textPainter.computeLineMetrics();
+    // final lineHeight = lineMetrics.isNotEmpty
+    //     ? textPainter.height / lineMetrics.length
+    //     : (typography.lineHeight * fontSize);
+    // final maxLines = (maxHeight / lineHeight).floor().clamp(1, 5);
+
+       double lineHeight;
+    int maxLines;
+    
+    try {
+      final lineMetrics = textPainter.computeLineMetrics();
+      if (lineMetrics.isNotEmpty) {
+        lineHeight = textPainter.height / lineMetrics.length;
+      } else {
+        // Fallback if no line metrics available
+        lineHeight = (typography.lineHeight * fontSize);
+      }
+      
+      // Ensure lineHeight is not zero or infinite
+      if (lineHeight <= 0 || lineHeight.isInfinite || lineHeight.isNaN) {
+        lineHeight = fontSize * 1.2; // Default line height multiplier
+      }
+
+      // Ensure maxHeight is valid
+      if (maxHeight <= 0 || maxHeight.isInfinite || maxHeight.isNaN) {
+        maxLines = 5; // Default to 5 lines if invalid height
+      } else {
+        maxLines = (maxHeight / lineHeight).floor().clamp(1, 5);
+      }
+    } catch (e) {
+      // Fallback values if calculation fails
+      lineHeight = fontSize * 1.2;
+      maxLines = 5;
+    }
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(dynamicBorderRadius),
+      child: BackdropFilter(
+        filter: blur.enabled
+            ? ImageFilter.blur(
+                sigmaX:
+                    blur.sigma.x.base.clamp(blur.sigma.x.min, blur.sigma.x.max),
+                sigmaY:
+                    blur.sigma.y.base.clamp(blur.sigma.y.min, blur.sigma.y.max),
+              )
+            : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+        child: Container(
+          padding: EdgeInsets.all(layoutConfig.padding ?? 8.0),
+          decoration: BoxDecoration(
+            color: LayoutHelpers.parseColorSafely(background.color).withOpacity(
+              background.opacity.base.clamp(
+                background.opacity.min,
+                background.opacity.max,
+              ),
+            ),
+            borderRadius: BorderRadius.circular(dynamicBorderRadius),
+          ),
+          child: AutoSizeText(
+            quoteText,
+            style: textStyle,
+            maxLines: maxLines,
+            overflow: TextOverflow.ellipsis,
+            textAlign: LayoutHelpers.parseTextAlign(typography.textAlign),
+            minFontSize: typography.fontSize.min,
+            maxFontSize: typography.fontSize.max,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AdaptiveBackgroundWidget extends StatelessWidget {
+  final Background background;
+  final Template template;
+  final BoxConstraints constraints;
+
+  const AdaptiveBackgroundWidget({
+    Key? key,
+    required this.background,
+    required this.template,
+    required this.constraints,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildBackgroundWithEffects();
+  }
+
+  Widget _buildBackgroundWithEffects() {
+    switch (background.type) {
+      case 'image':
+        return _buildImageBackground();
+      case 'gradient':
+        return _buildGradientBackground();
+      case 'color':
+        return _buildColorBackground();
+      default:
+        return _buildFallbackBackground();
+    }
+  }
+
+  Widget _buildImageBackground() {
+    final imageData = background.visualData.image;
+    if (imageData == null) return _buildFallbackBackground();
+
+    final variant = _chooseBestImageVariant(imageData.variants);
+    final imagePath = variant?.path ?? imageData.original;
+
+    Widget imageWidget = Image.asset(
+      imagePath,
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
+      errorBuilder: (context, error, stackTrace) => _buildFallbackBackground(),
+      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded) return child;
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 500),
+          child: frame != null
+              ? child
+              : Image.asset(imageData.placeholder, fit: BoxFit.cover),
+        );
+      },
+    );
+
+    // Apply visual effects
+    final effects = background.visualEffects;
+    if (effects != null) {
+      if (effects.opacity != 1.0) {
+        imageWidget = Opacity(
+          opacity: effects.opacity.clamp(0.0, 1.0),
+          child: imageWidget,
+        );
+      }
+
+      if (effects.blur > 0) {
+        imageWidget = ImageFiltered(
+          imageFilter: ImageFilter.blur(
+            sigmaX: effects.blur.clamp(0.0, 20.0),
+            sigmaY: effects.blur.clamp(0.0, 20.0),
+          ),
+          child: imageWidget,
+        );
+      }
+
+      if (effects.blendMode != 'normal') {
+        imageWidget = ColorFiltered(
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.5),
+            _parseBlendMode(effects.blendMode),
+          ),
+          child: imageWidget,
+        );
+      }
+    }
+
+    return SizedBox.expand(child: imageWidget);
+  }
+
+  Widget _buildGradientBackground() {
+    final gradientData = background.visualData.gradient;
+    if (gradientData == null) return _buildFallbackBackground();
+
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: gradientData.colors
+              .map((color) => LayoutHelpers.parseColorSafely(color))
+              .toList(),
+          stops: gradientData.stops
+              .map((stop) => stop.position.clamp(0.0, 1.0))
+              .toList(),
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          transform: GradientRotation(gradientData.angle * pi / 180),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildColorBackground() {
+    final colorData = background.visualData.color;
+    if (colorData == null) return _buildFallbackBackground();
+
+    return Container(
+      color: LayoutHelpers.parseColorSafely(colorData.color),
+    );
+  }
+
+  Widget _buildFallbackBackground() {
+    return Container(
+      color: Colors.grey[300],
+      child: const Icon(Icons.image_not_supported, color: Colors.white70),
+    );
+  }
+
+  BackgroundImageVariant? _chooseBestImageVariant(
+      List<BackgroundImageVariant> variants) {
+    if (variants.isEmpty) return null;
+
+    final targetWidth =
+        constraints.maxWidth * WidgetsBinding.instance.window.devicePixelRatio;
+
+    final sortedVariants = List<BackgroundImageVariant>.from(variants)
+      ..sort((a, b) => a.width.compareTo(b.width));
+
+    for (final variant in sortedVariants) {
+      if (variant.width >= targetWidth) return variant;
+    }
+
+    return sortedVariants.last;
+  }
+
+  BlendMode _parseBlendMode(String blendMode) {
+    switch (blendMode.toLowerCase()) {
+      case 'multiply':
+        return BlendMode.multiply;
+      case 'screen':
+        return BlendMode.screen;
+      case 'overlay':
+        return BlendMode.overlay;
+      default:
+        return BlendMode.srcOver;
+    }
   }
 }
