@@ -26,7 +26,8 @@ import '../../shared/models/app_config/system_config.dart';
 import '../../shared/models/app_config/theme_config.dart';
 import '../../shared/models/entities/author.dart';
 import '../../shared/models/entities/background_collection/background_collection.dart';
-import '../../shared/models/entities/category.dart';
+import '../../shared/models/entities/category_collection/all_category.dart';
+import '../../shared/models/entities/category_collection/category_collection.dart';
 import '../../shared/models/entities/entities.dart';
 import '../../shared/models/entities/language.dart';
 import '../../shared/models/entities/qoute_collection/qoute_collection.dart';
@@ -95,7 +96,65 @@ class DatabaseService extends GetxService {
     }
   }
 
-  // Register all Hive adapters
+ 
+  // Open all Hive boxes
+  Future<void> _openBoxes() async {
+    configBox = await Hive.openBox<AppConfig>(configBoxName);
+    quotesBox = await Hive.openBox<Quote>(quotesBoxName);
+    backgroundsBox = await Hive.openBox<Background>(backgroundsBoxName);
+    templatesBox = await Hive.openBox<Template>(templatesBoxName);
+    categoriesBox = await Hive.openBox<Category>(categoriesBoxName);
+    authorsBox = await Hive.openBox<Author>(authorsBoxName);
+    sourcesBox = await Hive.openBox<Source>(sourcesBoxName);
+    tagsBox = await Hive.openBox<Tag>(tagsBoxName);
+  }
+
+  // Load initial data from JSON
+  Future<void> _loadInitialData() async {
+    AppConfig? currentConfig = configBox.get('current');
+    if (currentConfig == null || !currentConfig.isInitialized) {
+    //if (true) {
+      try {
+        final String jsonContent =
+            await rootBundle.loadString('assets/data/app_data.json');
+        final Map<String, dynamic> data = json.decode(jsonContent);
+
+        if (!_validateDataStructure(data)) {
+          throw Exception('Invalid data structure in app_data.json');
+        }
+
+        await _storeInitialConfig(data);
+        await _storeEntities(data['entities']);
+
+        currentConfig = configBox.get('current');
+        if (currentConfig != null) {
+          currentConfig.isInitialized = true;
+          await configBox.put('current', currentConfig);
+        }
+      } catch (e, stackTrace) {
+        print('Error loading initial data: $e');
+        print('Stack trace: $stackTrace');
+        if (currentConfig != null) {
+          currentConfig.isInitialized = false;
+          await configBox.put('current', currentConfig);
+        }
+        rethrow;
+      }
+    }
+  }
+
+  // Validate JSON data structure
+  bool _validateDataStructure(Map<String, dynamic> data) {
+    final requiredKeys = [
+      'metadata',
+      'system_config',
+      'entities',
+      'validation_rules',
+      'analytics_config'
+    ];
+    return requiredKeys.every((key) => data.containsKey(key));
+  }
+   // Register all Hive adapters
   Future<void> _registerAdapters() async {
     try {
       // Core Config Models - typeId: 0-4
@@ -287,63 +346,6 @@ class DatabaseService extends GetxService {
     }
   }
 
-  // Open all Hive boxes
-  Future<void> _openBoxes() async {
-    configBox = await Hive.openBox<AppConfig>(configBoxName);
-    quotesBox = await Hive.openBox<Quote>(quotesBoxName);
-    backgroundsBox = await Hive.openBox<Background>(backgroundsBoxName);
-    templatesBox = await Hive.openBox<Template>(templatesBoxName);
-    categoriesBox = await Hive.openBox<Category>(categoriesBoxName);
-    authorsBox = await Hive.openBox<Author>(authorsBoxName);
-    sourcesBox = await Hive.openBox<Source>(sourcesBoxName);
-    tagsBox = await Hive.openBox<Tag>(tagsBoxName);
-  }
-
-  // Load initial data from JSON
-  Future<void> _loadInitialData() async {
-    AppConfig? currentConfig = configBox.get('current');
-    //if (currentConfig == null || !currentConfig.isInitialized) {
-    if (true) {
-      try {
-        final String jsonContent =
-            await rootBundle.loadString('assets/data/app_data.json');
-        final Map<String, dynamic> data = json.decode(jsonContent);
-
-        if (!_validateDataStructure(data)) {
-          throw Exception('Invalid data structure in app_data.json');
-        }
-
-        await _storeInitialConfig(data);
-        await _storeEntities(data['entities']);
-
-        currentConfig = configBox.get('current');
-        if (currentConfig != null) {
-          currentConfig.isInitialized = true;
-          await configBox.put('current', currentConfig);
-        }
-      } catch (e, stackTrace) {
-        print('Error loading initial data: $e');
-        print('Stack trace: $stackTrace');
-        if (currentConfig != null) {
-          currentConfig.isInitialized = false;
-          await configBox.put('current', currentConfig);
-        }
-        rethrow;
-      }
-    }
-  }
-
-  // Validate JSON data structure
-  bool _validateDataStructure(Map<String, dynamic> data) {
-    final requiredKeys = [
-      'metadata',
-      'system_config',
-      'entities',
-      'validation_rules',
-      'analytics_config'
-    ];
-    return requiredKeys.every((key) => data.containsKey(key));
-  }
 
   // Store initial configuration
   Future<void> _storeInitialConfig(Map<String, dynamic> data) async {
@@ -662,26 +664,26 @@ class DatabaseService extends GetxService {
   // Language related methods
   Future<void> setCurrentLanguage(String languageCode) async {
     currentLanguage.value = languageCode;
-    // await _updateCacheForLanguage(languageCode);
+     await _updateCacheForLanguage(languageCode);
   }
 
-  // Future<void> _updateCacheForLanguage(String languageCode) async {
-  //   try {
-  //     final categories = await getAllCategories();
-  //     final authors = await getAllAuthors();
-  //     final tags = await getAllTags();
+  Future<void> _updateCacheForLanguage(String languageCode) async {
+    try {
+      final categories = await getAllCategories();
+      final authors = await getAllAuthors();
+      final tags = await getAllTags();
 
-  //     cache.value = {
-  //       ...cache,
-  //       'currentLanguage': languageCode,
-  //       'categories': categories.map((c) => c.getTranslation(languageCode)).toList(),
-  //       'authors': authors.map((a) => a.getTranslation(languageCode)).toList(),
-  //       'tags': tags.map((t) => t.getTranslation(languageCode)).toList(),
-  //     };
-  //   } catch (e) {
-  //     print('Error updating cache for language $languageCode: $e');
-  //   }
-  // }
+      cache.value = {
+        ...cache,
+        'currentLanguage': languageCode,
+        // 'categories': categories.map((c) => c.getTranslation(languageCode)).toList(),
+        // 'authors': authors.map((a) => a.getTranslation(languageCode)).toList(),
+        // 'tags': tags.map((t) => t.getTranslation(languageCode)).toList(),
+      };
+    } catch (e) {
+      print('Error updating cache for language $languageCode: $e');
+    }
+  }
 
   // Filter methods
 

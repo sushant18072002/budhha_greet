@@ -38,11 +38,11 @@ class Template {
 
   @HiveField(3)
   @JsonKey(name: 'layout_config')
-  final LayoutConfig layoutConfig;
+  final LayoutConfig? layoutConfig;
 
   @HiveField(4)
   @JsonKey(name: 'style_config')
-  final StyleConfig styleConfig;
+  final StyleConfig? styleConfig;
 
   @HiveField(5)
   @JsonKey(name: 'responsive_config')

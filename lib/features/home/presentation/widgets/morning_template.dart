@@ -9,6 +9,62 @@ import '../../../../shared/models/entities/template_collection/template_collecti
 import '../controllers/home_controller.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
+class AspectRatioConfig {
+  // Constants for different view modes
+  static const gridRatio = "4:3";  // Standard display ratio, good for grid
+  static const listRatio = "4:5";  // Instagram-friendly portrait ratio
+  
+  static double getAspectRatioValue(bool isGridView) {
+    final ratio = isGridView ? gridRatio : listRatio;
+    final parts = ratio.split(":");
+    return double.parse(parts[0]) / double.parse(parts[1]);
+  }
+  
+  static double calculateItemHeight(double width, bool isGridView) {
+    return width / getAspectRatioValue(isGridView);
+  }
+}
+
+class LayoutConfig {
+  // Grid configuration
+  static const double maxGridItemWidth = 400.0; // Maximum width for grid items
+  static const double minGridItemWidth = 300.0; // Minimum width for grid items
+  static const gridRatio = "4:3";  // Aspect ratio for grid items
+  
+  // List configuration
+  static const double maxListItemWidth = 500.0; // Maximum width for list items
+  static const double listWidthPercentage = 0.85; // List item width as percentage of screen
+  static const listRatio = "4:5";  // Aspect ratio for list items
+  
+  static double getAspectRatioValue(bool isGridView) {
+    final ratio = isGridView ? gridRatio : listRatio;
+    final parts = ratio.split(":");
+    return double.parse(parts[0]) / double.parse(parts[1]);
+  }
+  
+  static double calculateItemHeight(double width, bool isGridView) {
+    return width / getAspectRatioValue(isGridView);
+  }
+
+  static BoxConstraints getItemConstraints(BoxConstraints screenConstraints, bool isGridView) {
+    if (isGridView) {
+      final idealWidth = (screenConstraints.maxWidth - 32) / 2; // 2 columns with padding
+      final width = idealWidth.clamp(minGridItemWidth, maxGridItemWidth);
+      return BoxConstraints(
+        maxWidth: width,
+        maxHeight: calculateItemHeight(width, true)
+      );
+    } else {
+      final width = (screenConstraints.maxWidth * listWidthPercentage)
+          .clamp(0.0, maxListItemWidth);
+      return BoxConstraints(
+        maxWidth: width,
+        maxHeight: calculateItemHeight(width, false)
+      );
+    }
+  }
+}
+
 class IntelligentTemplateGrid extends GetView<HomeController> {
   const IntelligentTemplateGrid({Key? key}) : super(key: key);
 
@@ -34,116 +90,164 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
 
     final template = controller.selectedTemplate.value;
     final transitionDuration = 
-        template?.styleConfig.common?.animations?.transitionDuration ?? 300;
+        template?.styleConfig?.common?.animations?.transitionDuration ?? 300;
 
-    // Wrap the content in a SliverToBoxAdapter for better scroll performance
     return SizedBox(
       height: _calculateContentHeight(constraints),
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: transitionDuration),
-        child: controller.isGridView.value
-            ? _buildIntelligentGrid(constraints)
-            : _buildIntelligentList(constraints),
+        child: _buildAdaptiveContentH(constraints),
       ),
     );
   }
-
-  double _calculateContentHeight(BoxConstraints constraints) {
+    double _calculateContentHeight(BoxConstraints constraints) {
     final itemCount = controller.morningTemplates.length;
-    final template = controller.selectedTemplate.value;
-    final spacing = _calculateDynamicSpacing(constraints.maxWidth, template?.layoutConfig.breakpoints);
+    final spacing = _calculateDynamicSpacing(
+      constraints.maxWidth
+    );
     
     if (controller.isGridView.value) {
-      final columns = _calculateOptimalColumns(constraints.maxWidth, template?.layoutConfig.breakpoints);
+      final columns = _calculateOptimalColumns(
+        constraints.maxWidth
+      );
       final rows = (itemCount / columns).ceil();
-      final aspectRatio = template?.composition.aspectRatio ?? "16:9";
-      final aspectRatioParts = aspectRatio.split(":");
-      final aspectRatioValue = double.parse(aspectRatioParts[0]) / double.parse(aspectRatioParts[1]);
       final itemWidth = _calculateItemWidth(constraints.maxWidth, columns, spacing);
-      final itemHeight = itemWidth / aspectRatioValue;
+      final itemHeight = AspectRatioConfig.calculateItemHeight(itemWidth, true);
       
       return (rows * (itemHeight + spacing)) + spacing;
     } else {
-      final itemHeight = constraints.maxWidth * 0.8;
+      final itemWidth = constraints.maxWidth - (spacing * 2);
+      final itemHeight = AspectRatioConfig.calculateItemHeight(itemWidth, false);
       return (itemCount * (itemHeight + spacing)) + spacing;
     }
   }
 
+   double _calculateItemWidth(double totalWidth, int columns, double spacing) {
+    return (totalWidth - (spacing * (columns + 1))) / columns;
+  }
+
+
+  Widget _buildAdaptiveContentH(BoxConstraints constraints) {
+    if (controller.isLoading.value) {
+      return _buildLoadingState();
+    }
+
+    final template = controller.selectedTemplate.value;
+    final transitionDuration = 
+        template?.styleConfig?.common?.animations?.transitionDuration ?? 300;
+
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: transitionDuration),
+      child: controller.isGridView.value
+          ? _buildIntelligentGrid(constraints)
+          : _buildIntelligentList(constraints),
+    );
+  }
+
   Widget _buildIntelligentGrid(BoxConstraints constraints) {
-    // Use CustomScrollView with SliverGrid for better performance
-    return CustomScrollView(
-      physics: const BouncingScrollPhysics(),
-      shrinkWrap: true,
-      slivers: [
-        SliverPadding(
-          padding: EdgeInsets.all(_calculateDynamicSpacing(
-            constraints.maxWidth,
-            controller.selectedTemplate.value?.layoutConfig.breakpoints,
-          )),
-          sliver: SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: _calculateOptimalColumns(
-                constraints.maxWidth,
-                controller.selectedTemplate.value?.layoutConfig.breakpoints,
-              ),
-              mainAxisSpacing: _calculateDynamicSpacing(
-                constraints.maxWidth,
-                controller.selectedTemplate.value?.layoutConfig.breakpoints,
-              ),
-              crossAxisSpacing: _calculateDynamicSpacing(
-                constraints.maxWidth,
-                controller.selectedTemplate.value?.layoutConfig.breakpoints,
-              ),
-              childAspectRatio: _calculateAspectRatio(
-                controller.selectedTemplate.value?.composition.aspectRatio ?? "16:9"
+    final spacing = _calculateDynamicSpacing(constraints.maxWidth);
+    final columns = _calculateOptimalColumns(constraints.maxWidth);
+    final itemConstraints = LayoutConfig.getItemConstraints(constraints, true);
+    
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: (itemConstraints.maxWidth * columns) + (spacing * (columns + 1))
+        ),
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.all(spacing),
+              sliver: SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: columns,
+                  mainAxisSpacing: spacing,
+                  crossAxisSpacing: spacing,
+                  childAspectRatio: LayoutConfig.getAspectRatioValue(true),
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) => _buildTemplateCard(
+                    template: controller.morningTemplates[index],
+                    constraints: itemConstraints,
+                    isGridView: true,
+                  ),
+                  childCount: controller.morningTemplates.length,
+                ),
               ),
             ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => _buildTemplateCard(
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIntelligentList(BoxConstraints constraints) {
+    final spacing = _calculateDynamicSpacing(constraints.maxWidth);
+    final itemConstraints = LayoutConfig.getItemConstraints(constraints, false);
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: itemConstraints.maxWidth + spacing * 2),
+        child: ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.all(spacing),
+          itemCount: controller.morningTemplates.length,
+          itemBuilder: (context, index) => Padding(
+            padding: EdgeInsets.only(bottom: spacing),
+            child: Center(
+              child: _buildTemplateCard(
                 template: controller.morningTemplates[index],
-                constraints: BoxConstraints(
-                  maxWidth: _calculateItemWidth(
-                    constraints.maxWidth,
-                    _calculateOptimalColumns(
-                      constraints.maxWidth,
-                      controller.selectedTemplate.value?.layoutConfig.breakpoints,
-                    ),
-                    _calculateDynamicSpacing(
-                      constraints.maxWidth,
-                      controller.selectedTemplate.value?.layoutConfig.breakpoints,
-                    ),
-                  ),
-                  maxHeight: double.infinity,
-                ),
-                isGridView: true,
+                constraints: itemConstraints,
+                isGridView: false,
               ),
-              childCount: controller.morningTemplates.length,
             ),
           ),
         ),
-      ],
+      ),
     );
   }
-   double _calculateAspectRatio(String aspectRatio) {
-    final parts = aspectRatio.split(":");
-    return double.parse(parts[0]) / double.parse(parts[1]);
+
+  double _calculateDynamicSpacing(double width) {
+    if (width <= 600) return 8;
+    if (width <= 1200) return 16;
+    return 24;
   }
 
+  int _calculateOptimalColumns(double width) {
+    if (width <= 600) return 2;
+    if (width <= 900) return 3;
+    if (width <= 1200) return 4;
+    return 5;
+  }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return LayoutBuilder(
-  //     builder: (context, constraints) {
-  //       return Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           _buildHeader(),
-  //           Obx(() => _buildAdaptiveContent(constraints)),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+  Widget _buildTemplateCard({
+    required Template template,
+    required BoxConstraints constraints,
+    required bool isGridView,
+  }) {
+    // ... existing _buildTemplateCard implementation ...
+    return Container(
+      constraints: constraints,
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              _buildBackgroundWithEffects(template, constraints),
+              _buildTemplateContent(template, isGridView, constraints),
+              _buildInteractiveElements(template),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _buildHeader() {
     return Container(
@@ -164,14 +268,13 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
           Expanded(
             child: Obx(() {
               final template = controller.selectedTemplate.value;
-              final translation =
+              final translation = 
                   template?.translations[controller.currentLanguage.value];
               return Text(
                 translation?.title ?? 'Templates',
                 style: Get.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: Colors.brown[800],
-                  letterSpacing: 0.2,
                 ),
               );
             }),
@@ -210,48 +313,32 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
     });
   }
 
-  // Widget _buildAdaptiveContent(BoxConstraints constraints) {
-  //   if (controller.isLoading.value) {
-  //     return _buildLoadingState();
-  //   }
 
+  // Widget _buildIntelligentList(BoxConstraints constraints) {
   //   final template = controller.selectedTemplate.value;
-  //   final transitionDuration =
-  //       template?.styleConfig.common?.animations?.transitionDuration ?? 300;
+  //   final layoutConfig = template?.layoutConfig;
+  //   final breakpoints = layoutConfig?.breakpoints;
+  //   final spacing = _calculateDynamicSpacing(constraints.maxWidth, breakpoints);
+  //   final itemHeight = constraints.maxWidth * 0.8;
 
-  //   return AnimatedSwitcher(
-  //     duration: Duration(milliseconds: transitionDuration),
-  //     child: controller.isGridView.value
-  //         ? _buildIntelligentGrid(constraints)
-  //         : _buildIntelligentList(constraints),
+  //   return ListView.builder(
+  //     shrinkWrap: true,
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     padding: EdgeInsets.all(spacing),
+  //     itemCount: controller.morningTemplates.length,
+  //     itemBuilder: (context, index) => Padding(
+  //       padding: EdgeInsets.only(bottom: spacing),
+  //       child: _buildTemplateCard(
+  //         template: controller.morningTemplates[index],
+  //         constraints: BoxConstraints(
+  //           maxWidth: constraints.maxWidth - (spacing * 2),
+  //           maxHeight: itemHeight,
+  //         ),
+  //         isGridView: false,
+  //       ),
+  //     ),
   //   );
   // }
-
-  Widget _buildIntelligentList(BoxConstraints constraints) {
-    final template = controller.selectedTemplate.value;
-    final layoutConfig = template?.layoutConfig;
-    final breakpoints = layoutConfig?.breakpoints;
-    final spacing = _calculateDynamicSpacing(constraints.maxWidth, breakpoints);
-    final itemHeight = constraints.maxWidth * 0.8;
-
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.all(spacing),
-      itemCount: controller.morningTemplates.length,
-      itemBuilder: (context, index) => Padding(
-        padding: EdgeInsets.only(bottom: spacing),
-        child: _buildTemplateCard(
-          template: controller.morningTemplates[index],
-          constraints: BoxConstraints(
-            maxWidth: constraints.maxWidth - (spacing * 2),
-            maxHeight: itemHeight,
-          ),
-          isGridView: false,
-        ),
-      ),
-    );
-  }
 
   Widget _buildLoadingState() {
     return Center(
@@ -259,102 +346,6 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
         padding: const EdgeInsets.all(32),
         child: CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(Colors.amber[600]!),
-        ),
-      ),
-    );
-  }
-
-  // Widget _buildIntelligentGrid(BoxConstraints constraints) {
-  //   final template = controller.selectedTemplate.value;
-  //   final layoutConfig = template?.layoutConfig;
-  //   final breakpoints = layoutConfig?.breakpoints;
-
-  //   final spacing = _calculateDynamicSpacing(
-  //     constraints.maxWidth,
-  //     breakpoints,
-  //   );
-
-  //   final columns = _calculateOptimalColumns(
-  //     constraints.maxWidth,
-  //     breakpoints,
-  //   );
-
-  //   final itemWidth = _calculateItemWidth(
-  //     constraints.maxWidth,
-  //     columns,
-  //     spacing,
-  //   );
-
-  //   final aspectRatio = template?.composition.aspectRatio ?? "16:9";
-  //   final aspectRatioParts = aspectRatio.split(":");
-  //   final aspectRatioValue =
-  //       double.parse(aspectRatioParts[0]) / double.parse(aspectRatioParts[1]);
-  //   final itemHeight = itemWidth / aspectRatioValue;
-
-  //   return Padding(
-  //     padding: EdgeInsets.all(spacing),
-  //     child: GridView.builder(
-  //       shrinkWrap: true,
-  //       physics: const NeverScrollableScrollPhysics(),
-  //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-  //         crossAxisCount: columns,
-  //         mainAxisSpacing: spacing,
-  //         crossAxisSpacing: spacing,
-  //         childAspectRatio: aspectRatioValue,
-  //       ),
-  //       itemCount: controller.morningTemplates.length,
-  //       itemBuilder: (context, index) => _buildTemplateCard(
-  //         template: controller.morningTemplates[index],
-  //         constraints: BoxConstraints(
-  //           maxWidth: itemWidth,
-  //           maxHeight: itemHeight,
-  //         ),
-  //         isGridView: true,
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  Widget _buildTemplateCard({
-    required Template template,
-    required BoxConstraints constraints,
-    required bool isGridView,
-  }) {
-    final styleConfig = template.styleConfig;
-    final commonStyle = styleConfig.common;
-    final animations = commonStyle?.animations;
-    final transitionDuration = animations?.transitionDuration ?? 300;
-    final typography = styleConfig.quote?.typography;
-    final fontSize = typography?.fontSize;
-    final borderRadius = fontSize?.base.clamp(8.0, 16.0) ?? 8.0;
-
-    return Hero(
-      tag: 'template_${template.uuid}',
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () => controller.onTemplateSelected(template),
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: transitionDuration),
-            height: constraints.maxHeight,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(borderRadius),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  _buildBackgroundWithEffects(template, constraints),
-                  // if (commonStyle?.gradientOverlay?.enabled ?? false)
-                  //   _buildGradientOverlay(template, isGridView),
-                  _buildTemplateContent(
-                    template,
-                    isGridView,
-                    constraints,
-                  ),
-                  _buildInteractiveElements(template),
-                ],
-              ),
-            ),
-          ),
         ),
       ),
     );
@@ -397,7 +388,7 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
         "_buildTemplateContent translation ${translation} template.translations ${template.translations.entries.toList()} ");
     if (translation == null) return const SizedBox.shrink();
 
-    final spacing = template.layoutConfig.portrait?.layoutAdjustments?.spacing
+    final spacing = template.layoutConfig?.portrait?.layoutAdjustments?.spacing
             .betweenElements ??
         8.0;
 
@@ -443,27 +434,27 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
   }
 
   // Helper methods for calculating dynamic values
-  double _calculateDynamicSpacing(
-      double width, LayoutBreakpoints? breakpoints) {
-    if (breakpoints == null) return 12;
+  // double _calculateDynamicSpacing(
+  //     double width, LayoutBreakpoints? breakpoints) {
+  //   if (breakpoints == null) return 12;
 
-    if (width <= breakpoints.small) return 12;
-    if (width <= breakpoints.medium) return 16;
-    return 20;
-  }
+  //   if (width <= breakpoints.small) return 12;
+  //   if (width <= breakpoints.medium) return 16;
+  //   return 20;
+  // }
 
-  int _calculateOptimalColumns(double width, LayoutBreakpoints? breakpoints) {
-    if (breakpoints == null) return 2;
+  // int _calculateOptimalColumns(double width, LayoutBreakpoints? breakpoints) {
+  //   if (breakpoints == null) return 2;
 
-    if (width <= breakpoints.small) return 2;
-    if (width <= breakpoints.medium) return 3;
-    if (width <= breakpoints.large) return 4;
-    return 5;
-  }
+  //   if (width <= breakpoints.small) return 2;
+  //   if (width <= breakpoints.medium) return 3;
+  //   if (width <= breakpoints.large) return 4;
+  //   return 5;
+  // }
 
-  double _calculateItemWidth(double totalWidth, int columns, double spacing) {
-    return (totalWidth - (spacing * (columns + 1))) / columns;
-  }
+  // double _calculateItemWidth(double totalWidth, int columns, double spacing) {
+  //   return (totalWidth - (spacing * (columns + 1))) / columns;
+  // }
 
   double _calculateDynamicFontSize(
     String text,
@@ -760,6 +751,83 @@ extension ElementLayoutExtension on ElementLayout? {
       this ?? DefaultLayoutConfigs.defaultElementLayout;
 }
 
+class DefaultStyleConfig {
+  static StyleConfig get defaultStyleConfig => StyleConfig(
+        common: defaultCommonStyle,
+        title: DefaultStyles.defaultElementStyle,
+        quote: DefaultStyles.defaultElementStyle,
+        actionButtons: defaultActionButtons,
+      );
+
+  static CommonStyle get defaultCommonStyle => CommonStyle(
+        gradientOverlay: defaultGradientOverlay,
+        animations: defaultAnimations,
+      );
+
+  static CommonGradientOverlay get defaultGradientOverlay => CommonGradientOverlay(
+        enabled: false,
+        stops: [
+          CommonGradientStop(
+            color: '#000000',
+            position: 0.0,
+          ),
+          CommonGradientStop(
+            color: '#FFFFFF',
+            position: 1.0,
+          ),
+        ],
+        angle: 0,
+      );
+
+  static CommonAnimations get defaultAnimations => CommonAnimations(
+        transitionDuration: 300,
+        hover: defaultHoverAnimation,
+      );
+
+  static CommonHoverAnimation get defaultHoverAnimation => CommonHoverAnimation(
+        scale: 1.05,
+        duration: 200,
+      );
+
+  static ActionButtons get defaultActionButtons => ActionButtons(
+        size: 44.0,
+        background: defaultActionBackground,
+        blur: defaultActionBlur,
+        shadow: defaultActionShadow,
+      );
+
+  static ActionBackground get defaultActionBackground => ActionBackground(
+        opacity: 0.8,
+        color: '#000000',
+      );
+
+  static ActionBlur get defaultActionBlur => ActionBlur(
+        enabled: true,
+        sigma: defaultActionSigma,
+      );
+
+  static ActionSigma get defaultActionSigma => ActionSigma(
+        x: 2.0,
+        y: 2.0,
+      );
+
+  static ActionShadow get defaultActionShadow => ActionShadow(
+        color: '#000000',
+        offset: defaultActionOffset,
+        blurRadius: 4.0,
+      );
+
+  static ActionOffset get defaultActionOffset => ActionOffset(
+        x: 0.0,
+        y: 2.0,
+      );
+}
+
+// Extension method for StyleConfig
+extension StyleConfigExtension on StyleConfig? {
+  StyleConfig get orDefault => this ?? DefaultStyleConfig.defaultStyleConfig;
+}
+
 // Helper methods
 class LayoutHelpers {
   static Color parseColorSafely(String? colorString) {
@@ -854,7 +922,7 @@ class AdaptiveTitleWidget extends StatelessWidget {
   Widget _buildAdaptiveTitle({
     required BoxConstraints constraints,
   }) {
-    final titleStyle = template.styleConfig.title.orDefault;
+    final titleStyle = template.styleConfig.orDefault.title.orDefault;
     final typography = titleStyle.typography.orDefault;
     final colors = titleStyle.colors.orDefault;
 
@@ -867,7 +935,7 @@ class AdaptiveTitleWidget extends StatelessWidget {
     );
 
     // Get layout configuration with defaults
-    final layoutConfig = (template.layoutConfig.portrait?.title).orDefault;
+    final layoutConfig = (template.layoutConfig?.portrait?.title).orDefault;
     final visualEffects = layoutConfig.visualEffects.orDefault;
     final blur = visualEffects.blur.orDefault;
     final borderRadius = visualEffects.borderRadius.orDefault;
@@ -970,12 +1038,12 @@ class AdaptiveTitleWidget extends StatelessWidget {
             vertical: ((layoutConfig.padding ?? 0.0) * 0.67),
           ),
           decoration: BoxDecoration(
-            color: LayoutHelpers.parseColorSafely(background.color).withOpacity(
-              background.opacity.base.clamp(
-                background.opacity.min,
-                background.opacity.max,
-              ),
-            ),
+            // color: LayoutHelpers.parseColorSafely(background.color).withOpacity(
+            //   background.opacity.base.clamp(
+            //     background.opacity.min,
+            //     background.opacity.max,
+            //   ),
+            // ),
             borderRadius: BorderRadius.circular(dynamicBorderRadius),
           ),
           child: AutoSizeText(
@@ -1019,21 +1087,21 @@ class AdaptiveQuoteWidget extends StatelessWidget {
   Widget _buildAdaptiveQuote({
     required BoxConstraints constraints,
   }) {
-    final quoteStyle = template.styleConfig.quote.orDefault;
-    final typography = quoteStyle.typography.orDefault;
-    final colors = quoteStyle.colors.orDefault;
+    final quoteStyle = template.styleConfig.orDefault.quote.orDefault;
+    final typography = quoteStyle?.typography.orDefault;
+    final colors = quoteStyle?.colors.orDefault;
 
     // Calculate dynamic font size
     final fontSize = LayoutHelpers.calculateDynamicFontSize(
       quoteText,
       constraints.maxWidth * 0.85,
       isGridView ? 14 : 16,
-      typography.fontSize.min,
-      typography.fontSize.max,
+      typography.orDefault.fontSize.min,
+      typography.orDefault.fontSize.max,
     );
 
     // Get layout configuration
-    final layoutConfig = (template.layoutConfig.portrait?.quote).orDefault;
+    final layoutConfig = (template.layoutConfig?.portrait?.quote).orDefault;
     final visualEffects = layoutConfig.visualEffects.orDefault;
     final blur = visualEffects.blur.orDefault;
     final borderRadius = visualEffects.borderRadius.orDefault;
@@ -1048,23 +1116,23 @@ class AdaptiveQuoteWidget extends StatelessWidget {
 
     // Create text shadows
     final shadows = <Shadow>[];
-    if (colors.shadow != null) {
+    if (colors.orDefault.shadow != null) {
       shadows.add(Shadow(
-        color: LayoutHelpers.parseColorSafely(colors.shadow.color)
-            .withOpacity(colors.shadow.opacity),
-        offset: Offset(colors.shadow.offset.x, colors.shadow.offset.y),
-        blurRadius: colors.shadow.blurRadius,
+        color: LayoutHelpers.parseColorSafely(colors.orDefault.shadow.color)
+            .withOpacity(colors.orDefault.shadow.opacity),
+        offset: Offset(colors.orDefault.shadow.offset.x, colors.orDefault.shadow.offset.y),
+        blurRadius: colors.orDefault.shadow.blurRadius,
       ));
     }
 
     // Create text style
     final textStyle = TextStyle(
-      fontFamily: typography.fontFamily,
+      fontFamily: typography.orDefault.fontFamily,
       fontSize: fontSize,
-      fontWeight: LayoutHelpers.parseFontWeight(typography.fontWeight),
-      letterSpacing: typography.letterSpacing,
-      color: LayoutHelpers.parseColorSafely(colors.text),
-      height: typography.lineHeight,
+      fontWeight: LayoutHelpers.parseFontWeight(typography.orDefault.fontWeight),
+      letterSpacing: typography.orDefault.letterSpacing,
+      color: LayoutHelpers.parseColorSafely(colors.orDefault.text),
+      height: typography.orDefault.lineHeight,
       shadows: shadows,
     );
 
@@ -1091,7 +1159,7 @@ class AdaptiveQuoteWidget extends StatelessWidget {
         lineHeight = textPainter.height / lineMetrics.length;
       } else {
         // Fallback if no line metrics available
-        lineHeight = (typography.lineHeight * fontSize);
+        lineHeight = (typography.orDefault.lineHeight * fontSize);
       }
       
       // Ensure lineHeight is not zero or infinite
@@ -1125,12 +1193,12 @@ class AdaptiveQuoteWidget extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(layoutConfig.padding ?? 8.0),
           decoration: BoxDecoration(
-            color: LayoutHelpers.parseColorSafely(background.color).withOpacity(
-              background.opacity.base.clamp(
-                background.opacity.min,
-                background.opacity.max,
-              ),
-            ),
+            // color: LayoutHelpers.parseColorSafely(background.color).withOpacity(
+            //   background.opacity.base.clamp(
+            //     background.opacity.min,
+            //     background.opacity.max,
+            //   ),
+            // ),
             borderRadius: BorderRadius.circular(dynamicBorderRadius),
           ),
           child: AutoSizeText(
@@ -1138,9 +1206,9 @@ class AdaptiveQuoteWidget extends StatelessWidget {
             style: textStyle,
             maxLines: maxLines,
             overflow: TextOverflow.ellipsis,
-            textAlign: LayoutHelpers.parseTextAlign(typography.textAlign),
-            minFontSize: typography.fontSize.min,
-            maxFontSize: typography.fontSize.max,
+            textAlign: LayoutHelpers.parseTextAlign(typography.orDefault.textAlign),
+            minFontSize: typography.orDefault.fontSize.min,
+            maxFontSize: typography.orDefault.fontSize.max,
           ),
         ),
       ),
@@ -1303,3 +1371,4 @@ class AdaptiveBackgroundWidget extends StatelessWidget {
     }
   }
 }
+

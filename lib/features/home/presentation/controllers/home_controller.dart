@@ -1,15 +1,16 @@
 import 'dart:math';
-import 'package:buddha_greet/shared/models/entities/category.dart';
+import 'package:buddha_greet/shared/models/entities/category_collection/all_category.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../core/services/database_service.dart';
 import '../../../../shared/models/entities/background_collection/background_collection.dart';
+import '../../../../shared/models/entities/category_collection/category_collection.dart';
 import '../../../../shared/models/entities/qoute_collection/quote/quote.dart';
 import '../../../../shared/models/entities/template_collection/template_collection.dart';
-
+import '../../../../shared/theme/app_colors.dart';
 
 class HomeController extends GetxController {
- final _dbService = Get.find<DatabaseService>();
+  final _dbService = Get.find<DatabaseService>();
 
   final RxList<Template> featuredTemplates = <Template>[].obs;
   final RxList<Template> morningTemplates = <Template>[].obs;
@@ -19,7 +20,7 @@ class HomeController extends GetxController {
   final RxBool isLoading = true.obs;
   final RxBool isMorningTemplatesLoading = true.obs;
   final Rx<Template?> selectedTemplate = Rx<Template?>(null);
-  final RxBool isGridView=true.obs;
+  final RxBool isGridView = true.obs;
   final RxString currentLanguage = 'en'.obs;
 
   @override
@@ -29,19 +30,19 @@ class HomeController extends GetxController {
   }
 
   Future<void> initializeController() async {
-  try {
-    // Wait for database to be initialized
-    // if (!_dbService.isInitialized) {
-    //   await _dbService.init();
-    // }
-    await loadInitialData();
-    await loadMorningTemplatesInitialData();
-    currentLanguage.value = _dbService.currentLanguage.value;
-  } catch (e, stackTrace) {
-    print('Error in initializeController: $e');
-    print('Stack trace: $stackTrace');
+    try {
+      // Wait for database to be initialized
+      // if (!_dbService.isInitialized) {
+      //   await _dbService.init();
+      // }
+      await loadInitialData();
+      await loadMorningTemplatesInitialData();
+      currentLanguage.value = _dbService.currentLanguage.value;
+    } catch (e, stackTrace) {
+      print('Error in initializeController: $e');
+      print('Stack trace: $stackTrace');
+    }
   }
-}
 
   Future<void> loadInitialData() async {
     try {
@@ -85,35 +86,37 @@ class HomeController extends GetxController {
       debugPrint(
           "template \n {start} ${template.translations[currentLanguage.value]?.greeting} backgroundId ${template.composition.backgroundId} id ${template.uuid} greeting ${template.translations.entries.first.value.greeting.isEmpty}");
       // Check if template has a greeting
-      if (
-          template.translations[currentLanguage.value]?.greeting == true) {
-        continue;
-      }
+      // if (template.translations[currentLanguage.value]?.greeting.isEmpty) {
+      //   continue;
+      // }
       print("template template.quoteId ${template.composition.quoteId} ");
       // Check if template has a quote
-      if (template.composition.quoteId == null) {
-        continue;
-      }
+      // if (template.composition.quoteId == null) {
+      //   continue;
+      // }
       print("template template.getQuoteById ${template.composition.quoteId} ");
       // Get and verify the quote exists
-      final quote = await getQuoteById(template.composition.quoteId!);
-      print(
-          "template quote ${quote}  quote.text[currentLanguage.value]?.isEmpty ${quote?.translations[currentLanguage.value]?.text.isEmpty}");
-      if (quote == null || quote.translations[currentLanguage.value]?.text.isEmpty == true) {
-        continue;
-      }
+      // final quote = await getQuoteById(template.composition.quoteId!);
+      // print(
+      //     "template quote ${quote}  quote.text[currentLanguage.value]?.isEmpty ${quote?.translations[currentLanguage.value]?.text.isEmpty}");
+      // if (quote == null ||
+      //     quote.translations[currentLanguage.value]?.text.isEmpty == true) {
+      //   continue;
+      // }
 
       // Get and verify the background has an image
       final background =
           await getBackgroundById(template.composition.backgroundId);
       print(
-          "template background ${background}   background.type != 'image'  ${background?.type != 'image'} imageUrl ${background?.visualData.image}");
+          "template background ${background}   background.type != 'image' background?.type ${background?.type} ${background?.type != 'image'} imageUrl ${{
+        background?.visualData.image?.original
+      }} ${background?.visualData.image}");
       if (background == null ||
           background.type != 'image' ||
-          background.type != null ||
-          background.visualData.image!=null) {
+          background.visualData.image == null) {
         continue;
       }
+      print("template background valid hurry");
 
       validTemplates.add(template);
     }
@@ -127,7 +130,8 @@ class HomeController extends GetxController {
     final items = <Map<String, dynamic>>[];
 
     for (var template in featuredTemplates) {
-      final background =await getBackgroundById(template.composition.backgroundId);
+      final background =
+          await getBackgroundById(template.composition.backgroundId);
       final quote = await getQuoteById(template.composition.quoteId);
 
       // Double-check that we have all required components
@@ -139,7 +143,8 @@ class HomeController extends GetxController {
           'template': template,
           'background': background,
           'quote': quote,
-          'greeting': template.translations[currentLanguage.value]!.greeting ?? '',
+          'greeting':
+              template.translations[currentLanguage.value]!.greeting ?? '',
         });
       }
     }
@@ -148,17 +153,16 @@ class HomeController extends GetxController {
     print("carouselItems.value ${carouselItems.value}");
   }
 
-
   // Update loadInitialData to include morning templates
   Future<void> loadMorningTemplatesInitialData() async {
     try {
       isMorningTemplatesLoading.value = true;
       // Load morning templates
       final allTemplates = await _dbService.getAllTemplates(
-       // category: 'morning',
-      );
+          // category: 'morning',
+          );
       morningTemplates.value = allTemplates;
-      selectedTemplate.value=allTemplates.first;
+      selectedTemplate.value = allTemplates.first;
       print("loadMorningTemplatesInitialData ${allTemplates.length}");
     } catch (e) {
       print('Error loading home data: $e');
@@ -167,33 +171,66 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<Quote?> getQuoteById(String quoteId)async{
+  Future<Quote?> getQuoteById(String quoteId) async {
     debugPrint("getQuoteById ${quoteId}");
     return await _dbService.getQuote(quoteId);
   }
-  Future<Background?> getBackgroundById(String quoteId)async{
+
+  Future<Background?> getBackgroundById(String quoteId) async {
     return await _dbService.getBackground(quoteId);
   }
 
-  void toggleViewMode(){
-    isGridView.value=!isGridView.value;
+  void toggleViewMode() {
+    isGridView.value = !isGridView.value;
   }
 
   Future<void> refreshData() async {
     await loadInitialData();
   }
-  void shareTemplate(Template template){
 
+  void shareTemplate(Template template) {}
+
+  void toggleFavorite(Template template) {}
+  void onTemplateSelected(Template template) {}
+  bool isFavorite(String id) {
+    return true;
   }
 
-  void toggleFavorite(Template template){
+  void updateLanguage(String langCode) async {
+    try {
+      await _dbService.setCurrentLanguage(langCode);
+      currentLanguage.value = langCode;
+      Get.updateLocale(Locale(langCode));
+      await loadInitialData();
+      await loadMorningTemplatesInitialData();
 
+      Get.snackbar(
+        'Success',
+        'messages.language_updated'.tr,
+        backgroundColor: AppColors.amber50,
+        colorText: AppColors.amber800,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(16),
+      );
+    } catch (e) {
+      print('Error updating language: $e');
+      Get.snackbar(
+        'Error',
+        'messages.language_update_failed'.tr,
+        backgroundColor: AppColors.amber50,
+        colorText: AppColors.amber800,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(16),
+      );
+    }
   }
-  void onTemplateSelected(Template template){
 
-  }
-  bool isFavorite(String id){
-      return true;
+  final RxInt selectedCategoryIndex = 0.obs;
+
+  void selectCategory(int index, Category category) {
+    selectedCategoryIndex.value = index;
+    onCategorySelected(category);
   }
 
+  void onCategorySelected(Category category) {}
 }
