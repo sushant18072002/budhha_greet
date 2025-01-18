@@ -1114,17 +1114,24 @@ class AdaptiveQuoteWidget extends StatelessWidget {
   Widget _buildAdaptiveQuote({
     required BoxConstraints constraints,
   }) {
+    // Get style configuration with fallbacks
     final quoteStyle = template.styleConfig.orDefault.quote.orDefault;
-    final typography = quoteStyle?.typography.orDefault;
-    final colors = quoteStyle?.colors.orDefault;
+    final typography = quoteStyle.typography.orDefault;
+    final colors = quoteStyle.colors.orDefault;
 
-    // Calculate dynamic font size
-    final fontSize = LayoutHelpers.calculateDynamicFontSize(
-      quoteText,
-      constraints.maxWidth * 0.85,
-      isGridView ? 14 : 16,
-      typography.orDefault.fontSize.min,
-      typography.orDefault.fontSize.max,
+    // Calculate base font size with proper bounds
+    final baseFontSize = isGridView ? 14.0 : 16.0;
+    final minFontSize = typography.fontSize.min.clamp(10.0, baseFontSize);
+    final maxFontSize = typography.fontSize.max.clamp(baseFontSize, 28.0);
+
+    // Calculate dynamic font size based on available width and text length
+    final fontSize = _calculateOptimalFontSize(
+      text: quoteText,
+      maxWidth: constraints.maxWidth * 0.85,
+      baseSize: baseFontSize,
+      minSize: minFontSize,
+      maxSize: maxFontSize,
+      maxLines: 5,
     );
 
     // Get layout configuration
@@ -1134,110 +1141,170 @@ class AdaptiveQuoteWidget extends StatelessWidget {
     final borderRadius = visualEffects.borderRadius.orDefault;
     final background = visualEffects.background.orDefault;
 
-    // Calculate border radius
-    final dynamicBorderRadius = (borderRadius.base.clamp(
-          borderRadius.min,
-          borderRadius.max,
-        ) *
-        borderRadius.scaleFactor);
-
-    // Create text shadows
-    final shadows = <Shadow>[];
-    if (colors.orDefault.shadow != null) {
-      shadows.add(Shadow(
-        color: LayoutHelpers.parseColorSafely(colors.orDefault.shadow.color)
-            .withOpacity(colors.orDefault.shadow.opacity),
-        offset: Offset(colors.orDefault.shadow.offset.x, colors.orDefault.shadow.offset.y),
-        blurRadius: colors.orDefault.shadow.blurRadius,
-      ));
-    }
-
-    // Create text style
-    final textStyle = TextStyle(
-      fontFamily: typography.orDefault.fontFamily,
+    // Create text style with proper shadow handling
+    final textStyle = _createTextStyle(
+      typography: typography,
+      colors: colors,
       fontSize: fontSize,
-      fontWeight: LayoutHelpers.parseFontWeight(typography.orDefault.fontWeight),
-      letterSpacing: typography.orDefault.letterSpacing,
-      color: LayoutHelpers.parseColorSafely(colors.orDefault.text),
-      height: typography.orDefault.lineHeight,
-      shadows: shadows,
     );
 
-    // Calculate max lines based on height
-    final textPainter = TextPainter(
-      text: TextSpan(text: quoteText, style: textStyle),
-      textDirection: TextDirection.ltr,
-      maxLines: 5,
+    // Calculate optimal line height and max lines
+    final textMetrics = _calculateTextMetrics(
+      text: quoteText,
+      style: textStyle,
+      maxWidth: constraints.maxWidth,
+      maxHeight: maxHeight,
     );
-    textPainter.layout(maxWidth: constraints.maxWidth);
-
-    // final lineMetrics = textPainter.computeLineMetrics();
-    // final lineHeight = lineMetrics.isNotEmpty
-    //     ? textPainter.height / lineMetrics.length
-    //     : (typography.lineHeight * fontSize);
-    // final maxLines = (maxHeight / lineHeight).floor().clamp(1, 5);
-
-       double lineHeight;
-    int maxLines;
-    
-    try {
-      final lineMetrics = textPainter.computeLineMetrics();
-      if (lineMetrics.isNotEmpty) {
-        lineHeight = textPainter.height / lineMetrics.length;
-      } else {
-        // Fallback if no line metrics available
-        lineHeight = (typography.orDefault.lineHeight * fontSize);
-      }
-      
-      // Ensure lineHeight is not zero or infinite
-      if (lineHeight <= 0 || lineHeight.isInfinite || lineHeight.isNaN) {
-        lineHeight = fontSize * 1.2; // Default line height multiplier
-      }
-
-      // Ensure maxHeight is valid
-      if (maxHeight <= 0 || maxHeight.isInfinite || maxHeight.isNaN) {
-        maxLines = 5; // Default to 5 lines if invalid height
-      } else {
-        maxLines = (maxHeight / lineHeight).floor().clamp(1, 5);
-      }
-    } catch (e) {
-      // Fallback values if calculation fails
-      lineHeight = fontSize * 1.2;
-      maxLines = 5;
-    }
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(dynamicBorderRadius),
+      borderRadius: BorderRadius.circular(_calculateDynamicBorderRadius(borderRadius)),
       child: BackdropFilter(
-        filter: blur.enabled
-            ? ImageFilter.blur(
-                sigmaX:
-                    blur.sigma.x.base.clamp(blur.sigma.x.min, blur.sigma.x.max),
-                sigmaY:
-                    blur.sigma.y.base.clamp(blur.sigma.y.min, blur.sigma.y.max),
-              )
-            : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+        filter: _createBlurEffect(blur),
         child: Container(
-          padding: EdgeInsets.all(layoutConfig.padding ?? 8.0),
+          padding: _calculatePadding(layoutConfig),
           decoration: BoxDecoration(
-            // color: LayoutHelpers.parseColorSafely(background.color).withOpacity(
-            //   background.opacity.base.clamp(
-            //     background.opacity.min,
-            //     background.opacity.max,
-            //   ),
-            // ),
-            borderRadius: BorderRadius.circular(dynamicBorderRadius),
+            color: _createBackgroundColor(background),
+            borderRadius: BorderRadius.circular(_calculateDynamicBorderRadius(borderRadius)),
           ),
           child: AutoSizeText(
             quoteText,
             style: textStyle,
-            maxLines: maxLines,
+            maxLines: textMetrics.maxLines,
             overflow: TextOverflow.ellipsis,
-            textAlign: LayoutHelpers.parseTextAlign(typography.orDefault.textAlign),
-            minFontSize: typography.orDefault.fontSize.min,
-            maxFontSize: typography.orDefault.fontSize.max,
+            textAlign: LayoutHelpers.parseTextAlign(typography.textAlign),
+            minFontSize: minFontSize,
+            maxFontSize: maxFontSize,
+            stepGranularity: 0.5,
           ),
         ),
+      ),
+    );
+  }
+
+  double _calculateOptimalFontSize({
+    required String text,
+    required double maxWidth,
+    required double baseSize,
+    required double minSize,
+    required double maxSize,
+    required int maxLines,
+  }) {
+    final approximateCharsPerLine = maxWidth / (baseSize * 0.6);
+    final totalChars = text.length;
+    final averageCharsPerLine = totalChars / maxLines;
+
+    if (averageCharsPerLine <= approximateCharsPerLine) {
+      return baseSize;
+    }
+
+    final scaleFactor = approximateCharsPerLine / averageCharsPerLine;
+    return (baseSize * scaleFactor).clamp(minSize, maxSize);
+  }
+
+  TextStyle _createTextStyle({
+    required ElementTypography typography,
+    required ElementStyleColors colors,
+    required double fontSize,
+  }) {
+    final shadows = <Shadow>[];
+    if (colors.shadow != null) {
+      shadows.add(Shadow(
+        color: LayoutHelpers.parseColorSafely(colors.shadow.color)
+            .withOpacity(colors.shadow.opacity),
+        offset: Offset(
+          colors.shadow.offset.x,
+          colors.shadow.offset.y,
+        ),
+        blurRadius: colors.shadow.blurRadius,
+      ));
+    }
+
+    return TextStyle(
+      fontFamily: typography.fontFamily,
+      fontSize: fontSize,
+      fontWeight: LayoutHelpers.parseFontWeight(typography.fontWeight),
+      letterSpacing: typography.letterSpacing,
+      color: LayoutHelpers.parseColorSafely(colors.text),
+      height: typography.lineHeight,
+      shadows: shadows,
+    );
+  }
+
+  ({int maxLines, double lineHeight}) _calculateTextMetrics({
+    required String text,
+    required TextStyle style,
+    required double maxWidth,
+    required double maxHeight,
+  }) {
+    try {
+      final textPainter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        textDirection: TextDirection.ltr,
+        maxLines: 5,
+      );
+      textPainter.layout(maxWidth: maxWidth);
+
+      final metrics = textPainter.computeLineMetrics();
+      double lineHeight;
+      
+      if (metrics.isNotEmpty) {
+        lineHeight = metrics.first.height;
+      } else {
+        lineHeight = style.fontSize! * (style.height ?? 1.2);
+      }
+
+      // Ensure lineHeight is valid
+      if (lineHeight <= 0 || lineHeight.isInfinite || lineHeight.isNaN) {
+        lineHeight = style.fontSize! * 1.2;
+      }
+
+      final availableLines = (maxHeight / lineHeight).floor();
+      final maxLines = availableLines.clamp(1, 5);
+
+      return (maxLines: maxLines, lineHeight: lineHeight);
+    } catch (e) {
+      // Fallback values if calculation fails
+      return (maxLines: 3, lineHeight: style.fontSize! * 1.2);
+    }
+  }
+
+  double _calculateDynamicBorderRadius(LayoutBorderRadius borderRadius) {
+    return (borderRadius.base.clamp(
+      borderRadius.min,
+      borderRadius.max,
+    ) * borderRadius.scaleFactor).clamp(4.0, 16.0);
+  }
+
+  EdgeInsets _calculatePadding(ElementLayout layout) {
+    final basePadding = layout.padding ?? 8.0;
+    return EdgeInsets.symmetric(
+      horizontal: basePadding,
+      vertical: basePadding * 0.75, // Slightly larger vertical padding for quotes
+    );
+  }
+
+  ImageFilter _createBlurEffect(LayoutBlur blur) {
+    if (!blur.enabled) {
+      return ImageFilter.blur(sigmaX: 0, sigmaY: 0);
+    }
+
+    return ImageFilter.blur(
+      sigmaX: blur.sigma.x.base.clamp(
+        blur.sigma.x.min,
+        blur.sigma.x.max,
+      ),
+      sigmaY: blur.sigma.y.base.clamp(
+        blur.sigma.y.min,
+        blur.sigma.y.max,
+      ),
+    );
+  }
+
+  Color _createBackgroundColor(LayoutBackground background) {
+    return LayoutHelpers.parseColorSafely(background.color).withOpacity(
+      background.opacity.base.clamp(
+        background.opacity.min,
+        background.opacity.max,
       ),
     );
   }
