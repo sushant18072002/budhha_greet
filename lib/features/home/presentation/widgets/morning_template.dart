@@ -9,27 +9,13 @@ import '../../../../shared/models/entities/template_collection/template_collecti
 import '../controllers/home_controller.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-class AspectRatioConfig {
-  // Constants for different view modes
-  static const gridRatio = "4:3";  // Standard display ratio, good for grid
-  static const listRatio = "4:5";  // Instagram-friendly portrait ratio
-  
-  static double getAspectRatioValue(bool isGridView) {
-    final ratio = isGridView ? gridRatio : listRatio;
-    final parts = ratio.split(":");
-    return double.parse(parts[0]) / double.parse(parts[1]);
-  }
-  
-  static double calculateItemHeight(double width, bool isGridView) {
-    return width / getAspectRatioValue(isGridView);
-  }
-}
+
 
 class LayoutConfig {
   // Grid configuration
   static const double maxGridItemWidth = 400.0; // Maximum width for grid items
   static const double minGridItemWidth = 300.0; // Minimum width for grid items
-  static const gridRatio = "4:3";  // Aspect ratio for grid items
+  static const gridRatio = "4:5";  // Aspect ratio for grid items
   
   // List configuration
   static const double maxListItemWidth = 500.0; // Maximum width for list items
@@ -100,6 +86,7 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
       ),
     );
   }
+
     double _calculateContentHeight(BoxConstraints constraints) {
     final itemCount = controller.morningTemplates.length;
     final spacing = _calculateDynamicSpacing(
@@ -112,19 +99,20 @@ class IntelligentTemplateGrid extends GetView<HomeController> {
       );
       final rows = (itemCount / columns).ceil();
       final itemWidth = _calculateItemWidth(constraints.maxWidth, columns, spacing);
-      final itemHeight = AspectRatioConfig.calculateItemHeight(itemWidth, true);
+      final itemHeight = LayoutConfig.calculateItemHeight(itemWidth, true);
       
       return (rows * (itemHeight + spacing)) + spacing;
     } else {
       final itemWidth = constraints.maxWidth - (spacing * 2);
-      final itemHeight = AspectRatioConfig.calculateItemHeight(itemWidth, false);
+      final itemHeight = LayoutConfig.calculateItemHeight(itemWidth, false);
       return (itemCount * (itemHeight + spacing)) + spacing;
     }
   }
-
    double _calculateItemWidth(double totalWidth, int columns, double spacing) {
     return (totalWidth - (spacing * (columns + 1))) / columns;
   }
+
+
 
 
   Widget _buildAdaptiveContentH(BoxConstraints constraints) {
@@ -911,6 +899,7 @@ class AdaptiveTitleWidget extends StatelessWidget {
     required this.maxHeight,
   }) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) => _buildAdaptiveTitle(
@@ -922,31 +911,93 @@ class AdaptiveTitleWidget extends StatelessWidget {
   Widget _buildAdaptiveTitle({
     required BoxConstraints constraints,
   }) {
+    // Get style configuration with fallbacks
     final titleStyle = template.styleConfig.orDefault.title.orDefault;
     final typography = titleStyle.typography.orDefault;
     final colors = titleStyle.colors.orDefault;
 
-    final fontSize = LayoutHelpers.calculateDynamicFontSize(
-      title,
-      constraints.maxWidth * 0.85,
-      isGridView ? 16 : 18,
-      titleStyle.typography.fontSize.min,
-      titleStyle.typography.fontSize.max,
+    // Calculate base font size with proper bounds
+    final baseFontSize = isGridView ? 16.0 : 18.0;
+    final minFontSize = typography.fontSize.min.clamp(12.0, baseFontSize);
+    final maxFontSize = typography.fontSize.max.clamp(baseFontSize, 32.0);
+
+    // Calculate dynamic font size based on available width and text length
+    final fontSize = _calculateOptimalFontSize(
+      text: title,
+      maxWidth: constraints.maxWidth * 0.85,
+      baseSize: baseFontSize,
+      minSize: minFontSize,
+      maxSize: maxFontSize,
+      maxLines: 3,
     );
 
-    // Get layout configuration with defaults
+    // Get layout configuration
     final layoutConfig = (template.layoutConfig?.portrait?.title).orDefault;
     final visualEffects = layoutConfig.visualEffects.orDefault;
     final blur = visualEffects.blur.orDefault;
     final borderRadius = visualEffects.borderRadius.orDefault;
-    final background = visualEffects.background.orDefault;
+    
+    // Create text style with proper shadow handling
+    final textStyle = _createTextStyle(
+      typography: typography,
+      colors: colors,
+      fontSize: fontSize,
+    );
 
-    // Calculate dynamic border radius
-    final dynamicBorderRadius =
-        (borderRadius.base.clamp(borderRadius.min, borderRadius.max) *
-            borderRadius.scaleFactor);
+    // Calculate optimal line height and max lines
+    final textMetrics = _calculateTextMetrics(
+      text: title,
+      style: textStyle,
+      maxWidth: constraints.maxWidth,
+      maxHeight: maxHeight,
+    );
 
-    // Create shadows
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(_calculateDynamicBorderRadius(borderRadius)),
+      child: BackdropFilter(
+        filter: _createBlurEffect(blur),
+        child: Container(
+          padding: _calculatePadding(layoutConfig),
+          child: AutoSizeText(
+            title,
+            style: textStyle,
+            maxLines: textMetrics.maxLines,
+            overflow: TextOverflow.ellipsis,
+            textAlign: LayoutHelpers.parseTextAlign(typography.textAlign),
+            minFontSize: minFontSize,
+            maxFontSize: maxFontSize,
+            stepGranularity: 0.5,
+          ),
+        ),
+      ),
+    );
+  }
+
+  double _calculateOptimalFontSize({
+    required String text,
+    required double maxWidth,
+    required double baseSize,
+    required double minSize,
+    required double maxSize,
+    required int maxLines,
+  }) {
+    final approximateCharsPerLine = maxWidth / (baseSize * 0.6);
+    final totalChars = text.length;
+    final averageCharsPerLine = totalChars / maxLines;
+
+    if (averageCharsPerLine <= approximateCharsPerLine) {
+      return baseSize;
+    }
+
+    final scaleFactor = approximateCharsPerLine / averageCharsPerLine;
+    return (baseSize * scaleFactor).clamp(minSize, maxSize);
+  }
+
+  TextStyle _createTextStyle({
+    required ElementTypography typography,
+    required ElementStyleColors colors,
+    required double fontSize,
+  }) {
     final shadows = <Shadow>[];
     if (colors.shadow != null) {
       shadows.add(Shadow(
@@ -960,102 +1011,78 @@ class AdaptiveTitleWidget extends StatelessWidget {
       ));
     }
 
-    // Create text style
-    final textStyle = TextStyle(
+    return TextStyle(
       fontFamily: typography.fontFamily,
-      fontSize: fontSize.clamp(
-        typography.fontSize.min,
-        typography.fontSize.max,
-      ),
+      fontSize: fontSize,
       fontWeight: LayoutHelpers.parseFontWeight(typography.fontWeight),
       letterSpacing: typography.letterSpacing,
       color: LayoutHelpers.parseColorSafely(colors.text),
       height: typography.lineHeight,
       shadows: shadows,
     );
+  }
 
-    // Text measurement and line calculation
-    final textSpan = TextSpan(
-      text: title,
-      style: textStyle,
-    );
-
-    final textPainter = TextPainter(
-      text: textSpan,
-      textDirection: TextDirection.ltr,
-      maxLines: 3,
-    );
-    textPainter.layout(maxWidth: constraints.maxWidth);
-
-    double lineHeight;
-    int maxLines;
-    
+  ({int maxLines, double lineHeight}) _calculateTextMetrics({
+    required String text,
+    required TextStyle style,
+    required double maxWidth,
+    required double maxHeight,
+  }) {
     try {
-      final lineMetrics = textPainter.computeLineMetrics();
-      if (lineMetrics.isNotEmpty) {
-        lineHeight = textPainter.height / lineMetrics.length;
-      } else {
-        // Fallback if no line metrics available
-        lineHeight = (typography.lineHeight * fontSize);
-      }
+      final textPainter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        textDirection: TextDirection.ltr,
+        maxLines: 3,
+      );
+      textPainter.layout(maxWidth: maxWidth);
+
+      final metrics = textPainter.computeLineMetrics();
+      double lineHeight;
       
-      // Ensure lineHeight is not zero or infinite
-      if (lineHeight <= 0 || lineHeight.isInfinite || lineHeight.isNaN) {
-        lineHeight = fontSize * 1.2; // Default line height multiplier
+      if (metrics.isNotEmpty) {
+        lineHeight = metrics.first.height;
+      } else {
+        lineHeight = style.fontSize! * (style.height ?? 1.2);
       }
 
-      // Ensure maxHeight is valid
-      if (maxHeight <= 0 || maxHeight.isInfinite || maxHeight.isNaN) {
-        maxLines = 3; // Default to 3 lines if invalid height
-      } else {
-        maxLines = (maxHeight / lineHeight).floor().clamp(1, 3);
-      }
+      final availableLines = (maxHeight / lineHeight).floor();
+      final maxLines = availableLines.clamp(1, 3);
+
+      return (maxLines: maxLines, lineHeight: lineHeight);
     } catch (e) {
       // Fallback values if calculation fails
-      lineHeight = fontSize * 1.2;
-      maxLines = 3;
+      return (maxLines: 2, lineHeight: style.fontSize! * 1.2);
+    }
+  }
+
+  double _calculateDynamicBorderRadius(LayoutBorderRadius borderRadius) {
+    return (borderRadius.base.clamp(
+      borderRadius.min,
+      borderRadius.max,
+    ) * borderRadius.scaleFactor).clamp(4.0, 16.0);
+  }
+
+  EdgeInsets _calculatePadding(ElementLayout layout) {
+    final basePadding = layout.padding ?? 8.0;
+    return EdgeInsets.symmetric(
+      horizontal: basePadding,
+      vertical: basePadding * 0.67,
+    );
+  }
+
+  ImageFilter _createBlurEffect(LayoutBlur blur) {
+    if (!blur.enabled) {
+      return ImageFilter.blur(sigmaX: 0, sigmaY: 0);
     }
 
-    // Build the widget
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(dynamicBorderRadius),
-      child: BackdropFilter(
-        filter: blur.enabled
-            ? ImageFilter.blur(
-                sigmaX: blur.sigma.x.base.clamp(
-                  blur.sigma.x.min,
-                  blur.sigma.x.max,
-                ),
-                sigmaY: blur.sigma.y.base.clamp(
-                  blur.sigma.y.min,
-                  blur.sigma.y.max,
-                ),
-              )
-            : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: layoutConfig.padding ?? 0.0,
-            vertical: ((layoutConfig.padding ?? 0.0) * 0.67),
-          ),
-          decoration: BoxDecoration(
-            // color: LayoutHelpers.parseColorSafely(background.color).withOpacity(
-            //   background.opacity.base.clamp(
-            //     background.opacity.min,
-            //     background.opacity.max,
-            //   ),
-            // ),
-            borderRadius: BorderRadius.circular(dynamicBorderRadius),
-          ),
-          child: AutoSizeText(
-            title,
-            style: textStyle,
-            maxLines: maxLines,
-            overflow: TextOverflow.ellipsis,
-            textAlign: LayoutHelpers.parseTextAlign(typography.textAlign),
-            minFontSize: titleStyle.typography.fontSize.min,
-            maxFontSize: titleStyle.typography.fontSize.max,
-          ),
-        ),
+    return ImageFilter.blur(
+      sigmaX: blur.sigma.x.base.clamp(
+        blur.sigma.x.min,
+        blur.sigma.x.max,
+      ),
+      sigmaY: blur.sigma.y.base.clamp(
+        blur.sigma.y.min,
+        blur.sigma.y.max,
       ),
     );
   }

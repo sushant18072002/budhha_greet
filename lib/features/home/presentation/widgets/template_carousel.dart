@@ -33,7 +33,7 @@ class TemplateCarousel extends GetView<HomeController> {
 
     // Calculate height based on 16:9 aspect ratio
     final carouselWidth = constraints.maxWidth;
-    final carouselHeight = (carouselWidth * 9) / 16;
+    final carouselHeight = (carouselWidth * 4) / 5;
 
     return Container(
       height: carouselHeight,
