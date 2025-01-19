@@ -4,7 +4,7 @@ import 'app_colors.dart';
 
 class AppTextStyles {
   static final appTitle = GoogleFonts.poppins(
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: FontWeight.w600,
     color: AppColors.amber800,
     height: 1.2,

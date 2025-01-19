@@ -18,37 +18,51 @@ class CategoriesSection extends GetWidget<HomeController> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('header.categories'.tr, style: AppTextStyles.sectionTitle),
+              Text(
+                'header.categories'.tr,
+                style: AppTextStyles.sectionTitle,
+                semanticsLabel: 'Categories Section',
+              ),
               TextButton(
                 onPressed: () {},
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.all(12), // Increased touch target
+                  minimumSize: const Size(44, 44), // Accessibility standard
+                ),
                 child: Text(
                   'header.see_all'.tr,
                   style: AppTextStyles.buttonText.copyWith(
                     color: AppColors.amber600,
+                    fontSize: 16, // Increased for better visibility
                   ),
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 16), // Increased spacing
         SizedBox(
-          height: 90,
+          height: 100, // Increased height for better touch targets
           child: Obx(() => ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(
+                  decelerationRate: ScrollDecelerationRate.fast,
+                ),
                 itemCount: controller.categories.length,
                 itemBuilder: (context, index) {
                   final category = controller.categories[index];
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOut,
                     margin: const EdgeInsets.only(right: 12),
-                    child: CategoryCard(
-                      category: category,
-                      isSelected:
-                          controller.selectedCategoryIndex.value == index,
-                      onTap: () => controller.selectCategory(index, category),
+                    child: Hero(
+                      tag: 'category_${category.type}',
+                      child: CategoryCard(
+                        category: category,
+                        isSelected: controller.selectedCategoryIndex.value == index,
+                        onTap: () => controller.selectCategory(index, category),
+                      ),
                     ),
                   );
                 },
@@ -79,44 +93,47 @@ class CategoryCard extends GetWidget<HomeController> {
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
         child: Container(
-          width: 100,
-          padding: const EdgeInsets.all(12),
+          width: 110, // Increased width
+          padding: const EdgeInsets.all(16), // Increased padding
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: isSelected
-                  ? [AppColors.amber400, AppColors.amber600]
+                  ? [AppColors.amber500, AppColors.amber700]
                   : [AppColors.amber50, AppColors.amber100],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(16),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: AppColors.amber300.withOpacity(0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    )
-                  ]
-                : null,
+            boxShadow: [
+              BoxShadow(
+                color: isSelected
+                    ? AppColors.amber300.withOpacity(0.3)
+                    : AppColors.amber200.withOpacity(0.1),
+                blurRadius: isSelected ? 8 : 4,
+                offset: Offset(0, isSelected ? 4 : 2),
+              ),
+            ],
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                _getCategoryIcon(category.type),
-                color: isSelected ? Colors.white : AppColors.amber800,
-                size: 28,
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                child: Icon(
+                  _getCategoryIcon(category.type),
+                  color: isSelected ? Colors.white : AppColors.amber800,
+                  size: 32, // Increased icon size
+                  semanticLabel: '${category.type} icon',
+                ),
               ),
               const SizedBox(height: 8),
               Obx(
                 () => Text(
-                  category.translations[controller.currentLanguage.value]
-                          ?.name ??
-                      "",
+                  category.translations[controller.currentLanguage.value]?.name ?? "",
                   style: AppTextStyles.bodySmall.copyWith(
                     color: isSelected ? Colors.white : AppColors.amber800,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    fontSize: 13, // Slightly increased for better readability
                   ),
                   textAlign: TextAlign.center,
                   maxLines: 1,
