@@ -32,11 +32,11 @@ class HomeScreen extends GetView<HomeController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildHeader(),
-                      const SizedBox(height: 16),
+                     // const SizedBox(height: 8),
                       TemplateCarousel(),
-                      const SizedBox(height: 24), // Increased spacing
+                      //const SizedBox(height: 8), // Increased spacing
                       CategoriesSection(),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 8),
                       const IntelligentTemplateGrid(),
                     ],
                   ),

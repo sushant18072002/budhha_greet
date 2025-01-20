@@ -26,7 +26,7 @@ class CategoriesSection extends GetWidget<HomeController> {
               TextButton(
                 onPressed: () {},
                 style: TextButton.styleFrom(
-                  padding: const EdgeInsets.all(12), // Increased touch target
+                  padding: const EdgeInsets.all(8), // Increased touch target
                   minimumSize: const Size(44, 44), // Accessibility standard
                 ),
                 child: Text(
@@ -40,11 +40,11 @@ class CategoriesSection extends GetWidget<HomeController> {
             ],
           ),
         ),
-        const SizedBox(height: 16), // Increased spacing
+        //const SizedBox(height: 8), // Increased spacing
         SizedBox(
           height: 100, // Increased height for better touch targets
           child: Obx(() => ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 scrollDirection: Axis.horizontal,
                 physics: const BouncingScrollPhysics(
                   decelerationRate: ScrollDecelerationRate.fast,
@@ -55,7 +55,7 @@ class CategoriesSection extends GetWidget<HomeController> {
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     curve: Curves.easeInOut,
-                    margin: const EdgeInsets.only(right: 12),
+                    margin: const EdgeInsets.only(right: 8),
                     child: Hero(
                       tag: 'category_${category.type}',
                       child: CategoryCard(

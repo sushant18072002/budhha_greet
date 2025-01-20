@@ -6,7 +6,7 @@ import 'core/config/initial_binding.dart';
 import 'core/routes/app_pages.dart';
 import 'core/routes/app_routes.dart';
 import 'core/services/database_service.dart';
-import 'lib/core/translations/app_translations.dart';
+import 'core/translations/app_translations.dart';
 import 'shared/theme/app_theme.dart';
 
 void main() async {

@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'dart:ui';
-
 import 'package:buddha_greet/shared/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import '../../../../core/routes/app_routes.dart';
 import '../../../../shared/models/entities/background_collection/background_collection.dart';
 import '../../../../shared/models/entities/qoute_collection/quote/quote.dart';
 import '../../../../shared/models/entities/template_collection/template_collection.dart';
@@ -50,7 +50,7 @@ class EnhancedHeader extends GetView<HomeController> {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
-        vertical: 16,
+        vertical: 8,
       ),
       child: Row(
         children: [
@@ -83,12 +83,7 @@ class EnhancedHeader extends GetView<HomeController> {
           children: [
             Text(
               'Morning Blessing',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: AppColors.amber900,
-                letterSpacing: -0.5,
-              ),
+              style: AppTextStyles.headlineSmall,
             ),
             const SizedBox(height: 4),
             Text(
@@ -438,45 +433,6 @@ BoxConstraints _getOptimizedItemConstraints(
   );
 }
 
-
-  Widget _buildIntelligentGrid(BoxConstraints constraints) {
-    final spacing = _calculateDynamicSpacing(constraints.maxWidth);
-    final columns = _calculateOptimalColumns(constraints.maxWidth);
-    final itemConstraints = LayoutConfig.getItemConstraints(constraints, true);
-
-    return Center(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-            maxWidth: (itemConstraints.maxWidth * columns) +
-                (spacing * (columns + 1))),
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            SliverPadding(
-              padding: EdgeInsets.all(spacing),
-              sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: columns,
-                  mainAxisSpacing: spacing,
-                  crossAxisSpacing: spacing,
-                  childAspectRatio: LayoutConfig.getAspectRatioValue(true),
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => _buildTemplateCard(
-                    template: controller.morningTemplates[index],
-                    constraints: itemConstraints,
-                    isGridView: true,
-                  ),
-                  childCount: controller.morningTemplates.length,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildIntelligentList(BoxConstraints constraints) {
     final spacing = _calculateDynamicSpacing(constraints.maxWidth);
     final itemConstraints = LayoutConfig.getItemConstraints(constraints, false);
@@ -522,94 +478,32 @@ BoxConstraints _getOptimizedItemConstraints(
     required BoxConstraints constraints,
     required bool isGridView,
   }) {
-    // ... existing _buildTemplateCard implementation ...
-    return Container(
-      constraints: constraints,
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              _buildBackgroundWithEffects(template, constraints),
-              _buildTemplateContent(template, isGridView, constraints),
-              _buildInteractiveElements(template),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(AppRoutes.template, arguments: template);
 
-  Widget _buildHeader() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16.0),
+      },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        // decoration: BoxDecoration(
-        //   color: Colors.white,
-        //   boxShadow: [
-        //     BoxShadow(
-        //       color: Colors.black.withOpacity(0.05),
-        //       blurRadius: 4,
-        //       offset: const Offset(0, 2),
-        //     ),
-        //   ],
-        // ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Obx(() {
-                final template = controller.selectedTemplate.value;
-                final translation =
-                    template?.translations[controller.currentLanguage.value];
-                return Text(
-                  translation?.title ?? 'Templates',
-                  style: AppTextStyles.sectionTitle,
-                );
-              }),
+        constraints: constraints,
+        child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                _buildBackgroundWithEffects(template, constraints),
+                _buildTemplateContent(template, isGridView, constraints),
+                _buildInteractiveElements(template),
+              ],
             ),
-            _buildViewModeToggle(),
-          ],
+          ),
         ),
       ),
     );
-  }
-
-  Widget _buildViewModeToggle() {
-    return Obx(() {
-      final isGridView = controller.isGridView.value;
-      final template = controller.selectedTemplate.value;
-      final styleConfig = template?.styleConfig;
-      final actionStyle = styleConfig?.actionButtons;
-
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Material(
-          color: Colors.amber.shade50,
-          borderRadius: BorderRadius.circular(
-            actionStyle?.background?.opacity ?? 8,
-          ),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(8),
-            onTap: controller.toggleViewMode,
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Icon(
-                isGridView ? Icons.grid_view : Icons.view_list,
-                color: Colors.amber[600],
-                size: actionStyle?.size ?? 24,
-              ),
-            ),
-          ),
-        ),
-      );
-    });
   }
 
   Widget _buildLoadingState() {
@@ -1292,81 +1186,124 @@ class AdaptiveQuoteWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (context, constraints) => _buildAdaptiveQuote(
-        constraints: constraints,
-      ),
+      builder: (context, constraints) {
+        final availableWidth = constraints.maxWidth;
+        final textScaleFactor = MediaQuery.of(context).textScaleFactor;
+        
+        return _buildOptimizedQuoteContainer(
+          constraints: constraints,
+          textScaleFactor: textScaleFactor,
+          availableWidth: availableWidth,
+        );
+      },
     );
   }
 
-  Widget _buildAdaptiveQuote({
+  Widget _buildOptimizedQuoteContainer({
     required BoxConstraints constraints,
+    required double textScaleFactor,
+    required double availableWidth,
   }) {
-    // Get style configuration with fallbacks
     final quoteStyle = template.styleConfig.orDefault.quote.orDefault;
     final typography = quoteStyle.typography.orDefault;
     final colors = quoteStyle.colors.orDefault;
 
-    // Calculate base font size with proper bounds
-    final baseFontSize = isGridView ? 14.0 : 16.0;
-    final minFontSize = typography.fontSize.min.clamp(10.0, baseFontSize);
-    final maxFontSize = typography.fontSize.max.clamp(baseFontSize, 28.0);
+    // Dynamic sizing calculations
+    final baseFontSize = _calculateBaseFontSize(isGridView);
+    final scaledFontLimits = _calculateFontSizeLimits(
+      typography: typography,
+      baseFontSize: baseFontSize,
+      textScaleFactor: textScaleFactor,
+    );
 
-    // Calculate dynamic font size based on available width and text length
+    // Calculate optimal font size based on container constraints
     final fontSize = _calculateOptimalFontSize(
       text: quoteText,
-      maxWidth: constraints.maxWidth * 0.85,
-      baseSize: baseFontSize,
-      minSize: minFontSize,
-      maxSize: maxFontSize,
-      maxLines: 5,
+      maxWidth: availableWidth * 0.85, // Account for padding
+      baseSize: scaledFontLimits.baseSize,
+      minSize: scaledFontLimits.minSize,
+      maxSize: scaledFontLimits.maxSize,
     );
 
-    // Get layout configuration
     final layoutConfig = (template.layoutConfig?.portrait?.quote).orDefault;
     final visualEffects = layoutConfig.visualEffects.orDefault;
-    final blur = visualEffects.blur.orDefault;
-    final borderRadius = visualEffects.borderRadius.orDefault;
-    final background = visualEffects.background.orDefault;
-
-    // Create text style with proper shadow handling
-    final textStyle = _createTextStyle(
-      typography: typography,
-      colors: colors,
-      fontSize: fontSize,
-    );
-
-    // Calculate optimal line height and max lines
-    final textMetrics = _calculateTextMetrics(
-      text: quoteText,
-      style: textStyle,
-      maxWidth: constraints.maxWidth,
-      maxHeight: maxHeight,
-    );
-
+    
     return ClipRRect(
-      borderRadius:
-          BorderRadius.circular(_calculateDynamicBorderRadius(borderRadius)),
+      borderRadius: _calculateBorderRadius(visualEffects.borderRadius),
       child: BackdropFilter(
-        filter: _createBlurEffect(blur),
+        filter: _createBlurEffect(visualEffects.blur.orDefault),
         child: Container(
-          padding: _calculatePadding(layoutConfig),
-          decoration: BoxDecoration(
-            color: _createBackgroundColor(background),
-            borderRadius: BorderRadius.circular(
-                _calculateDynamicBorderRadius(borderRadius)),
-          ),
-          child: AutoSizeText(
-            quoteText,
-            style: textStyle,
-            maxLines: textMetrics.maxLines,
-            overflow: TextOverflow.ellipsis,
-            textAlign: LayoutHelpers.parseTextAlign(typography.textAlign),
-            minFontSize: minFontSize,
-            maxFontSize: maxFontSize,
-            stepGranularity: 0.5,
+          padding: _calculateDynamicPadding(layoutConfig, availableWidth),
+          decoration: _createContainerDecoration(visualEffects),
+          child: _buildAdaptiveTextContent(
+            typography: typography,
+            colors: colors,
+            fontSize: fontSize,
+            constraints: constraints,
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildAdaptiveTextContent({
+    required ElementTypography typography,
+    required ElementStyleColors colors,
+    required double fontSize,
+    required BoxConstraints constraints,
+  }) {
+    return LayoutBuilder(
+      builder: (context, textConstraints) {
+        final textStyle = _createOptimizedTextStyle(
+          typography: typography,
+          colors: colors,
+          fontSize: fontSize,
+        );
+
+        final maxLines = _calculateOptimalLines(
+          textStyle: textStyle,
+          maxHeight: maxHeight,
+          text: quoteText,
+        );
+
+        return AutoSizeText(
+          quoteText,
+          style: textStyle,
+          maxLines: maxLines,
+          overflow: TextOverflow.ellipsis,
+          textAlign: LayoutHelpers.parseTextAlign(typography.textAlign),
+         minFontSize: _roundToStepGranularity(fontSize * 0.8, 0.5), // Allow slight reduction if needed
+          maxFontSize:  _roundToStepGranularity(fontSize , 0.5),
+          stepGranularity: 0.5,
+        );
+      },
+    );
+  }
+
+  double _roundToStepGranularity(double value, double stepGranularity) {
+  return (value / stepGranularity).round() * stepGranularity;
+}
+
+
+  double _calculateBaseFontSize(bool isGridView) {
+    // Base sizes adjusted for grid vs list view
+    return isGridView ? 14.0 : 16.0;
+  }
+
+  ({double baseSize, double minSize, double maxSize}) _calculateFontSizeLimits({
+    required ElementTypography typography,
+    required double baseFontSize,
+    required double textScaleFactor,
+  }) {
+    // Scale font sizes based on device text scaling
+    final scaledBase = baseFontSize * textScaleFactor;
+    final minSize = (typography.fontSize.min * textScaleFactor).clamp(10.0, scaledBase);
+    final maxSize = (typography.fontSize.max * textScaleFactor).clamp(scaledBase, 24.0);
+
+    return (
+      baseSize: scaledBase,
+      minSize: minSize,
+      maxSize: maxSize,
     );
   }
 
@@ -1376,131 +1313,109 @@ class AdaptiveQuoteWidget extends StatelessWidget {
     required double baseSize,
     required double minSize,
     required double maxSize,
-    required int maxLines,
   }) {
+    // Calculate optimal font size based on text length and container width
     final approximateCharsPerLine = maxWidth / (baseSize * 0.6);
-    final totalChars = text.length;
-    final averageCharsPerLine = totalChars / maxLines;
-
-    if (averageCharsPerLine <= approximateCharsPerLine) {
-      return baseSize;
+    final textLength = text.length;
+    final targetLines = isGridView ? 3 : 4;
+    
+    if (textLength <= approximateCharsPerLine * targetLines) {
+      return baseSize.clamp(minSize, maxSize);
     }
 
-    final scaleFactor = approximateCharsPerLine / averageCharsPerLine;
+    final scaleFactor = (approximateCharsPerLine * targetLines) / textLength;
     return (baseSize * scaleFactor).clamp(minSize, maxSize);
   }
 
-  TextStyle _createTextStyle({
+  int _calculateOptimalLines({
+    required TextStyle textStyle,
+    required double maxHeight,
+    required String text,
+  }) {
+    final textPainter = TextPainter(
+      text: TextSpan(text: text, style: textStyle),
+      textDirection: TextDirection.ltr,
+      maxLines: 1,
+    )..layout();
+
+    final lineHeight = textPainter.height;
+    final maxPossibleLines = (maxHeight / lineHeight).floor();
+    
+    // Limit lines based on view mode
+    return maxPossibleLines.clamp(1, isGridView ? 3 : 5);
+  }
+
+  TextStyle _createOptimizedTextStyle({
     required ElementTypography typography,
     required ElementStyleColors colors,
     required double fontSize,
   }) {
-    final shadows = <Shadow>[];
-    if (colors.shadow != null) {
-      shadows.add(Shadow(
-        color: LayoutHelpers.parseColorSafely(colors.shadow.color)
-            .withOpacity(colors.shadow.opacity),
-        offset: Offset(
-          colors.shadow.offset.x,
-          colors.shadow.offset.y,
-        ),
-        blurRadius: colors.shadow.blurRadius,
-      ));
-    }
+    final textColor = LayoutHelpers.parseColorSafely(colors.text);
+    final shadows = _createTextShadows(colors.shadow);
 
     return TextStyle(
       fontFamily: typography.fontFamily,
       fontSize: fontSize,
       fontWeight: LayoutHelpers.parseFontWeight(typography.fontWeight),
       letterSpacing: typography.letterSpacing,
-      color: LayoutHelpers.parseColorSafely(colors.text),
       height: typography.lineHeight,
+      color: textColor,
       shadows: shadows,
     );
   }
 
-  ({int maxLines, double lineHeight}) _calculateTextMetrics({
-    required String text,
-    required TextStyle style,
-    required double maxWidth,
-    required double maxHeight,
-  }) {
-    try {
-      final textPainter = TextPainter(
-        text: TextSpan(text: text, style: style),
-        textDirection: TextDirection.ltr,
-        maxLines: 5,
-      );
-      textPainter.layout(maxWidth: maxWidth);
+  List<Shadow> _createTextShadows(ElementShadow? shadow) {
+    if (shadow == null) return [];
 
-      final metrics = textPainter.computeLineMetrics();
-      double lineHeight;
-
-      if (metrics.isNotEmpty) {
-        lineHeight = metrics.first.height;
-      } else {
-        lineHeight = style.fontSize! * (style.height ?? 1.2);
-      }
-
-      // Ensure lineHeight is valid
-      if (lineHeight <= 0 || lineHeight.isInfinite || lineHeight.isNaN) {
-        lineHeight = style.fontSize! * 1.2;
-      }
-
-      final availableLines = (maxHeight / lineHeight).floor();
-      final maxLines = availableLines.clamp(1, 5);
-
-      return (maxLines: maxLines, lineHeight: lineHeight);
-    } catch (e) {
-      // Fallback values if calculation fails
-      return (maxLines: 3, lineHeight: style.fontSize! * 1.2);
-    }
+    return [
+      Shadow(
+        color: LayoutHelpers.parseColorSafely(shadow.color)
+            .withOpacity(shadow.opacity),
+        offset: Offset(shadow.offset.x, shadow.offset.y),
+        blurRadius: shadow.blurRadius,
+      ),
+    ];
   }
 
-  double _calculateDynamicBorderRadius(LayoutBorderRadius borderRadius) {
-    return (borderRadius.base.clamp(
-              borderRadius.min,
-              borderRadius.max,
-            ) *
-            borderRadius.scaleFactor)
-        .clamp(4.0, 16.0);
+  BorderRadius _calculateBorderRadius(LayoutBorderRadius borderRadius) {
+    final radius = (borderRadius.base * borderRadius.scaleFactor)
+        .clamp(borderRadius.min, borderRadius.max);
+    return BorderRadius.circular(radius);
   }
 
-  EdgeInsets _calculatePadding(ElementLayout layout) {
+  EdgeInsets _calculateDynamicPadding(
+    ElementLayout layout,
+    double availableWidth,
+  ) {
     final basePadding = layout.padding ?? 8.0;
+    final horizontalScale = (availableWidth / 400).clamp(0.8, 1.2);
+    
     return EdgeInsets.symmetric(
-      horizontal: basePadding,
-      vertical:
-          basePadding * 0.75, // Slightly larger vertical padding for quotes
+      horizontal: basePadding * horizontalScale,
+      vertical: basePadding * horizontalScale * 0.75,
+    );
+  }
+
+  BoxDecoration _createContainerDecoration(LayoutVisualEffects effects) {
+    final background = effects.background.orDefault;
+    
+    return BoxDecoration(
+      color: LayoutHelpers.parseColorSafely(background.color)
+          .withOpacity(background.opacity.base),
+      borderRadius: _calculateBorderRadius(effects.borderRadius),
     );
   }
 
   ImageFilter _createBlurEffect(LayoutBlur blur) {
-    if (!blur.enabled) {
-      return ImageFilter.blur(sigmaX: 0, sigmaY: 0);
-    }
+    if (!blur.enabled) return ImageFilter.blur(sigmaX: 0, sigmaY: 0);
 
     return ImageFilter.blur(
-      sigmaX: blur.sigma.x.base.clamp(
-        blur.sigma.x.min,
-        blur.sigma.x.max,
-      ),
-      sigmaY: blur.sigma.y.base.clamp(
-        blur.sigma.y.min,
-        blur.sigma.y.max,
-      ),
-    );
-  }
-
-  Color _createBackgroundColor(LayoutBackground background) {
-    return LayoutHelpers.parseColorSafely(background.color).withOpacity(
-      background.opacity.base.clamp(
-        background.opacity.min,
-        background.opacity.max,
-      ),
+      sigmaX: blur.sigma.x.base.clamp(blur.sigma.x.min, blur.sigma.x.max),
+      sigmaY: blur.sigma.y.base.clamp(blur.sigma.y.min, blur.sigma.y.max),
     );
   }
 }
+
 
 class AdaptiveBackgroundWidget extends StatelessWidget {
   final Background background;
