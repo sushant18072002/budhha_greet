@@ -351,16 +351,21 @@ Widget _buildEnhancedTemplateCard({
       borderRadius: BorderRadius.circular(16),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            _buildOptimizedBackground(template, constraints),
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 0.5, sigmaY: 0.5),
-              child: _buildEnhancedContent(template, isGridView, constraints),
-            ),
-            //_buildAccessibleControls(template),
-          ],
+        child: GestureDetector(
+          onTap: (){
+             Get.toNamed(AppRoutes.template, arguments: template);
+          },
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              _buildOptimizedBackground(template, constraints),
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 0.5, sigmaY: 0.5),
+                child: _buildEnhancedContent(template, isGridView, constraints),
+              ),
+              //_buildAccessibleControls(template),
+            ],
+          ),
         ),
       ),
     ),

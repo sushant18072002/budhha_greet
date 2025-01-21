@@ -156,9 +156,9 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildTitle(),
+            Expanded(flex: 4, child: Center(child: _buildTitle())),
             const SizedBox(height: 16),
-            _buildQuote(),
+            Expanded(flex: 6, child: _buildQuote()),
           ],
         ),
       ),
@@ -174,7 +174,7 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
       title: translation.title,
       template: template,
       isGridView: false,
-      maxHeight: 120,
+      maxHeight:  MediaQuery.of(Get.context!).size.height * 0.6*0.4,
     );
   }
 
@@ -192,7 +192,7 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
           quoteText: quoteText,
           template: template,
           isGridView: false,
-          maxHeight: 200,
+          maxHeight: MediaQuery.of(Get.context!).size.height * 0.6*0.5,
         );
       },
     );
@@ -267,19 +267,20 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
     required String value,
   }) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: AppColors.amber50,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         children: [
           Icon(icon, color: AppColors.amber600, size: 20),
           const SizedBox(width: 8),
           Expanded(
-            child: Column(
+            flex: 9,
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   label,
@@ -298,6 +299,7 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
               ],
             ),
           ),
+          Expanded(flex: 1,child: Container(),)
         ],
       ),
     );

@@ -233,4 +233,12 @@ class HomeController extends GetxController {
   }
 
   void onCategorySelected(Category category) {}
+
+   final currentIndex = 0.obs;
+
+  void setCurrentIndex(int index) {
+    currentIndex.value = index;
+  }
+  
 }
+
