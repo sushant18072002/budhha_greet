@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:buddha_greet/shared/models/entities/category_collection/all_category.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../core/services/database_service.dart';

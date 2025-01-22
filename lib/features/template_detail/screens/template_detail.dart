@@ -174,7 +174,7 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
       title: translation.title,
       template: template,
       isGridView: false,
-      maxHeight:  MediaQuery.of(Get.context!).size.height * 0.6*0.4,
+      maxHeight:  MediaQuery.of(Get.context!).size.height*0.4,
     );
   }
 
@@ -192,7 +192,7 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
           quoteText: quoteText,
           template: template,
           isGridView: false,
-          maxHeight: MediaQuery.of(Get.context!).size.height * 0.6*0.5,
+          maxHeight: MediaQuery.of(Get.context!).size.height *0.5,
         );
       },
     );
