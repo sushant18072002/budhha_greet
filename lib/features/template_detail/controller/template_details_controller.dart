@@ -1,17 +1,22 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../core/services/database_service.dart';
-import '../../../../shared/models/entities/background_collection/background_collection.dart';
-import '../../../../shared/models/entities/category_collection/category_collection.dart';
-import '../../../../shared/models/entities/qoute_collection/quote/quote.dart';
-import '../../../../shared/models/entities/template_collection/template_collection.dart';
-import '../../../../shared/theme/app_colors.dart';
 
-class HomeController extends GetxController {
-  final _dbService = Get.find<DatabaseService>();
+import '../../../core/services/database_service.dart';
+import '../../../shared/models/entities/background_collection/background_collection.dart';
+import '../../../shared/models/entities/category_collection/category_collection.dart';
+import '../../../shared/models/entities/qoute_collection/qoute_collection.dart';
+import '../../../shared/models/entities/template_collection/template_collection.dart';
+import '../../../shared/theme/app_colors.dart';
 
-  final RxList<Template> featuredTemplates = <Template>[].obs;
+class TemplateDetailsController extends GetxController {
+  final currentLanguage = 'en'.obs;
+  final isFavorite = false.obs;
+  final relatedTemplates = <Template>[].obs;
+
+    final _dbService = Get.find<DatabaseService>();
+
   final RxList<Template> morningTemplates = <Template>[].obs;
   final RxList<Category> categories = <Category>[].obs;
   final RxList<Map<String, dynamic>> carouselItems =
@@ -20,7 +25,6 @@ class HomeController extends GetxController {
   final RxBool isMorningTemplatesLoading = true.obs;
   final Rx<Template?> selectedTemplate = Rx<Template?>(null);
   final RxBool isGridView = true.obs;
-  final RxString currentLanguage = 'en'.obs;
 
   @override
   void onInit() {
@@ -58,10 +62,10 @@ class HomeController extends GetxController {
         while (selectedIndices.length < 3) {
           selectedIndices.add(random.nextInt(validTemplates.length));
         }
-        featuredTemplates.value =
+        relatedTemplates.value =
             selectedIndices.map((i) => validTemplates[i]).toList();
       } else {
-        featuredTemplates.value = validTemplates;
+        relatedTemplates.value = validTemplates;
       }
 
       // Load categories
@@ -124,11 +128,11 @@ class HomeController extends GetxController {
   }
 
   Future<void> _prepareCarouselItems() async {
-    if (featuredTemplates.isEmpty) return;
+    if (relatedTemplates.isEmpty) return;
 
     final items = <Map<String, dynamic>>[];
 
-    for (var template in featuredTemplates) {
+    for (var template in relatedTemplates) {
       final background =
           await getBackgroundById(template.composition.backgroundId);
       final quote = await getQuoteById(template.composition.quoteId);
@@ -191,9 +195,6 @@ class HomeController extends GetxController {
 
   void toggleFavorite(Template template) {}
   void onTemplateSelected(Template template) {}
-  bool isFavorite(String id) {
-    return true;
-  }
 
   void updateLanguage(String langCode) async {
     try {
@@ -233,11 +234,8 @@ class HomeController extends GetxController {
 
   void onCategorySelected(Category category) {}
 
-   final currentIndex = 0.obs;
-
-  void setCurrentIndex(int index) {
-    currentIndex.value = index;
+  void openTemplate(relatedTemplate){
+    
   }
-  
 }
-
+  

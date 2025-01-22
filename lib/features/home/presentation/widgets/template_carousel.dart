@@ -1,4 +1,5 @@
 import 'package:buddha_greet/features/home/presentation/widgets/morning_template.dart';
+import 'package:buddha_greet/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -58,8 +59,8 @@ class TemplateCarousel extends GetView<HomeController> {
         itemCount: controller.featuredTemplates.length,
         pagination: const SwiperPagination(
           builder: DotSwiperPaginationBuilder(
-            activeColor: Colors.amber,
-            color: Colors.amber,
+            activeColor: AppColors.amber800,
+            color: AppColors.amber300,
           ),
         ),
         scale: 0.9,

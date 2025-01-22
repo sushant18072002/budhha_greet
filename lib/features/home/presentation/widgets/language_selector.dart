@@ -18,7 +18,7 @@ class LanguageSelector extends GetWidget<HomeController> {
       ),
       color: AppColors.white,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         decoration: BoxDecoration(
           color: AppColors.amber50,
           borderRadius: BorderRadius.circular(12),
