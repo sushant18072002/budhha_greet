@@ -26,7 +26,8 @@ class HomeController extends GetxController {
   final Rx<Template?> selectedTemplate = Rx<Template?>(null);
   final RxString currentLanguage = 'en'.obs;
 
-  HomeController(this._dbService);
+ HomeController({required DatabaseService dbService}) : _dbService = dbService;
+
 
   @override
   void onInit() {
