@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -66,49 +65,28 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
   }
 
   Widget _buildBackButton() {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.black26,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new_rounded),
-        onPressed: () => Get.back(),
-      ),
+    return IconButton(
+      icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+      onPressed: () => Get.back(),
     );
   }
 
   Widget _buildShareButton() {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.black26,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: IconButton(
-        icon: const Icon(Icons.share_rounded),
-        onPressed: () => controller.shareTemplate(template),
-      ),
+    return IconButton(
+      icon: const Icon(Icons.share_rounded, color: Colors.white),
+      onPressed: () => controller.shareTemplate(template),
     );
   }
 
   Widget _buildFavoriteButton() {
     return Obx(() {
       final isFavorite = controller.isFavorite.value;
-      return Container(
-        margin: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Colors.black26,
-          borderRadius: BorderRadius.circular(12),
+      return IconButton(
+        icon: Icon(
+          isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+          color: isFavorite ? Colors.red : Colors.white,
         ),
-        child: IconButton(
-          icon: Icon(
-            isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-            color: isFavorite ? Colors.red : Colors.white,
-          ),
-          onPressed: () => controller.toggleFavorite(template),
-        ),
+        onPressed: () => controller.toggleFavorite(template),
       );
     });
   }
@@ -124,7 +102,7 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
           );
         }
 
-        return AdaptiveBackgroundWidget(
+         return AdaptiveBackgroundWidget(
           background: snapshot.data!,
           template: template,
           constraints: const BoxConstraints.expand(),
@@ -151,14 +129,14 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
   Widget _buildTemplateContent() {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(flex: 4, child: Center(child: _buildTitle())),
+            _buildTitle(),
             const SizedBox(height: 16),
-            Expanded(flex: 6, child: _buildQuote()),
+            _buildQuote(),
           ],
         ),
       ),
@@ -170,11 +148,9 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
     final translation = template.translations[currentLanguage];
     if (translation == null) return const SizedBox.shrink();
 
-    return AdaptiveTitleWidget(
-      title: translation.title,
-      template: template,
-      isGridView: false,
-      maxHeight:  MediaQuery.of(Get.context!).size.height*0.4,
+    return Text(
+      translation.title,
+      style: AppTextStyles.headlineMedium.copyWith(color: Colors.white),
     );
   }
 
@@ -188,11 +164,9 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
             snapshot.data?.translations[controller.currentLanguage.value]?.text;
         if (quoteText == null) return const SizedBox.shrink();
 
-        return AdaptiveQuoteWidget(
-          quoteText: quoteText,
-          template: template,
-          isGridView: false,
-          maxHeight: MediaQuery.of(Get.context!).size.height *0.5,
+        return Text(
+          quoteText,
+          style: AppTextStyles.quoteText,
         );
       },
     );
@@ -215,16 +189,21 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
   }
 
   Widget _buildMetadataSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Template Information',
-          style: AppTextStyles.headlineMedium,
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Template Information',
+              style: AppTextStyles.headlineMedium,
+            ),
+            const SizedBox(height: 16),
+            _buildMetadataGrid(),
+          ],
         ),
-        const SizedBox(height: 16),
-        _buildMetadataGrid(),
-      ],
+      ),
     );
   }
 
@@ -240,22 +219,22 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
         _buildMetadataItem(
           icon: Icons.remove_red_eye_rounded,
           label: 'Views',
-          value: '${/*template.stats?.views ??*/ 0}',
+          value: '${template.metrics?.views ?? 0}',
         ),
         _buildMetadataItem(
           icon: Icons.favorite_rounded,
           label: 'Favorites',
-          value: '${/*template.stats?.favorites ??*/ 0}',
+          value: '${template.metrics?.favorites ?? 0}',
         ),
         _buildMetadataItem(
           icon: Icons.share_rounded,
           label: 'Shares',
-          value: '${/*template.stats?.shares ??*/ 0}',
+          value: '${template.metrics?.shares ?? 0}',
         ),
         _buildMetadataItem(
           icon: Icons.download_rounded,
           label: 'Downloads',
-          value: '${/*template.stats?.downloads ??*/ 0}',
+          value: '${template.metrics?.shares ?? 0}',
         ),
       ],
     );
@@ -277,10 +256,8 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
           Icon(icon, color: AppColors.amber600, size: 20),
           const SizedBox(width: 8),
           Expanded(
-            flex: 9,
-            child: Row(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   label,
@@ -299,29 +276,31 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
               ],
             ),
           ),
-          Expanded(flex: 1,child: Container(),)
         ],
       ),
     );
   }
 
   Widget _buildDetailsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'About this Template',
-          style: AppTextStyles.headlineMedium,
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'About this Template',
+              style: AppTextStyles.headlineMedium,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              template.translations[controller.currentLanguage]?.description ??
+                  'No description available.',
+              style: AppTextStyles.bodyMedium,
+            ),
+          ],
         ),
-        const SizedBox(height: 16),
-        Text(
-          template.translations[controller.currentLanguage]?.description ?? 'No description available.',
-          style: TextStyle(
-            color: Colors.black87,
-            height: 1.5,
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -355,27 +334,22 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
   Widget _buildRelatedTemplateCard(Template relatedTemplate) {
     return GestureDetector(
       onTap: () => controller.openTemplate(relatedTemplate),
-      child: Container(
-        width: 160,
-        margin: const EdgeInsets.only(right: 16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+      child: Card(
+        child: Container(
+          width: 160,
+          margin: const EdgeInsets.only(right: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                _buildRelatedTemplateBackground(relatedTemplate),
+                _buildRelatedTemplateOverlay(relatedTemplate),
+              ],
             ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              _buildRelatedTemplateBackground(relatedTemplate),
-              _buildRelatedTemplateOverlay(relatedTemplate),
-            ],
           ),
         ),
       ),
@@ -453,7 +427,7 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
             child: _buildActionButton(
               icon: Icons.edit_rounded,
               label: 'Customize',
-             // onTap: () => /*controller.customizeTemplate(template)*/
+              onTap: () => controller.customizeTemplate(template),
               isPrimary: true,
             ),
           ),
@@ -462,7 +436,7 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
             child: _buildActionButton(
               icon: Icons.download_rounded,
               label: 'Download',
-             // onTap: () => /*controller.downloadTemplate(template)*/
+              onTap: () => controller.downloadTemplate(template),
               isPrimary: false,
             ),
           ),
@@ -474,14 +448,14 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
   Widget _buildActionButton({
     required IconData icon,
     required String label,
-   // required VoidCallback onTap,
+    required VoidCallback onTap,
     required bool isPrimary,
   }) {
     return Material(
       color: isPrimary ? AppColors.amber600 : AppColors.amber50,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
-       // onTap: onTap,
+        onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16),
