@@ -237,5 +237,12 @@ class TemplateDetailsController extends GetxController {
   void openTemplate(relatedTemplate){
     
   }
+
+  void customizeTemplate(relatedTemplate){
+    
+  }
+  void downloadTemplate(relatedTemplate){
+    
+  }
 }
   

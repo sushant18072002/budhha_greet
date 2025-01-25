@@ -985,96 +985,84 @@ class AdaptiveTitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (context, constraints) => _buildAdaptiveTitle(
-        constraints: constraints,
-      ),
-    );
-  }
+      builder: (context, constraints) {
+        // Get style configuration with fallbacks
+        final titleStyle = template.styleConfig.orDefault.title.orDefault;
+        final typography = titleStyle.typography.orDefault;
+        final colors = titleStyle.colors.orDefault;
 
-  Widget _buildAdaptiveTitle({
-    required BoxConstraints constraints,
-  }) {
-    // Get style configuration with fallbacks
-    final titleStyle = template.styleConfig.orDefault.title.orDefault;
-    final typography = titleStyle.typography.orDefault;
-    final colors = titleStyle.colors.orDefault;
+        // Calculate base font size based on view type
+        final baseFontSize =28.0;
+        final minFontSize = typography.fontSize.min.clamp(24.0, baseFontSize);
+        final maxFontSize = typography.fontSize.max.clamp(baseFontSize, 32.0);
 
-    // Calculate base font size with proper bounds
-    final baseFontSize = isGridView ? 16.0 : 18.0;
-    final minFontSize = typography.fontSize.min.clamp(12.0, baseFontSize);
-    final maxFontSize = typography.fontSize.max.clamp(baseFontSize, 32.0);
+        // Calculate optimal font size based on available space
+        final fontSize = _calculateOptimalFontSize(
+          text: title,
+          maxWidth: constraints.maxWidth * 0.85, // Account for padding
+          maxHeight: maxHeight,
+          baseSize: baseFontSize,
+          minSize: minFontSize,
+          maxSize: maxFontSize,
+        );
 
-    // Calculate dynamic font size based on available width and text length
-    final fontSize = _calculateOptimalFontSize(
-      text: title,
-      maxWidth: constraints.maxWidth * 0.85,
-      baseSize: baseFontSize,
-      minSize: minFontSize,
-      maxSize: maxFontSize,
-      maxLines: 3,
-    );
+        // Create text style with proper shadow handling
+        final textStyle = _createTextStyle(
+          typography: typography,
+          colors: colors,
+          fontSize: fontSize,
+        );
 
-    // Get layout configuration
-    final layoutConfig = (template.layoutConfig?.portrait?.title).orDefault;
-    final visualEffects = layoutConfig.visualEffects.orDefault;
-    final blur = visualEffects.blur.orDefault;
-    final borderRadius = visualEffects.borderRadius.orDefault;
-
-    // Create text style with proper shadow handling
-    final textStyle = _createTextStyle(
-      typography: typography,
-      colors: colors,
-      fontSize: fontSize,
-    );
-
-    // Calculate optimal line height and max lines
-    final textMetrics = _calculateTextMetrics(
-      text: title,
-      style: textStyle,
-      maxWidth: constraints.maxWidth,
-      maxHeight: maxHeight,
-    );
-
-    return ClipRRect(
-      borderRadius:
-          BorderRadius.circular(_calculateDynamicBorderRadius(borderRadius)),
-      child: BackdropFilter(
-        filter: _createBlurEffect(blur),
-        child: Container(
-          padding: _calculatePadding(layoutConfig),
-          child: AutoSizeText(
-            title,
-            style: textStyle,
-            maxLines: textMetrics.maxLines,
-            overflow: TextOverflow.ellipsis,
-            textAlign: LayoutHelpers.parseTextAlign(typography.textAlign),
-            minFontSize: minFontSize,
-            maxFontSize: maxFontSize,
-            stepGranularity: 0.5,
+        return Container(
+          padding: _calculatePadding(isGridView),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: AutoSizeText(
+              title,
+              style: textStyle,
+              maxLines: isGridView ? 2 : 3,
+              overflow: TextOverflow.ellipsis,
+              textScaleFactor: 1.5,
+              textAlign: LayoutHelpers.parseTextAlign(typography.textAlign),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   double _calculateOptimalFontSize({
     required String text,
     required double maxWidth,
+    required double maxHeight,
     required double baseSize,
     required double minSize,
     required double maxSize,
-    required int maxLines,
   }) {
-    final approximateCharsPerLine = maxWidth / (baseSize * 0.6);
-    final totalChars = text.length;
-    final averageCharsPerLine = totalChars / maxLines;
+    final textPainter = TextPainter(
+      text: TextSpan(
+        text: text,
+        style: TextStyle(
+          fontSize: baseSize,
+          fontWeight: FontWeight.normal,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+      maxLines: isGridView ? 2 : 3,
+    );
 
-    if (averageCharsPerLine <= approximateCharsPerLine) {
-      return baseSize;
-    }
+    textPainter.layout(maxWidth: maxWidth);
 
-    final scaleFactor = approximateCharsPerLine / averageCharsPerLine;
-    return (baseSize * scaleFactor).clamp(minSize, maxSize);
+    // Calculate the scaling factor based on available space
+    final widthScale = maxWidth / textPainter.width;
+    final heightScale = maxHeight / textPainter.height;
+    final scaleFactor = widthScale < heightScale ? widthScale : heightScale;
+
+    // Adjust font size based on scaling factor
+    final scaledFontSize = baseSize * scaleFactor;
+
+    // Ensure the font size stays within the min and max limits
+    return scaledFontSize.clamp(minSize, maxSize);
   }
 
   TextStyle _createTextStyle({
@@ -1106,70 +1094,11 @@ class AdaptiveTitleWidget extends StatelessWidget {
     );
   }
 
-  ({int maxLines, double lineHeight}) _calculateTextMetrics({
-    required String text,
-    required TextStyle style,
-    required double maxWidth,
-    required double maxHeight,
-  }) {
-    try {
-      final textPainter = TextPainter(
-        text: TextSpan(text: text, style: style),
-        textDirection: TextDirection.ltr,
-        maxLines: 3,
-      );
-      textPainter.layout(maxWidth: maxWidth);
-
-      final metrics = textPainter.computeLineMetrics();
-      double lineHeight;
-
-      if (metrics.isNotEmpty) {
-        lineHeight = metrics.first.height;
-      } else {
-        lineHeight = style.fontSize! * (style.height ?? 1.2);
-      }
-
-      final availableLines = (maxHeight / lineHeight).floor();
-      final maxLines = availableLines.clamp(1, 3);
-
-      return (maxLines: maxLines, lineHeight: lineHeight);
-    } catch (e) {
-      // Fallback values if calculation fails
-      return (maxLines: 2, lineHeight: style.fontSize! * 1.2);
-    }
-  }
-
-  double _calculateDynamicBorderRadius(LayoutBorderRadius borderRadius) {
-    return (borderRadius.base.clamp(
-              borderRadius.min,
-              borderRadius.max,
-            ) *
-            borderRadius.scaleFactor)
-        .clamp(4.0, 16.0);
-  }
-
-  EdgeInsets _calculatePadding(ElementLayout layout) {
-    final basePadding = layout.padding ?? 8.0;
+  EdgeInsets _calculatePadding(bool isGridView) {
+    final basePadding = isGridView ? 8.0 : 16.0;
     return EdgeInsets.symmetric(
       horizontal: basePadding,
-      vertical: basePadding * 0.67,
-    );
-  }
-
-  ImageFilter _createBlurEffect(LayoutBlur blur) {
-    if (!blur.enabled) {
-      return ImageFilter.blur(sigmaX: 0, sigmaY: 0);
-    }
-
-    return ImageFilter.blur(
-      sigmaX: blur.sigma.x.base.clamp(
-        blur.sigma.x.min,
-        blur.sigma.x.max,
-      ),
-      sigmaY: blur.sigma.y.base.clamp(
-        blur.sigma.y.min,
-        blur.sigma.y.max,
-      ),
+      vertical: basePadding * 0.5,
     );
   }
 }
