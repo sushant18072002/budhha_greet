@@ -1,6 +1,11 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../shared/models/entities/background_collection/background_collection.dart';
 import '../../../shared/models/entities/qoute_collection/qoute_collection.dart';
@@ -12,13 +17,14 @@ import '../controller/template_details_controller.dart';
 
 class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
   final Template template;
+  final GlobalKey _sliverAppBarKey = GlobalKey();
 
-  const TemplateDetailsScreen({
+  TemplateDetailsScreen({
     Key? key,
     required this.template,
   }) : super(key: key);
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
@@ -44,15 +50,18 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
           StretchMode.zoomBackground,
           StretchMode.blurBackground,
         ],
-        background: Hero(
-          tag: 'template_${template.uuid}',
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              _buildBackgroundImage(),
-              _buildGradientOverlay(),
-              _buildTemplateContent(),
-            ],
+        background: RepaintBoundary(
+          key: _sliverAppBarKey,
+          child: Hero(
+            tag: 'template_${template.uuid}',
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                _buildBackgroundImage(),
+                _buildGradientOverlay(),
+                _buildTemplateContent(),
+              ],
+            ),
           ),
         ),
       ),
@@ -63,8 +72,7 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
       ],
     );
   }
-
-  Widget _buildBackButton() {
+   Widget _buildBackButton() {
     return IconButton(
       icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
       onPressed: () => Get.back(),
@@ -74,9 +82,32 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
   Widget _buildShareButton() {
     return IconButton(
       icon: const Icon(Icons.share_rounded, color: Colors.white),
-      onPressed: () => controller.shareTemplate(template),
+      onPressed: _captureAndShareSliverAppBar,
     );
   }
+  
+
+  Future<void> _captureAndShareSliverAppBar() async {
+    try {
+      // Capture the widget as an image
+      final RenderRepaintBoundary boundary = _sliverAppBarKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      final ui.Image image = await boundary.toImage();
+      final ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      final Uint8List imageBytes = byteData!.buffer.asUint8List();
+
+      // Save the image to a temporary file
+      final tempDir = await getTemporaryDirectory();
+      final file = await File('${tempDir.path}/sliver_app_bar.png').writeAsBytes(imageBytes);
+      // Share the image with a message
+      await Share.shareXFiles(
+        [XFile(file.path)],
+        text: 'Good Morning',
+      );
+    } catch (e) {
+      print('Error capturing and sharing image: $e');
+    }
+  }
+
 
   Widget _buildFavoriteButton() {
     return Obx(() {

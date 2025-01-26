@@ -519,6 +519,7 @@ class DatabaseService extends GetxService {
   Future<void> saveCategory(Category category) async =>
       await categoriesBox.put(category.id, category);
   Category? getCategory(String id) => categoriesBox.get(id);
+  
   List<Category> getAllCategories() => categoriesBox.values.toList();
   Future<void> deleteCategory(String id) async =>
       await categoriesBox.delete(id);

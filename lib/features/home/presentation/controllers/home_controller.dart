@@ -62,7 +62,7 @@ class HomeController extends GetxController {
       }
 
       categories.value = await _dbService.getAllCategories();
-      await _prepareCarouselItems();
+     
     } catch (e) {
       _handleError('Loading home data failed', e);
     } finally {
@@ -86,30 +86,6 @@ class HomeController extends GetxController {
     return validTemplates;
   }
 
-  Future<void> _prepareCarouselItems() async {
-    if (featuredTemplates.isEmpty) return;
-
-    final items = <Map<String, dynamic>>[];
-
-    for (var template in featuredTemplates) {
-      final background = await getBackgroundById(template.composition.backgroundId);
-      final quote = await getQuoteById(template.composition.quoteId);
-
-      if (background != null &&
-          background.type == 'image' &&
-          background.visualData.image != null &&
-          quote != null) {
-        items.add({
-          'template': template,
-          'background': background,
-          'quote': quote,
-          'greeting': template.translations[currentLanguage.value]!.greeting ?? '',
-        });
-      }
-    }
-
-    carouselItems.value = items;
-  }
 
   Future<void> loadMorningTemplatesInitialData() async {
     try {
