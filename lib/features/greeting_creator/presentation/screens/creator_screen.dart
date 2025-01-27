@@ -1,8 +1,6 @@
-// greeting_screen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'dart:ui' as ui;
 
 import '../../../../shared/theme/app_colors.dart';
 import '../../../../shared/theme/app_text_styles.dart';
@@ -15,7 +13,7 @@ class GreetingController extends GetxController {
   final textPosition = Offset(0, 0).obs;
   final textRotation = 0.0.obs;
   final personalMessage = "".obs;
-  final backgroundType = "color".obs; // color, gradient, image
+  final backgroundType = "color".obs; 
   final backgroundColor = AppColors.amber100.obs;
   final backgroundImage = Rxn<String>();
   final backgroundOpacity = 1.0.obs;
