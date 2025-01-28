@@ -158,33 +158,58 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
     );
   }
 
-  Widget _buildTemplateContent() {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTitle(),
-            const SizedBox(height: 16),
-            _buildQuote(),
-          ],
-        ),
+  Widget _buildTemplateContent(
+  ) {
+    final currentLanguage = controller.currentLanguage.value;
+    final translation = template.translations[currentLanguage];
+    print(
+        "_buildTemplateContent translation $translation template.translations ${template.translations.entries.toList()} ");
+    if (translation == null) return const SizedBox.shrink();
+
+    final spacing = template.layoutConfig?.portrait?.layoutAdjustments?.spacing
+            .betweenElements ??
+        8.0;
+    var isGridView =  MediaQuery.of(Get.context!).orientation == Orientation.portrait;
+    var constraints= BoxConstraints.expand();
+    return Padding(
+      padding: EdgeInsets.all(isGridView ? 12 : 16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Flexible(
+            flex: 4,
+            fit: FlexFit.tight,
+            child: Center(
+                child: AdaptiveTitleWidget(
+              title: translation.title,
+              template: template,
+              isGridView: isGridView,
+              maxHeight: constraints.maxHeight * 0.4,
+            )
+                // _buildAdaptiveTitle(
+                //   title: translation.title,
+                //   template: template,
+                //   isGridView: isGridView,
+                //   constraints: constraints,
+                //   maxHeight: constraints.maxHeight * 0.4,
+                // ),
+                ),
+          ),
+          SizedBox(height: spacing),
+          Flexible(
+            flex: 6,
+            fit: FlexFit.tight,
+            child: _buildQuote(
+            
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildTitle() {
-    final currentLanguage = controller.currentLanguage.value;
-    final translation = template.translations[currentLanguage];
-    if (translation == null) return const SizedBox.shrink();
-
-    return Text(
-      translation.title,
-      style: AppTextStyles.headlineMedium.copyWith(color: Colors.white),
-    );
-  }
+ 
 
   Widget _buildQuote() {
     return FutureBuilder<Quote?>(
@@ -195,10 +220,13 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
         final quoteText =
             snapshot.data?.translations[controller.currentLanguage.value]?.text;
         if (quoteText == null) return const SizedBox.shrink();
-
-        return Text(
-          quoteText,
-          style: AppTextStyles.quoteText,
+         var isGridView =  MediaQuery.of(Get.context!).orientation == Orientation.portrait;
+    var constraints= BoxConstraints.expand();
+        return AdaptiveQuoteWidget(
+          quoteText: quoteText,
+          template: template,
+          isGridView: isGridView,
+          maxHeight: constraints.maxHeight,
         );
       },
     );

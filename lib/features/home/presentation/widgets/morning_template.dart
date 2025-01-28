@@ -395,7 +395,7 @@ Widget _buildEnhancedContent(
   final currentLanguage = controller.currentLanguage.value;
     final translation = template.translations[currentLanguage];
     print(
-        "_buildTemplateContent translation ${translation} template.translations ${template.translations.entries.toList()} ");
+        "_buildTemplateContent translation $translation template.translations ${template.translations.entries.toList()} ");
     if (translation == null) return const SizedBox.shrink();
 
   return SafeArea(
@@ -556,7 +556,7 @@ BoxConstraints _getOptimizedItemConstraints(
     final currentLanguage = controller.currentLanguage.value;
     final translation = template.translations[currentLanguage];
     print(
-        "_buildTemplateContent translation ${translation} template.translations ${template.translations.entries.toList()} ");
+        "_buildTemplateContent translation $translation template.translations ${template.translations.entries.toList()} ");
     if (translation == null) return const SizedBox.shrink();
 
     final spacing = template.layoutConfig?.portrait?.layoutAdjustments?.spacing
@@ -975,12 +975,12 @@ class AdaptiveTitleWidget extends StatelessWidget {
   final double maxHeight;
 
   const AdaptiveTitleWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.template,
     required this.isGridView,
     required this.maxHeight,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1071,18 +1071,16 @@ class AdaptiveTitleWidget extends StatelessWidget {
     required double fontSize,
   }) {
     final shadows = <Shadow>[];
-    if (colors.shadow != null) {
-      shadows.add(Shadow(
-        color: LayoutHelpers.parseColorSafely(colors.shadow.color)
-            .withOpacity(colors.shadow.opacity),
-        offset: Offset(
-          colors.shadow.offset.x,
-          colors.shadow.offset.y,
-        ),
-        blurRadius: colors.shadow.blurRadius,
-      ));
-    }
-
+    shadows.add(Shadow(
+      color: LayoutHelpers.parseColorSafely(colors.shadow.color)
+          .withOpacity(colors.shadow.opacity),
+      offset: Offset(
+        colors.shadow.offset.x,
+        colors.shadow.offset.y,
+      ),
+      blurRadius: colors.shadow.blurRadius,
+    ));
+  
     return TextStyle(
       fontFamily: typography.fontFamily,
       fontSize: fontSize,
@@ -1110,12 +1108,12 @@ class AdaptiveQuoteWidget extends StatelessWidget {
   final double maxHeight;
 
   const AdaptiveQuoteWidget({
-    Key? key,
+    super.key,
     required this.quoteText,
     required this.template,
     required this.isGridView,
     required this.maxHeight,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1357,11 +1355,11 @@ class AdaptiveBackgroundWidget extends StatelessWidget {
   final BoxConstraints constraints;
 
   const AdaptiveBackgroundWidget({
-    Key? key,
+    super.key,
     required this.background,
     required this.template,
     required this.constraints,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1407,35 +1405,33 @@ class AdaptiveBackgroundWidget extends StatelessWidget {
 
     // Apply visual effects
     final effects = background.visualEffects;
-    if (effects != null) {
-      if (effects.opacity != 1.0) {
-        imageWidget = Opacity(
-          opacity: effects.opacity.clamp(0.0, 1.0),
-          child: imageWidget,
-        );
-      }
-
-      if (effects.blur > 0) {
-        imageWidget = ImageFiltered(
-          imageFilter: ImageFilter.blur(
-            sigmaX: effects.blur.clamp(0.0, 20.0),
-            sigmaY: effects.blur.clamp(0.0, 20.0),
-          ),
-          child: imageWidget,
-        );
-      }
-
-      if (effects.blendMode != 'normal') {
-        imageWidget = ColorFiltered(
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.5),
-            _parseBlendMode(effects.blendMode),
-          ),
-          child: imageWidget,
-        );
-      }
+    if (effects.opacity != 1.0) {
+      imageWidget = Opacity(
+        opacity: effects.opacity.clamp(0.0, 1.0),
+        child: imageWidget,
+      );
     }
 
+    if (effects.blur > 0) {
+      imageWidget = ImageFiltered(
+        imageFilter: ImageFilter.blur(
+          sigmaX: effects.blur.clamp(0.0, 20.0),
+          sigmaY: effects.blur.clamp(0.0, 20.0),
+        ),
+        child: imageWidget,
+      );
+    }
+
+    if (effects.blendMode != 'normal') {
+      imageWidget = ColorFiltered(
+        colorFilter: ColorFilter.mode(
+          Colors.black.withOpacity(0.5),
+          _parseBlendMode(effects.blendMode),
+        ),
+        child: imageWidget,
+      );
+    }
+  
     return SizedBox.expand(child: imageWidget);
   }
 
