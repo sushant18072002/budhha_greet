@@ -1,5 +1,4 @@
 import 'package:buddha_greet/shared/models/entities/author.dart';
-import 'package:buddha_greet/shared/models/entities/category_collection/all_category.dart';
 import 'package:buddha_greet/shared/models/entities/tag.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';

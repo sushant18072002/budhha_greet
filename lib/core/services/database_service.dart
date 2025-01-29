@@ -519,6 +519,7 @@ class DatabaseService extends GetxService {
   Future<void> saveCategory(Category category) async =>
       await categoriesBox.put(category.id, category);
   Category? getCategory(String id) => categoriesBox.get(id);
+  
   List<Category> getAllCategories() => categoriesBox.values.toList();
   Future<void> deleteCategory(String id) async =>
       await categoriesBox.delete(id);
@@ -665,9 +666,9 @@ class DatabaseService extends GetxService {
 
   Future<void> _updateCacheForLanguage(String languageCode) async {
     try {
-      final categories = await getAllCategories();
-      final authors = await getAllAuthors();
-      final tags = await getAllTags();
+      final categories = getAllCategories();
+      final authors = getAllAuthors();
+      final tags = getAllTags();
 
       cache.value = {
         ...cache,

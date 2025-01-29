@@ -52,7 +52,7 @@ class HomeController extends GetxController {
       
       if (validTemplates.length > 3) {
         final random = Random();
-        final selectedIndices = Set<int>();
+        final selectedIndices = <int>{};
         while (selectedIndices.length < 3) {
           selectedIndices.add(random.nextInt(validTemplates.length));
         }
@@ -61,8 +61,8 @@ class HomeController extends GetxController {
         featuredTemplates.value = validTemplates;
       }
 
-      categories.value = await _dbService.getAllCategories();
-      await _prepareCarouselItems();
+      categories.value = _dbService.getAllCategories();
+     
     } catch (e) {
       _handleError('Loading home data failed', e);
     } finally {
@@ -71,7 +71,7 @@ class HomeController extends GetxController {
   }
 
   Future<List<Template>> _getValidTemplatesForCarousel() async {
-    final allTemplates = await _dbService.getAllTemplates();
+    final allTemplates = _dbService.getAllTemplates();
     final validTemplates = <Template>[];
 
     for (var template in allTemplates) {
@@ -86,35 +86,11 @@ class HomeController extends GetxController {
     return validTemplates;
   }
 
-  Future<void> _prepareCarouselItems() async {
-    if (featuredTemplates.isEmpty) return;
-
-    final items = <Map<String, dynamic>>[];
-
-    for (var template in featuredTemplates) {
-      final background = await getBackgroundById(template.composition.backgroundId);
-      final quote = await getQuoteById(template.composition.quoteId);
-
-      if (background != null &&
-          background.type == 'image' &&
-          background.visualData.image != null &&
-          quote != null) {
-        items.add({
-          'template': template,
-          'background': background,
-          'quote': quote,
-          'greeting': template.translations[currentLanguage.value]!.greeting ?? '',
-        });
-      }
-    }
-
-    carouselItems.value = items;
-  }
 
   Future<void> loadMorningTemplatesInitialData() async {
     try {
       isMorningTemplatesLoading.value = true;
-      final allTemplates = await _dbService.getAllTemplates();
+      final allTemplates = _dbService.getAllTemplates();
       morningTemplates.value = allTemplates;
       selectedTemplate.value = allTemplates.isNotEmpty ? allTemplates.first : null;
     } catch (e) {
@@ -125,11 +101,11 @@ class HomeController extends GetxController {
   }
 
   Future<Quote?> getQuoteById(String quoteId) async {
-    return await _dbService.getQuote(quoteId);
+    return _dbService.getQuote(quoteId);
   }
 
   Future<Background?> getBackgroundById(String backgroundId) async {
-    return await _dbService.getBackground(backgroundId);
+    return _dbService.getBackground(backgroundId);
   }
 
   void toggleViewMode() => isGridView.value = !isGridView.value;
