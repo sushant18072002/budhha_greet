@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import '../../core/routes/app_routes.dart';
 import '../../features/home/presentation/controllers/home_controller.dart';
 import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
 
 class CustomBottomNavigation extends GetView<HomeController> {
   const CustomBottomNavigation({Key? key}) : super(key: key);

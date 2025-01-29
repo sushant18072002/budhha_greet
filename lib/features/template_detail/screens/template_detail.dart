@@ -1,6 +1,11 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../shared/models/entities/background_collection/background_collection.dart';
 import '../../../shared/models/entities/qoute_collection/qoute_collection.dart';
@@ -12,13 +17,14 @@ import '../controller/template_details_controller.dart';
 
 class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
   final Template template;
+  final GlobalKey _sliverAppBarKey = GlobalKey();
 
-  const TemplateDetailsScreen({
+  TemplateDetailsScreen({
     Key? key,
     required this.template,
   }) : super(key: key);
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
@@ -44,15 +50,18 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
           StretchMode.zoomBackground,
           StretchMode.blurBackground,
         ],
-        background: Hero(
-          tag: 'template_${template.uuid}',
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              _buildBackgroundImage(),
-              _buildGradientOverlay(),
-              _buildTemplateContent(),
-            ],
+        background: RepaintBoundary(
+          key: _sliverAppBarKey,
+          child: Hero(
+            tag: 'template_${template.uuid}',
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                _buildBackgroundImage(),
+                _buildGradientOverlay(),
+                _buildTemplateContent(),
+              ],
+            ),
           ),
         ),
       ),
@@ -63,8 +72,8 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
       ],
     );
   }
-
-  Widget _buildBackButton() {
+  
+   Widget _buildBackButton() {
     return IconButton(
       icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
       onPressed: () => Get.back(),
@@ -74,9 +83,32 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
   Widget _buildShareButton() {
     return IconButton(
       icon: const Icon(Icons.share_rounded, color: Colors.white),
-      onPressed: () => controller.shareTemplate(template),
+      onPressed: _captureAndShareSliverAppBar,
     );
   }
+  
+
+  Future<void> _captureAndShareSliverAppBar() async {
+    try {
+      // Capture the widget as an image
+      final RenderRepaintBoundary boundary = _sliverAppBarKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      final ui.Image image = await boundary.toImage();
+      final ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      final Uint8List imageBytes = byteData!.buffer.asUint8List();
+
+      // Save the image to a temporary file
+      final tempDir = await getTemporaryDirectory();
+      final file = await File('${tempDir.path}/sliver_app_bar.png').writeAsBytes(imageBytes);
+      // Share the image with a message
+      await Share.shareXFiles(
+        [XFile(file.path)],
+        text: 'Good Morning',
+      );
+    } catch (e) {
+      print('Error capturing and sharing image: $e');
+    }
+  }
+
 
   Widget _buildFavoriteButton() {
     return Obx(() {
@@ -126,51 +158,85 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
     );
   }
 
-  Widget _buildTemplateContent() {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTitle(),
-            const SizedBox(height: 16),
-            _buildQuote(),
-          ],
-        ),
+  Widget _buildTemplateContent(
+  ) {
+    final currentLanguage = controller.currentLanguage.value;
+    final translation = template.translations[currentLanguage];
+    print(
+        "_buildTemplateContent translation $translation template.translations ${template.translations.entries.toList()} ");
+    if (translation == null) return const SizedBox.shrink();
+
+    final spacing = template.layoutConfig?.portrait?.layoutAdjustments?.spacing
+            .betweenElements ??
+        8.0;
+    var isGridView =  MediaQuery.of(Get.context!).orientation == Orientation.portrait;
+    var constraints= BoxConstraints.expand();
+    return Padding(
+      padding: EdgeInsets.all(isGridView ? 12 : 16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Flexible(
+            flex: 4,
+            fit: FlexFit.tight,
+            child: Center(
+                child: AdaptiveTitleWidget(
+              title: translation.title,
+              template: template,
+              isGridView: isGridView,
+              maxHeight: constraints.maxHeight * 0.4,
+            )
+                // _buildAdaptiveTitle(
+                //   title: translation.title,
+                //   template: template,
+                //   isGridView: isGridView,
+                //   constraints: constraints,
+                //   maxHeight: constraints.maxHeight * 0.4,
+                // ),
+                ),
+          ),
+          SizedBox(height: spacing),
+          Flexible(
+            flex: 6,
+            fit: FlexFit.tight,
+            child: _buildQuote(
+            
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildTitle() {
-    final currentLanguage = controller.currentLanguage.value;
-    final translation = template.translations[currentLanguage];
-    if (translation == null) return const SizedBox.shrink();
-
-    return Text(
-      translation.title,
-      style: AppTextStyles.headlineMedium.copyWith(color: Colors.white),
-    );
-  }
+ 
 
   Widget _buildQuote() {
-    return FutureBuilder<Quote?>(
-      future: controller.getQuoteById(template.composition.quoteId),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return const SizedBox.shrink();
+  return LayoutBuilder(
+    builder: (context, constraints) {
+      return FutureBuilder<Quote?>(
+        future: controller.getQuoteById(template.composition.quoteId),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return const SizedBox.shrink();
 
-        final quoteText =
-            snapshot.data?.translations[controller.currentLanguage.value]?.text;
-        if (quoteText == null) return const SizedBox.shrink();
+          final quoteText = snapshot.data?.translations[controller.currentLanguage.value]?.text;
+          if (quoteText == null) return const SizedBox.shrink();
 
-        return Text(
-          quoteText,
-          style: AppTextStyles.quoteText,
-        );
-      },
-    );
-  }
+          final isGridView = MediaQuery.of(context).orientation == Orientation.portrait;
+          
+          final maxQuoteHeight = constraints.maxHeight;
+
+          return AdaptiveQuoteWidget(
+            quoteText: quoteText,
+            template: template,
+            isGridView: isGridView,
+            maxHeight: maxQuoteHeight,
+          );
+        },
+      );
+    },
+  );
+}
 
   Widget _buildContent(BuildContext context) {
     return Padding(

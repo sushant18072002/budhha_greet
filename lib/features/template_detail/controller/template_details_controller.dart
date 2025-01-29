@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:buddha_greet/features/home/presentation/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,6 +26,7 @@ class TemplateDetailsController extends GetxController {
   final RxBool isMorningTemplatesLoading = true.obs;
   final Rx<Template?> selectedTemplate = Rx<Template?>(null);
   final RxBool isGridView = true.obs;
+  var controller = Get.find<HomeController>();
 
   @override
   void onInit() {
@@ -34,6 +36,7 @@ class TemplateDetailsController extends GetxController {
 
   Future<void> initializeController() async {
     try {
+      currentLanguage.value=controller.currentLanguage.value;
       // Wait for database to be initialized
       // if (!_dbService.isInitialized) {
       //   await _dbService.init();
@@ -58,7 +61,7 @@ class TemplateDetailsController extends GetxController {
       // Randomly select 3 templates from valid ones
       if (validTemplates.length > 3) {
         final random = Random();
-        final selectedIndices = Set<int>();
+        final selectedIndices = <int>{};
         while (selectedIndices.length < 3) {
           selectedIndices.add(random.nextInt(validTemplates.length));
         }
@@ -69,7 +72,7 @@ class TemplateDetailsController extends GetxController {
       }
 
       // Load categories
-      final allCategories = await _dbService.getAllCategories();
+      final allCategories = _dbService.getAllCategories();
       categories.value = allCategories;
 
       // Prepare carousel items
@@ -82,7 +85,7 @@ class TemplateDetailsController extends GetxController {
   }
 
   Future<List<Template>> _getValidTemplatesForCarousel() async {
-    final allTemplates = await _dbService.getAllTemplates();
+    final allTemplates = _dbService.getAllTemplates();
     final validTemplates = <Template>[];
     print(" allTemplates ${allTemplates.length}");
     for (var template in allTemplates) {
@@ -111,7 +114,7 @@ class TemplateDetailsController extends GetxController {
       final background =
           await getBackgroundById(template.composition.backgroundId);
       print(
-          "template background ${background}   background.type != 'image' background?.type ${background?.type} ${background?.type != 'image'} imageUrl ${{
+          "template background $background   background.type != 'image' background?.type ${background?.type} ${background?.type != 'image'} imageUrl ${{
         background?.visualData.image?.original
       }} ${background?.visualData.image}");
       if (background == null ||
@@ -161,7 +164,7 @@ class TemplateDetailsController extends GetxController {
     try {
       isMorningTemplatesLoading.value = true;
       // Load morning templates
-      final allTemplates = await _dbService.getAllTemplates(
+      final allTemplates = _dbService.getAllTemplates(
           // category: 'morning',
           );
       morningTemplates.value = allTemplates;
@@ -175,12 +178,12 @@ class TemplateDetailsController extends GetxController {
   }
 
   Future<Quote?> getQuoteById(String quoteId) async {
-    debugPrint("getQuoteById ${quoteId}");
-    return await _dbService.getQuote(quoteId);
+    debugPrint("getQuoteById $quoteId");
+    return _dbService.getQuote(quoteId);
   }
 
   Future<Background?> getBackgroundById(String quoteId) async {
-    return await _dbService.getBackground(quoteId);
+    return _dbService.getBackground(quoteId);
   }
 
   void toggleViewMode() {
