@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:buddha_greet/features/home/presentation/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,6 +26,7 @@ class TemplateDetailsController extends GetxController {
   final RxBool isMorningTemplatesLoading = true.obs;
   final Rx<Template?> selectedTemplate = Rx<Template?>(null);
   final RxBool isGridView = true.obs;
+  var controller = Get.find<HomeController>();
 
   @override
   void onInit() {
@@ -34,6 +36,7 @@ class TemplateDetailsController extends GetxController {
 
   Future<void> initializeController() async {
     try {
+      currentLanguage.value=controller.currentLanguage.value;
       // Wait for database to be initialized
       // if (!_dbService.isInitialized) {
       //   await _dbService.init();

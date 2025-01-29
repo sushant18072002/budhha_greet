@@ -212,25 +212,31 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
  
 
   Widget _buildQuote() {
-    return FutureBuilder<Quote?>(
-      future: controller.getQuoteById(template.composition.quoteId),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return const SizedBox.shrink();
+  return LayoutBuilder(
+    builder: (context, constraints) {
+      return FutureBuilder<Quote?>(
+        future: controller.getQuoteById(template.composition.quoteId),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return const SizedBox.shrink();
 
-        final quoteText =
-            snapshot.data?.translations[controller.currentLanguage.value]?.text;
-        if (quoteText == null) return const SizedBox.shrink();
-         var isGridView =  MediaQuery.of(Get.context!).orientation == Orientation.portrait;
-    var constraints= BoxConstraints.expand();
-        return AdaptiveQuoteWidget(
-          quoteText: quoteText,
-          template: template,
-          isGridView: isGridView,
-          maxHeight: constraints.maxHeight,
-        );
-      },
-    );
-  }
+          final quoteText = snapshot.data?.translations[controller.currentLanguage.value]?.text;
+          if (quoteText == null) return const SizedBox.shrink();
+
+          final isGridView = MediaQuery.of(context).orientation == Orientation.portrait;
+          
+          final maxQuoteHeight = constraints.maxHeight;
+
+          return AdaptiveQuoteWidget(
+            quoteText: quoteText,
+            template: template,
+            isGridView: isGridView,
+            maxHeight: maxQuoteHeight,
+          );
+        },
+      );
+    },
+  );
+}
 
   Widget _buildContent(BuildContext context) {
     return Padding(
