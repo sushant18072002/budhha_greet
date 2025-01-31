@@ -57,7 +57,7 @@ class CategoriesSection extends GetWidget<HomeController> {
                     curve: Curves.easeInOut,
                     margin: const EdgeInsets.only(right: 8),
                     child: Hero(
-                      tag: 'category_${category.type}',
+                      tag: 'category_${category.id}',
                       child: CategoryCard(
                         category: category,
                         isSelected: controller.selectedCategoryIndex.value == index,
