@@ -43,30 +43,34 @@ class CategoriesSection extends GetWidget<HomeController> {
         //const SizedBox(height: 8), // Increased spacing
         SizedBox(
           height: 100, // Increased height for better touch targets
-          child: Obx(() => ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(
-                  decelerationRate: ScrollDecelerationRate.fast,
-                ),
-                itemCount: controller.categories.length,
-                itemBuilder: (context, index) {
-                  final category = controller.categories[index];
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeInOut,
-                    margin: const EdgeInsets.only(right: 8),
-                    child: Hero(
-                      tag: 'category_${category.id}',
-                      child: CategoryCard(
-                        category: category,
-                        isSelected: controller.selectedCategoryIndex.value == index,
-                        onTap: () => controller.selectCategory(index, category),
-                      ),
+          child: Obx(
+             () {
+              return ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(
+                      decelerationRate: ScrollDecelerationRate.fast,
                     ),
+                    itemCount: controller.categories.length,
+                    itemBuilder: (context, index) {
+                      final category = controller.categories[index];
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeInOut,
+                        margin: const EdgeInsets.only(right: 8),
+                        child:Hero(
+                          tag: 'category_${category.id}',
+                          child: CategoryCard(
+                            category: category,
+                            index: index,
+                            onTap: () => controller.selectCategory(index, category),
+                          ),)
+                        
+                      );
+                    },
                   );
-                },
-              )),
+            }
+          ),
         ),
       ],
     );
@@ -75,13 +79,13 @@ class CategoriesSection extends GetWidget<HomeController> {
 
 class CategoryCard extends GetWidget<HomeController> {
   final Category category;
-  final bool isSelected;
+  final int index;
   final VoidCallback onTap;
 
   const CategoryCard({
     Key? key,
+    required this.index,
     required this.category,
-    required this.isSelected,
     required this.onTap,
   }) : super(key: key);
 
@@ -92,57 +96,61 @@ class CategoryCard extends GetWidget<HomeController> {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
-        child: Container(
-          width: 110, // Increased width
-          padding: const EdgeInsets.all(16), // Increased padding
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: isSelected
-                  ? [AppColors.amber500, AppColors.amber700]
-                  : [AppColors.amber50, AppColors.amber100],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: isSelected
-                    ? AppColors.amber300.withOpacity(0.3)
-                    : AppColors.amber200.withOpacity(0.1),
-                blurRadius: isSelected ? 8 : 4,
-                offset: Offset(0, isSelected ? 4 : 2),
+        child: Obx(() {
+         
+
+          return Container(
+            width: 110, // Increased width
+            padding: const EdgeInsets.all(16), // Increased padding
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors:  controller.selectedCategoryIndex.value  == index
+                    ? [AppColors.amber500, AppColors.amber700]
+                    : [AppColors.amber50, AppColors.amber100],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                child: Icon(
-                  _getCategoryIcon(category.type),
-                  color: isSelected ? Colors.white : AppColors.amber800,
-                  size: 32, // Increased icon size
-                  semanticLabel: '${category.type} icon',
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color:  controller.selectedCategoryIndex.value  == index
+                      ? AppColors.amber300.withOpacity(0.3)
+                      : AppColors.amber200.withOpacity(0.1),
+                  blurRadius:  controller.selectedCategoryIndex.value  == index ? 8 : 4,
+                  offset: Offset(0,  controller.selectedCategoryIndex.value  == index ? 4 : 2),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Obx(
-                () => Text(
-                  category.translations[controller.currentLanguage.value]?.name ?? "",
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  child: Icon(
+                    _getCategoryIcon(category.type),
+                    color:  controller.selectedCategoryIndex.value  == index ? Colors.white : AppColors.amber800,
+                    size: 32, // Increased icon size
+                    semanticLabel: '${category.type} icon',
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  // Ensure category.translations is not null and has the key for the current language
+                  category.translations[controller.currentLanguage.value]?.name ??
+                      "No Name Available", // Fallback text in case of null
                   style: AppTextStyles.bodySmall.copyWith(
-                    color: isSelected ? Colors.white : AppColors.amber800,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    color:  controller.selectedCategoryIndex.value  == index ? Colors.white : AppColors.amber800,
+                    fontWeight:  controller.selectedCategoryIndex.value  == index ? FontWeight.w600 : FontWeight.w500,
                     fontSize: 13, // Slightly increased for better readability
                   ),
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
