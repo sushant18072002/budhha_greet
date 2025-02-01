@@ -147,10 +147,13 @@ class HomeController extends GetxController {
 
   void selectCategory(int index, Category category) {
     selectedCategoryIndex.value = index;
+    print(" selectCategory selectedCategoryIndex.value  ${selectedCategoryIndex.value }");
     onCategorySelected(category);
   }
 
-  void onCategorySelected(Category category) {}
+  void onCategorySelected(Category category) {
+
+  }
 
   void setCurrentIndex(int index) {
     currentIndex.value = index;

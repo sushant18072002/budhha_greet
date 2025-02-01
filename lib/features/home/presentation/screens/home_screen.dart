@@ -1,12 +1,10 @@
-import 'package:buddha_greet/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../../../../shared/widgets/bottom_nav.dart';
+import '../../../../shared/widgets/sliver_appbar_delegate.dart';
 import '../controllers/home_controller.dart';
 import '../../../../shared/theme/app_colors.dart';
 import '../../../../shared/theme/app_text_styles.dart';
-
 import '../widgets/categories_section.dart';
 import '../widgets/language_selector.dart';
 import '../widgets/template_carousel.dart';
@@ -22,7 +20,7 @@ class HomeScreen extends GetView<HomeController> {
       body: SafeArea(
         child: RefreshIndicator(
           color: AppColors.amber600,
-          //backgroundColor: AppColors.white,
+          backgroundColor: AppColors.amber100,
           onRefresh: controller.refreshData,
           child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(
@@ -31,7 +29,7 @@ class HomeScreen extends GetView<HomeController> {
             slivers: [
               SliverPersistentHeader(
                 floating: true,
-                delegate: _SliverAppBarDelegate(
+                delegate: CustumSliverAppBarDelegate(
                   child: _buildHeader(),
                   minHeight: 60,
                   maxHeight: 60,
@@ -55,7 +53,7 @@ class HomeScreen extends GetView<HomeController> {
           ),
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavigation(),
+      bottomNavigationBar: const CustumBottomNavigation(),
     );
   }
 
@@ -63,20 +61,20 @@ class HomeScreen extends GetView<HomeController> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Container(
-      padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.vertical(
-          bottom: Radius.circular(24),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.vertical(
+            bottom: Radius.circular(24),
           ),
-        ],
-      ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -107,106 +105,5 @@ class HomeScreen extends GetView<HomeController> {
         ),
       ),
     );
-  }
-
-  Widget _buildBottomNav() {
-    return Container(
-      height: 65, // Reduced height for better proportions
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.amber100.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(Icons.home, 'Home', true),
-            _buildNavItem(Icons.add, 'Create', false,
-                onTap: () => Get.toNamed(AppRoutes.creator)),
-            _buildNavItem(Icons.book, 'Library', false,
-                onTap: () => Get.toNamed(AppRoutes.library)),
-            _buildNavItem(Icons.person, 'Profile', false),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label, bool isActive,
-      {VoidCallback? onTap}) {
-    final color = isActive ? AppColors.amber600 : AppColors.amber400;
-
-    return InkWell(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        onTap?.call();
-      },
-      customBorder: const CircleBorder(),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: 60,
-        decoration: BoxDecoration(
-          color: isActive ? AppColors.amber100 : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 8), // Reduced padding
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              color: color,
-              size: 24, // Reduced icon size from 28 to 24
-            ),
-            const SizedBox(height: 2), // Reduced spacing
-            Text(
-              label,
-              style: AppTextStyles.bottomNavLabel.copyWith(
-                color: color,
-                fontSize: 11, // Reduced font size from 13 to 11
-                height: 1.2, // Tighter line height
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  final double minHeight;
-  final double maxHeight;
-  final Widget child;
-
-  _SliverAppBarDelegate({
-    required this.minHeight,
-    required this.maxHeight,
-    required this.child,
-  });
-
-  @override
-  double get minExtent => minHeight;
-
-  @override
-  double get maxExtent => maxHeight;
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(child: child);
-  }
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
   }
 }

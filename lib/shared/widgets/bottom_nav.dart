@@ -5,8 +5,8 @@ import '../../core/routes/app_routes.dart';
 import '../../features/home/presentation/controllers/home_controller.dart';
 import '../theme/app_colors.dart';
 
-class CustomBottomNavigation extends GetView<HomeController> {
-  const CustomBottomNavigation({Key? key}) : super(key: key);
+class CustumBottomNavigation extends GetView<HomeController> {
+  const CustumBottomNavigation({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +33,12 @@ class CustomBottomNavigation extends GetView<HomeController> {
                 isSelected: controller.currentIndex.value == 0,
                 onTap: () => _handleNavigation(0),
               ),
-              _buildNavItem(
-                icon: Icons.add_circle_outline_rounded,
-                label: 'Create',
-                isSelected: controller.currentIndex.value == 1,
-                onTap: () => _handleNavigation(1),
-              ),
+              // _buildNavItem(
+              //   icon: Icons.add_circle_outline_rounded,
+              //   label: 'Create',
+              //   isSelected: controller.currentIndex.value == 1,
+              //   onTap: () => _handleNavigation(1),
+              // ),
               _buildNavItem(
                 icon: Icons.book_rounded,
                 label: 'Library',
