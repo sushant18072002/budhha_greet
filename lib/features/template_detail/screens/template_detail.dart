@@ -162,8 +162,6 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
   ) {
     final currentLanguage = controller.currentLanguage.value;
     final translation = template.translations[currentLanguage];
-    print(
-        "_buildTemplateContent translation $translation template.translations ${template.translations.entries.toList()} ");
     if (translation == null) return const SizedBox.shrink();
 
     final spacing = template.layoutConfig?.portrait?.layoutAdjustments?.spacing
@@ -187,13 +185,7 @@ class TemplateDetailsScreen extends GetView<TemplateDetailsController> {
               isGridView: isGridView,
               maxHeight: constraints.maxHeight * 0.4,
             )
-                // _buildAdaptiveTitle(
-                //   title: translation.title,
-                //   template: template,
-                //   isGridView: isGridView,
-                //   constraints: constraints,
-                //   maxHeight: constraints.maxHeight * 0.4,
-                // ),
+               
                 ),
           ),
           SizedBox(height: spacing),
