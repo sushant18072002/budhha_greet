@@ -1844,6 +1844,87 @@
             "modified_by": "system",
             "version": 1
           }
+        },
+        {
+          "uuid": "bg007",
+          "type": "image",
+          "translations": {
+            "en": {
+              "title": "Forest Lake Sunrise",
+              "description": "Serene lake nestled in misty forest during early morning light",
+              "semantic_label": "Calm lake surrounded by pine trees with morning mist"
+            },
+            "hi": {
+              "title": "जंगल की झील सूर्योदय",
+              "description": "सुबह की रोशनी में कोहरे से घिरी शांत झील",
+              "semantic_label": "सुबह की कोहरे में घिरी चीड़ के पेड़ों से घिरी शांत झील"
+            }
+          },
+          "visual_data": {
+            "image": {
+              "original": "assets/images/backgrounds/temple_sunrise3.jpeg",
+              "thumbnail": "assets/images/backgrounds/temple_sunrise3.jpeg",
+              "placeholder": "assets/images/backgrounds/temple_sunrise3.jpeg",
+              "variants": [
+                {
+                  "width": 640,
+                  "height": 1136,
+                  "path": "assets/images/backgrounds/temple_sunrise3.jpeg"
+                },
+                {
+                  "width": 750,
+                  "height": 1334,
+                  "path": "assets/images/backgrounds/temple_sunrise3.jpeg"
+                },
+                {
+                  "width": 1080,
+                  "height": 1920,
+                  "path": "assets/images/backgrounds/temple_sunrise3.jpeg"
+                }
+              ]
+            },
+            "gradient": null,
+            "color": null
+          },
+          "visual_effects": {
+            "opacity": 1.0,
+            "blur": 0,
+            "blend_mode": "normal"
+          },
+          "category_ids": [
+            "forests",
+            "lakes"
+          ],
+          "tag_ids": [
+            "sunrise",
+            "nature"
+          ],
+          "attribution": {
+            "photographer": "@naturephotographer",
+            "license": "CC BY 4.0",
+            "url": "https://example.com/forest-lake-license"
+          },
+          "optimization": {
+            "formats": [
+              "jpeg",
+              "webp",
+              "avif"
+            ],
+            "quality": 85,
+            "placeholder": "blur"
+          },
+          "cache_config": {
+            "ttl_seconds": 86400,
+            "priority": "high",
+            "preload": true
+          },
+          "audit": {
+            "created_at": "2024-01-16T00:00:00Z",
+            "created_by": "system",
+            "modified_at": "2024-01-16T00:00:00Z",
+            "modified_by": "system",
+            "version": 1
+          }
         }
       ]
     },
