@@ -1862,24 +1862,24 @@
           },
           "visual_data": {
             "image": {
-              "original": "assets/images/backgrounds/temple_sunrise3.jpeg",
-              "thumbnail": "assets/images/backgrounds/temple_sunrise3.jpeg",
-              "placeholder": "assets/images/backgrounds/temple_sunrise3.jpeg",
+              "original": "assets/images/backgrounds/temple_sunrise4.jpeg",
+              "thumbnail": "assets/images/backgrounds/temple_sunrise4.jpeg",
+              "placeholder": "assets/images/backgrounds/temple_sunrise4.jpeg",
               "variants": [
                 {
                   "width": 640,
                   "height": 1136,
-                  "path": "assets/images/backgrounds/temple_sunrise3.jpeg"
+                  "path": "assets/images/backgrounds/temple_sunrise4.jpeg"
                 },
                 {
                   "width": 750,
                   "height": 1334,
-                  "path": "assets/images/backgrounds/temple_sunrise3.jpeg"
+                  "path": "assets/images/backgrounds/temple_sunrise4.jpeg"
                 },
                 {
                   "width": 1080,
                   "height": 1920,
-                  "path": "assets/images/backgrounds/temple_sunrise3.jpeg"
+                  "path": "assets/images/backgrounds/temple_sunrise4.jpeg"
                 }
               ]
             },
